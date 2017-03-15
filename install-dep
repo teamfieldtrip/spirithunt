@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+
+DEP_NAME="$1"
+echo "Installing ${DEP_NAME}"
+
+set -xe
+echo y | android update sdk --no-ui --all --filter ${DEP_NAME}

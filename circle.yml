@@ -1,0 +1,58 @@
+# Disable emulator audio
+machine:
+  environment:
+    QEMU_AUDIO_DRV: none
+general:
+  artifacts:
+    - /home/ubuntu/AndroidApp/app/build/outputs/apk/
+
+machine:
+  environment:
+        ANDROID_HOME: /usr/local/android-sdk-linux
+        GRADLE_OPTS: '-Dorg.gradle.jvmargs="-Xmx2048m -XX:+HeapDumpOnOutOfMemoryError"'
+        _JAVA_OPTIONS: "-Xms512m -Xmx1024m"
+  java:
+    version: oraclejdk8
+
+dependencies:
+  pre:
+    - ~/spirithunt/install-dep platform-tools
+    - ~/spirithunt/install-dep build-tools-25.0.2
+    - ~/spirithunt/install-dep android-25
+    - ~/spirithunt/install-dep tools
+    - ~/spirithunt/install-dep extra-android-m2repository
+    - ~/spirithunt/install-dep extra-google-google_play_services
+    - ~/spirithunt/install-dep extra-google-m2repository
+  override:
+    - chmod +x gradlew
+    - ANDROID_HOME=/usr/local/android-sdk-linux ./gradlew dependencies
+  cache_directories:
+    - /usr/local/android-sdk-linux/platform-tools
+    - /usr/local/android-sdk-linux/build-tools
+    - /usr/local/android-sdk-linux/platforms/android-25
+    - /usr/local/android-sdk-linux/tools
+    - /usr/local/android-sdk-linux/extras/android/m2repository
+    - /usr/local/android-sdk-linux/extras/google/google_play_services
+    - /usr/local/android-sdk-linux/extras/google/m2repository
+
+compile:
+  pre:
+    - echo "sdk.dir=${ANDROID_HOME}" > ~/spirithunt/local.properties
+  override:
+    - ./gradlew assembleAndroidTest assembleDebug
+
+test:
+  pre:
+    - emulator -avd circleci-android24 -no-window:
+        background: true
+        parallel: true
+    # wait for it to have booted
+    - circle-android wait-for-boot
+  override:
+    # Run local tests and connect to Android and test it there
+    - ./gradlew test connectedAndroidTest
+  post:
+    # copy the build outputs to artifacts
+    - cp -r ~/spirithunt/app/build/outputs $CIRCLE_ARTIFACTS
+    # copy the test results to the test results directory.
+    - cp -r ~/spirithunt/app/build/outputs/androidTest-results/* $CIRCLE_TEST_REPORTS

@@ -7,12 +7,12 @@
 Stuff.
 
 <!-- Shield images -->
-[shield-build]: https://img.shields.io/travis/teamfieldtrip/spirithunt.svg
+[shield-build]: https://img.shields.io/circleci/project/github/teamfieldtrip/spirithunt.svg
 [shield-cc]: https://img.shields.io/codeclimate/github/teamfieldtrip/spirithunt.svg
 [shield-license]: https://img.shields.io/github/license/teamfieldtrip/spirithunt.svg
 
 <!-- Shield links -->
-[link-build]: https://travis-ci.org/teamfieldtrip/spirithunt
+[link-build]: https://circleci.com/gh/teamfieldtrip/spirithunt
 [link-cc]: https://codeclimate.com/github/teamfieldtrip/spirithunt
 
 <!-- Local files -->
