@@ -9,6 +9,7 @@ android:
     - build-tools-25.0.2
     - android-23
     - extra-google-m2repository
+    - extra-android-m2repository
 script:
    - ./gradlew build connectedCheck
 before_cache:
