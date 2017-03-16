@@ -31,6 +31,8 @@ dependencies:
     - /usr/local/android-sdk-linux/platforms/android-25
 
 compile:
+  pre:
+    - echo "sdk.dir=${ANDROID_HOME}" > ~/spirithunt/local.properties
   override:
     - ./gradlew assembleAndroidTest assembleDebug
 
