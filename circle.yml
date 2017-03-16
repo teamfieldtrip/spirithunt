@@ -32,8 +32,7 @@ dependencies:
 
 compile:
   override:
-    - ./gradlew assembleAndroidTest
-    - ./gradlew assembleDebug
+    - ./gradlew assembleAndroidTest assembleDebug
 
 test:
   pre:
@@ -42,11 +41,11 @@ test:
         parallel: true
     # wait for it to have booted
     - circle-android wait-for-boot
+    # Install the app on the Android device
+    - ./gradlew installDebugAndroidTest
   override:
-    # Run local tests
-    - ./gradlew test
-    # run tests  against the emulator.
-    - ./gradlew connectedAndroidTest
+    # Run local tests and connect to Android and test it there
+    - ./gradlew test connectedAndroidTest
   post:
     # copy the build outputs to artifacts
     - cp -r ~/spirithunt/build/outputs $CIRCLE_ARTIFACTS
