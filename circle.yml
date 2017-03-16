@@ -41,8 +41,6 @@ test:
         parallel: true
     # wait for it to have booted
     - circle-android wait-for-boot
-    # Install the app on the Android device
-    - ./gradlew installDebugAndroidTest
   override:
     # Run local tests and connect to Android and test it there
     - ./gradlew test connectedAndroidTest
