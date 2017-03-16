@@ -30,6 +30,11 @@ dependencies:
   cache_directories:
     - /usr/local/android-sdk-linux/platforms/android-25
 
+compile:
+  override:
+    - ./gradlew assembleAndroidTest
+    - ./gradlew assembleDebug
+
 test:
   pre:
     - emulator -avd circleci-android24 -no-window:
@@ -37,8 +42,12 @@ test:
         parallel: true
     # wait for it to have booted
     - circle-android wait-for-boot
+  override:
+    # Run local tests
+    - ./gradlew test
     # run tests  against the emulator.
     - ./gradlew connectedAndroidTest
+  post:
     # copy the build outputs to artifacts
     - cp -r spirithunt/build/outputs $CIRCLE_ARTIFACTS
     # copy the test results to the test results directory.
