@@ -8,9 +8,8 @@ DIR_PATH="${BASEPATH}/${DEP_PATH}"
 
 if [ ! -d "$DIR_PATH" ]; then
     echo "Installing ${DEP_NAME}..."
+    set -xe
     echo y | android update sdk --no-ui --all --filter ${DEP_NAME}
-    exit $?
 else
     echo "Skipping ${DEP_NAME}."
-    exit 0
 fi
