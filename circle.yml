@@ -21,14 +21,20 @@ dependencies:
     - ~/spirithunt/install-dep "android-25" "platforms/android-25"
     - ~/spirithunt/install-dep "tools" "tools"
     - ~/spirithunt/install-dep "extra-android-m2repository" "extras/android/m2repository"
+    - ~/spirithunt/install-dep "extra-android-support" "does-not-exist"
     - ~/spirithunt/install-dep "extra-google-google_play_services" "extras/google/google_play_services"
     - ~/spirithunt/install-dep "extra-google-m2repository" "extras/google/m2repository"
   override:
     - chmod +x gradlew
     - ANDROID_HOME=/usr/local/android-sdk-linux ./gradlew dependencies
   cache_directories:
+    - /usr/local/android-sdk-linux/platform-tools
+    - /usr/local/android-sdk-linux/build-tools
     - /usr/local/android-sdk-linux/platforms/android-25
-    - /usr/local/android-sdk-linux/licenses
+    - /usr/local/android-sdk-linux/tools
+    - /usr/local/android-sdk-linux/extras/android/m2repository
+    - /usr/local/android-sdk-linux/extras/google/google_play_services
+    - /usr/local/android-sdk-linux/extras/google/m2repository
 
 compile:
   pre:
