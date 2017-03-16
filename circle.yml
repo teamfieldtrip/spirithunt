@@ -16,14 +16,13 @@ machine:
 
 dependencies:
   pre:
-    - ~/spirithunt/install-dep "platform-tools" "platform-tools"
-    - ~/spirithunt/install-dep "build-tools-25.0.2" "build-tools"
-    - ~/spirithunt/install-dep "android-25" "platforms/android-25"
-    - ~/spirithunt/install-dep "tools" "tools"
-    - ~/spirithunt/install-dep "extra-android-m2repository" "extras/android/m2repository"
-    - ~/spirithunt/install-dep "extra-android-support" "does-not-exist"
-    - ~/spirithunt/install-dep "extra-google-google_play_services" "extras/google/google_play_services"
-    - ~/spirithunt/install-dep "extra-google-m2repository" "extras/google/m2repository"
+    - ~/spirithunt/install-dep platform-tools
+    - ~/spirithunt/install-dep build-tools-25.0.2
+    - ~/spirithunt/install-dep android-25
+    - ~/spirithunt/install-dep tools
+    - ~/spirithunt/install-dep extra-android-m2repository
+    - ~/spirithunt/install-dep extra-google-google_play_services
+    - ~/spirithunt/install-dep extra-google-m2repository
   override:
     - chmod +x gradlew
     - ANDROID_HOME=/usr/local/android-sdk-linux ./gradlew dependencies
