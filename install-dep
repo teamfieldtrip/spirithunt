@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+
+DEP_NAME="$1"
+DEP_PATH="$2"
+
+BASEPATH=/usr/local/android-sdk-linux
+DIR_PATH="${BASEPATH}/${DEP_PATH}"
+
+if [ ! -d "$DIR_PATH" ]; then
+    echo "Installing ${DEP_NAME}..."
+    echo y | android update sdk --no-ui --all --filter ${DEP_NAME}
+    exit $?
+else
+    echo "Skipping ${DEP_NAME}."
+    exit 0
+fi
