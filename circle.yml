@@ -32,7 +32,7 @@ dependencies:
 
 test:
   pre:
-    - emulator -avd circleci-android24 -no-window:
+    - emulator -avd circleci-android25 -no-window:
         background: true
         parallel: true
     # wait for it to have booted
@@ -40,6 +40,6 @@ test:
     # run tests  against the emulator.
     - ./gradlew connectedAndroidTest
     # copy the build outputs to artifacts
-    - cp -r my-project/build/outputs $CIRCLE_ARTIFACTS
+    - cp -r spirithunt/build/outputs $CIRCLE_ARTIFACTS
     # copy the test results to the test results directory.
-    - cp -r my-project/build/outputs/androidTest-results/* $CIRCLE_TEST_REPORTS
+    - cp -r spirithunt/build/outputs/androidTest-results/* $CIRCLE_TEST_REPORTS
