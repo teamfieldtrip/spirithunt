@@ -75,9 +75,7 @@ public class MainActivity extends AppCompatActivity implements
         mLastLocation = LocationServices.FusedLocationApi.getLastLocation(
                 mGoogleApiClient);
 
-        if (mRequestingLocationUpdates || true) {
-            startLocationUpdates();
-        }
+        startLocationUpdates();
     }
 
     protected void startLocationUpdates() {
