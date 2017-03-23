@@ -1,6 +1,7 @@
 package android.spirithunt.win.lib;
 
-import android.spirithunt.win.Constants;
+import android.content.Context;
+import android.spirithunt.win.R;
 import android.util.Log;
 
 import java.net.URISyntaxException;
@@ -16,9 +17,9 @@ public class Socket {
     private static final String TAG = Socket.class.getSimpleName();
     private io.socket.client.Socket socket;
 
-    public Socket() {
+    public Socket(Context context) {
         try {
-            this.socket = IO.socket(Constants.SERVER_URL);
+            this.socket = IO.socket(context.getString(R.string.server_address));
         } catch (URISyntaxException e) {
             throw new RuntimeException(e);
         }
