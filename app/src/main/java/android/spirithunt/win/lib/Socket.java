@@ -1,6 +1,6 @@
 package android.spirithunt.win.lib;
 
-import android.content.Context;
+import android.spirithunt.win.ContextProvider;
 import android.spirithunt.win.R;
 import android.util.Log;
 
@@ -15,11 +15,12 @@ import io.socket.emitter.Emitter;
 
 public class Socket {
     private static final String TAG = Socket.class.getSimpleName();
+    private static final Socket instance = new Socket();
     private io.socket.client.Socket socket;
 
-    public Socket(Context context) {
+    private Socket() {
         try {
-            this.socket = IO.socket(context.getString(R.string.server_address));
+            this.socket = IO.socket(ContextProvider.getInstance().getContext().getString(R.string.server_address));
         } catch (URISyntaxException e) {
             throw new RuntimeException(e);
         }
@@ -57,5 +58,8 @@ public class Socket {
 
     public io.socket.client.Socket getConnection() {
         return this.socket;
+    }
+    public static Socket getInstance() {
+        return Socket.instance;
     }
 }
