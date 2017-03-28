@@ -1,6 +1,5 @@
-package android.spirithunt.win.lib;
+package android.spirithunt.win.Controllers;
 
-import android.spirithunt.win.ContextProvider;
 import android.spirithunt.win.R;
 import android.util.Log;
 
@@ -13,14 +12,14 @@ import io.socket.emitter.Emitter;
  * @author Remco Schipper
  */
 
-public class Socket {
-    private static final String TAG = Socket.class.getSimpleName();
-    private static final Socket instance = new Socket();
+public class SocketController {
+    private static final String TAG = SocketController.class.getSimpleName();
+    private static final SocketController instance = new SocketController();
     private io.socket.client.Socket socket;
 
-    private Socket() {
+    private SocketController() {
         try {
-            this.socket = IO.socket(ContextProvider.getInstance().getContext().getString(R.string.server_address));
+            this.socket = IO.socket(ContextController.getInstance().getContext().getString(R.string.server_address));
         } catch (URISyntaxException e) {
             throw new RuntimeException(e);
         }
@@ -33,25 +32,25 @@ public class Socket {
         this.socket.once(io.socket.client.Socket.EVENT_CONNECT, new Emitter.Listener() {
             @Override
             public void call(Object... args) {
-                Log.d(Socket.TAG, "Connected to the server");
+                Log.d(SocketController.TAG, "Connected to the server");
             }
         });
         this.socket.once(io.socket.client.Socket.EVENT_CONNECT_ERROR, new Emitter.Listener() {
             @Override
             public void call(Object... args) {
-                Log.e(Socket.TAG, "Could not connect to the server");
+                Log.e(SocketController.TAG, "Could not connect to the server");
             }
         });
         this.socket.on(io.socket.client.Socket.EVENT_RECONNECT, new Emitter.Listener() {
             @Override
             public void call(Object... args) {
-                Log.d(Socket.TAG, "Reconnected to the server");
+                Log.d(SocketController.TAG, "Reconnected to the server");
             }
         });
         this.socket.on(io.socket.client.Socket.EVENT_DISCONNECT, new Emitter.Listener() {
             @Override
             public void call(Object... args) {
-                Log.e(Socket.TAG, "Lost the connection to the server");
+                Log.e(SocketController.TAG, "Lost the connection to the server");
             }
         });
     }
@@ -59,7 +58,7 @@ public class Socket {
     public io.socket.client.Socket getConnection() {
         return this.socket;
     }
-    public static Socket getInstance() {
-        return Socket.instance;
+    public static SocketController getInstance() {
+        return SocketController.instance;
     }
 }
