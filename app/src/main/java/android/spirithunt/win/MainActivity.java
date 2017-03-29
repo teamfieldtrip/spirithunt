@@ -12,21 +12,40 @@ public class MainActivity extends AppCompatActivity {
     private Player player;
     private GpsReader gps;
 
+    private void createGps() {
+        if(this.gps == null) {
+            this.gps = new GpsReader(this);
+        }
+    }
+
+    private void getOrCreatePlayer() {
+        final MainActivity self = this;
+
+        if(this.player == null) {
+            Player p = PlayerManager.getInstance().getPlayer();
+
+            if(p == null) {
+                PlayerManager.getInstance().getNewPlayer(new PlayerCreateCallback() {
+                    @Override
+                    public void call(String e, Player p) {
+                        self.player = p;
+                        self.createGps();
+                    }
+                });
+            }
+            else {
+                this.player = p;
+                this.createGps();
+            }
+        }
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ContextProvider.getInstance().setContext(this.getApplicationContext());
-        final MainActivity self = this;
-
-        PlayerManager.getInstance().getNewPlayer(new PlayerCreateCallback() {
-            @Override
-            public void call(String e, Player p) {
-                player = p;
-                gps = new GpsReader(self);
-            }
-        });
-
+        this.getOrCreatePlayer();
     }
 
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
