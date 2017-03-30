@@ -3,6 +3,7 @@ package android.spirithunt.win.lib;
 import android.spirithunt.win.callback.GpsUpdateCallback;
 import android.spirithunt.win.protocol.GpsUpdate;
 import android.spirithunt.win.model.Player;
+import android.spirithunt.win.provider.SocketProvider;
 
 import io.socket.client.*;
 
@@ -18,7 +19,7 @@ public class GpsUpdater {
      * Get the socket to use when needed
      */
     private GpsUpdater() {
-        this.socket = Socket.getInstance().getConnection();
+        this.socket = SocketProvider.getInstance().getConnection();
     }
 
     /**
