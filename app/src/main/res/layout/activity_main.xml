@@ -11,24 +11,9 @@
     tools:context="android.spirithunt.win.MainActivity">
 
     <TextView
+        android:id="@+id/mTextView"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="Latitude"
-        android:id="@+id/mLatitudeTextView" />
+        android:text="Hello World" />
 
-    <TextView
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:text="Longitude"
-        android:id="@+id/mLongitudeTextView"
-        android:layout_below="@+id/mLatitudeTextView"
-        android:layout_alignParentStart="true" />
-
-    <TextView
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/mLastUpdateTimeTextView"
-        android:layout_below="@+id/mLongitudeTextView"
-        android:layout_alignParentStart="true"
-        android:text="Last Update Time" />
 </RelativeLayout>
