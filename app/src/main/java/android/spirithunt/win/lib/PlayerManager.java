@@ -4,6 +4,7 @@ import android.spirithunt.win.callback.PlayerCreateCallback;
 import android.spirithunt.win.model.Player;
 import android.spirithunt.win.protocol.PlayerCreate;
 import android.spirithunt.win.protocol.PlayerResume;
+import android.spirithunt.win.provider.SocketProvider;
 
 import io.socket.client.*;
 import io.socket.client.Socket;
@@ -24,7 +25,7 @@ public class PlayerManager {
     private PlayerManager() {
         final PlayerManager self = this;
 
-        this.socket = android.spirithunt.win.lib.Socket.getInstance().getConnection();
+        this.socket = SocketProvider.getInstance().getConnection();
         this.socket.on(io.socket.client.Socket.EVENT_RECONNECT, new Emitter.Listener() {
             @Override
             public void call(Object... args) {

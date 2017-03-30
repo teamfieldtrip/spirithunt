@@ -5,6 +5,7 @@ import android.spirithunt.win.lib.GpsReader;
 import android.spirithunt.win.lib.PlayerManager;
 import android.spirithunt.win.model.Player;
 import android.support.annotation.NonNull;
+import android.spirithunt.win.provider.ContextProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 

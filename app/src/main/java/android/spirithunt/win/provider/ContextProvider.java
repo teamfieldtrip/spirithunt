@@ -1,4 +1,4 @@
-package android.spirithunt.win;
+package android.spirithunt.win.provider;
 
 import android.content.Context;
 
@@ -10,7 +10,7 @@ public class ContextProvider {
     private static final ContextProvider ourInstance = new ContextProvider();
     private Context context;
 
-    void setContext(Context context) {
+    public void setContext(Context context) {
         this.context = context;
     }
 
