@@ -1,4 +1,4 @@
-package android.spirithunt.win.Controllers;
+package android.spirithunt.win.controller;
 
 /**
  * Created by sven on 30-3-17.
