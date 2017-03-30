@@ -1,4 +1,4 @@
-package android.spirithunt.win.Providers;
+package android.spirithunt.win.provider;
 
 import android.Manifest;
 import android.content.pm.PackageManager;

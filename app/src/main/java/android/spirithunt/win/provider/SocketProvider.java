@@ -1,4 +1,4 @@
-package android.spirithunt.win.Providers;
+package android.spirithunt.win.provider;
 
 import android.spirithunt.win.R;
 import android.util.Log;
