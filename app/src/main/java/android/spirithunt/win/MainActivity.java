@@ -6,6 +6,7 @@ import android.spirithunt.win.lib.PlayerManager;
 import android.spirithunt.win.model.Player;
 import android.support.annotation.NonNull;
 import android.spirithunt.win.Controllers.ContextController;
+import android.spirithunt.win.Providers.ContextProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 

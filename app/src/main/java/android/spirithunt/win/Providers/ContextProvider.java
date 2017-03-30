@@ -1,4 +1,4 @@
-package android.spirithunt.win.Controllers;
+package android.spirithunt.win.Providers;
 
 import android.content.Context;
 
@@ -6,8 +6,8 @@ import android.content.Context;
  * @author Remco Schipper
  */
 
-public class ContextController {
-    private static final ContextController ourInstance = new ContextController();
+public class ContextProvider {
+    private static final ContextProvider ourInstance = new ContextProvider();
     private Context context;
 
     public void setContext(Context context) {
@@ -18,7 +18,7 @@ public class ContextController {
         return this.context;
     }
 
-    public static ContextController getInstance() {
+    public static ContextProvider getInstance() {
         return ourInstance;
     }
 }

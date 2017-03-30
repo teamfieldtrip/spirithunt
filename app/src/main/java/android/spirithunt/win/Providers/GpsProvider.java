@@ -1,4 +1,4 @@
-package android.spirithunt.win.Controllers;
+package android.spirithunt.win.Providers;
 
 import android.Manifest;
 import android.content.pm.PackageManager;
@@ -24,7 +24,7 @@ import java.util.Date;
  * @author sven
  */
 
-public class GpsController extends AppCompatActivity implements
+public class GpsProvider extends AppCompatActivity implements
     GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener {
 
     public static final long UPDATE_INTERVAL_IN_MILLISECONDS = 7500;
