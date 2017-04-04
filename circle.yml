@@ -47,6 +47,6 @@ test:
     - ./gradlew test
   post:
     # copy the build outputs to artifacts
-    - cp -r ~/spirithunt/app/build/outputs $CIRCLE_ARTIFACTS
+    - cp -r ~/spirithunt/app/build/outputs $CIRCLE_ARTIFACTS || true
     # copy the test results to the test results directory.
-    - cp -r ~/spirithunt/app/build/outputs/androidTest-results/* $CIRCLE_TEST_REPORTS
+    - cp -r ~/spirithunt/app/build/outputs/androidTest-results/* $CIRCLE_TEST_REPORTS || true
