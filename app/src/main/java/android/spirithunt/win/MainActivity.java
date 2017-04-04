@@ -1,8 +1,6 @@
 package android.spirithunt.win;
 
-import android.content.Intent;
 import android.spirithunt.win.callback.PlayerCreateCallback;
-import android.spirithunt.win.controller.SettingsController;
 import android.spirithunt.win.lib.GpsReader;
 import android.spirithunt.win.lib.PlayerManager;
 import android.spirithunt.win.model.Player;
