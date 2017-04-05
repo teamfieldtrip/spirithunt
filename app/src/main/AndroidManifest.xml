@@ -16,6 +16,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".controller.LoginController" android:noHistory="true" />
+        <activity android:name=".controller.MenuController" />
+        <activity android:name=".controller.ReconnectController" />
     </application>
 
 </manifest>
