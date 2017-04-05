@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <PreferenceCategory
+        android:title="@string/settings_title">
+
+    <CheckBoxPreference
+        android:key="settings_sound"
+        android:title="@string/settings_title_sound"
+        android:summary="@string/settings_summary_sound"
+        >
+    </CheckBoxPreference>
+
+    <CheckBoxPreference
+        android:key="settings_vibration"
+        android:title="@string/settings_title_vibration"
+        android:summary="@string/settings_summary_vibration"
+        >
+    </CheckBoxPreference>
+    </PreferenceCategory>
+
+</PreferenceScreen>
