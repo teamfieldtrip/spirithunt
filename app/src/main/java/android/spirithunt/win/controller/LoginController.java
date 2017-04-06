@@ -19,7 +19,7 @@ import io.socket.client.Socket;
 
 /**
  * Created by sven on 30-3-17.
- * @author Remco Schipper <github@remcoschipper.com>
+ * @author Remco Schipper
  */
 
 public class LoginController extends AppCompatActivity {
@@ -30,12 +30,14 @@ public class LoginController extends AppCompatActivity {
             this.progressDialog.dismiss();
         }
     }
+
     private void showMenu(Context context) {
         Intent intent = new Intent(context, MenuController.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
         startActivity(intent);
         finish();
     }
+
     private void showProgressDialog() {
         if(this.progressDialog == null) {
             this.progressDialog = new ProgressDialog(this);
@@ -45,6 +47,7 @@ public class LoginController extends AppCompatActivity {
             this.progressDialog.show();
         }
     }
+
     private void showErrorDialog(Context context) {
         new AlertDialog.Builder(context)
             .setTitle(getString(R.string.authentication_alert_title))
@@ -57,6 +60,7 @@ public class LoginController extends AppCompatActivity {
             .setIcon(android.R.drawable.ic_dialog_alert)
             .show();
     }
+
     private void saveJwt(String token) {
         SharedPreferences sharedPref = this.getSharedPreferences(getString(R.string.preferences_file), Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPref.edit();
@@ -68,6 +72,7 @@ public class LoginController extends AppCompatActivity {
     protected void onPause() {
         super.onPause();
     }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -94,8 +99,7 @@ public class LoginController extends AppCompatActivity {
                         if(args[0] == null) {
                             self.saveJwt(args[1].toString());
                             self.showMenu(self);
-                        }
-                        else {
+                        } else {
                             self.showErrorDialog(self);
                         }
                     }

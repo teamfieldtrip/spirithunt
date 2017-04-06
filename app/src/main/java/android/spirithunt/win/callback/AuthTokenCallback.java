@@ -1,7 +1,7 @@
 package android.spirithunt.win.callback;
 
 /**
- * @author Remco Schipper <github@remcoschipper.com>
+ * @author Remco Schipper
  */
 
 public interface AuthTokenCallback {

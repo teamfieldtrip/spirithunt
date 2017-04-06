@@ -4,15 +4,14 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 /**
- * @author Remco Schipper <github@remcoschipper.com>
+ * @author Remco Schipper
  */
 
 public class AuthToken extends JSONObject {
     public AuthToken(String token) {
         try {
             this.put("token", token);
-        }
-        catch(JSONException e) {
+        } catch(JSONException e) {
             System.out.println(e.getMessage());
         }
     }

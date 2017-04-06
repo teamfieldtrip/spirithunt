@@ -13,8 +13,7 @@ public class GpsUpdate extends JSONObject {
             this.put("latitude", latitude);
             this.put("longitude", longitude);
             this.put("time", time);
-        }
-        catch(JSONException e) {
+        } catch(JSONException e) {
             System.out.println(e.getMessage());
         }
     }

@@ -6,7 +6,7 @@ import android.support.v7.widget.AppCompatButton;
 import android.util.AttributeSet;
 
 /**
- * @author Remco Schipper <github@remcoschipper.com>
+ * @author Remco Schipper
  * @see <a href="http://stackoverflow.com/a/16648457">How to set a particular font for a button text in android?</a>
  */
 

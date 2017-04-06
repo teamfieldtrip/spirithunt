@@ -4,7 +4,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 /**
- * @author Remco Schipper  <github@remcoschipper.com>
+ * @author Remco Schipper
  */
 
 public class AuthLogin extends JSONObject {
@@ -12,8 +12,7 @@ public class AuthLogin extends JSONObject {
         try {
             this.put("email", email);
             this.put("password", password);
-        }
-        catch(JSONException e) {
+        } catch(JSONException e) {
             System.out.println(e.getMessage());
         }
     }
