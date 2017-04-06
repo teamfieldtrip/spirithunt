@@ -19,9 +19,9 @@ import io.socket.client.Socket;
 
 public class LobbyController extends AppCompatActivity {
 
-    private ArrayList<Player> players = new ArrayList<Player>();    // General list of players
-    private ArrayList<Player> teamRed = new ArrayList<Player>();    // Team 0
-    private ArrayList<Player> teamBlue = new ArrayList<Player>();   // Team 1
+    private ArrayList<Player> players = new ArrayList<>();    // General list of players
+    private ArrayList<Player> teamRed = new ArrayList<>();    // Team 0
+    private ArrayList<Player> teamBlue = new ArrayList<>();   // Team 1
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

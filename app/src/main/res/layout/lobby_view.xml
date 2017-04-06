@@ -38,10 +38,10 @@
     </LinearLayout>
 
     <LinearLayout
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:layout_weight="1">
-        
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1">
+
 
     </LinearLayout>
 
@@ -54,26 +54,26 @@
         android:baselineAligned="false"
         android:layout_weight="2"
         >
-            <LinearLayout
-                android:layout_width="match_parent"
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            >
+            <ListView
+                android:id="@+id/listview_teamred_lobby"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                >
-                <ListView
-                    android:id="@+id/listview_teamred_lobby"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:background="@android:color/holo_red_light"
-                    android:cacheColorHint="@android:color/transparent" />
+                android:layout_weight="1"
+                android:background="@android:color/holo_red_light"
+                android:cacheColorHint="@android:color/transparent" />
 
-                <ListView
-                    android:id="@+id/listview_teamblue_lobby"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:background="@android:color/holo_blue_light"
-                    android:cacheColorHint="@android:color/transparent" />
-            </LinearLayout>
+            <ListView
+                android:id="@+id/listview_teamblue_lobby"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@android:color/holo_blue_light"
+                android:cacheColorHint="@android:color/transparent" />
+        </LinearLayout>
     </LinearLayout>
 </LinearLayout>
