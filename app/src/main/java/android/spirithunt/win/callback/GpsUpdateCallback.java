@@ -6,5 +6,4 @@ package android.spirithunt.win.callback;
 
 public interface GpsUpdateCallback {
     public void call(String error);
-
 }

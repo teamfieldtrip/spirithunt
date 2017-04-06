@@ -7,12 +7,10 @@ import org.json.JSONObject;
  * @author Remco Schipper
  */
 
-public class GpsUpdate extends JSONObject {
-    public GpsUpdate(double latitude, double longitude, Long time) {
+public class AuthToken extends JSONObject {
+    public AuthToken(String token) {
         try {
-            this.put("latitude", latitude);
-            this.put("longitude", longitude);
-            this.put("time", time);
+            this.put("token", token);
         } catch(JSONException e) {
             System.out.println(e.getMessage());
         }

@@ -7,12 +7,11 @@ import org.json.JSONObject;
  * @author Remco Schipper
  */
 
-public class GpsUpdate extends JSONObject {
-    public GpsUpdate(double latitude, double longitude, Long time) {
+public class AuthLogin extends JSONObject {
+    public AuthLogin(String email, String password) {
         try {
-            this.put("latitude", latitude);
-            this.put("longitude", longitude);
-            this.put("time", time);
+            this.put("email", email);
+            this.put("password", password);
         } catch(JSONException e) {
             System.out.println(e.getMessage());
         }
