@@ -2,8 +2,8 @@
     <string name="app_name">Spirit Hunt</string>
     <string name="preferences_file">prefs</string>
     <string name="saved_jwt">jwt</string>
-    <string name="username_hint">Iranian Emporer</string>
-    <string name="password_hint">Hassan Rohani</string>
+    <string name="username_hint">E-mail address</string>
+    <string name="password_hint">Password</string>
     <string name="btn_login">Login</string>
     <string name="authentication_progress_title">Authenticating</string>
     <string name="authentication_progress_content">Please wait</string>
