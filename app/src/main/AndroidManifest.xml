@@ -19,6 +19,7 @@
         <activity android:name=".controller.LoginController" android:noHistory="true" />
         <activity android:name=".controller.MenuController" />
         <activity android:name=".controller.ReconnectController" />
+        <activity android:name=".controller.SettingsController" />
     </application>
 
 </manifest>

@@ -10,4 +10,11 @@
     <string name="authentication_alert_title">Authentication error</string>
     <string name="authentication_alert_content">Unable to login, are you sure the e-mail/password combination is correct?</string>
     <string name="authentication_alert_button">Try again</string>
+
+    <!--Setting String-->
+    <string name="settings_title">Settings</string>
+    <string name="settings_title_sound">Sound</string>
+    <string name="settings_summary_sound">Use in-game sound</string>
+    <string name="settings_title_vibration">Vibration</string>
+    <string name="settings_summary_vibration">Use in-game vibration</string>
 </resources>
