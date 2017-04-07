@@ -81,7 +81,7 @@ public class LoginController extends AppCompatActivity {
 
     public void signUp(View view) {
         //TODO: something useful
-        System.out.println("Open the sign-up view or something useful");
+        throw new UnsupportedOperationException();
     }
 
     public void submit(View view) {

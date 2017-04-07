@@ -5,18 +5,21 @@
         <selector xmlns:android="http://schemas.android.com/apk/res/android" >
             <item android:state_pressed="true" >
                 <shape android:shape="rectangle"  >
-                    <corners android:radius="12dip" />
-                    <gradient android:angle="90" android:startColor="#880f0f10" android:centerColor="#880d0d0f" android:endColor="#885d5d5e"/>
+                    <corners android:radius="@dimen/button_border_radius" />
+                    <gradient android:angle="90"
+                        android:startColor="@color/colorButtonGradientStart"
+                        android:centerColor="@color/colorButtonGradientMiddle"
+                        android:endColor="@color/colorButtonGradientEnd"/>
                 </shape>
             </item>
             <item android:state_focused="true">
                 <shape android:shape="rectangle"  >
-                    <corners android:radius="12dip" />
+                    <corners android:radius="@dimen/button_border_radius" />
                 </shape>
             </item>
             <item >
                 <shape android:shape="rectangle"  >
-                    <corners android:radius="12dip" />
+                    <corners android:radius="@dimen/button_border_radius" />
                 </shape>
             </item>
         </selector>

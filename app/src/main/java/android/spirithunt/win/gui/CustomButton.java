@@ -6,10 +6,10 @@ import android.support.v7.widget.AppCompatButton;
 import android.util.AttributeSet;
 
 /**
+ * Provides the lay-out with a custom button (accepts a custom font)
  * @author Remco Schipper
  * @see <a href="http://stackoverflow.com/a/16648457">How to set a particular font for a button text in android?</a>
  */
-
 public class CustomButton extends AppCompatButton {
     public CustomButton(Context context) {
         super(context);

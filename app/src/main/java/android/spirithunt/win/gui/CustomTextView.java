@@ -6,10 +6,10 @@ import android.support.v7.widget.AppCompatEditText;
 import android.util.AttributeSet;
 
 /**
+ * Provides the lay-out with a custom textview (accepts a custom font)
  * @author Remco Schipper
  * @see <a href="http://stackoverflow.com/a/16648457">How to set a particular font for a button text in android?</a>
  */
-
 public class CustomTextView extends AppCompatEditText {
     public CustomTextView(Context context) {
         super(context);
