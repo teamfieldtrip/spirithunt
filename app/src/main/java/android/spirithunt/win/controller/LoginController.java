@@ -43,7 +43,7 @@ public class LoginController extends AppCompatActivity {
             this.progressDialog = new ProgressDialog(this);
             this.progressDialog.setTitle(getString(R.string.authentication_progress_title));
             this.progressDialog.setMessage(getString(R.string.authentication_progress_content));
-            this.progressDialog.setCancelable(true);
+            this.progressDialog.setCancelable(false);
             this.progressDialog.show();
         }
     }
@@ -79,11 +79,16 @@ public class LoginController extends AppCompatActivity {
         setContentView(R.layout.login_view);
     }
 
+    public void signUp(View view) {
+        //TODO: something useful
+        System.out.println("Open the sign-up view or something useful");
+    }
+
     public void submit(View view) {
         final LoginController self = this;
         this.showProgressDialog();
 
-        String email = ((TextView)findViewById(R.id.username)).getText().toString();
+        String email = ((TextView)findViewById(R.id.email)).getText().toString();
         String password = ((TextView)findViewById(R.id.password)).getText().toString();
 
         Socket socket = SocketProvider.getInstance().getConnection();

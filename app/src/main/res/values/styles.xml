@@ -2,13 +2,43 @@
 
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="android:windowBackground">@drawable/bg_main</item>
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
     </style>
-    <style name="default_button" parent="@android:style/Widget.Button">
-        <item name="android:background">@drawable/rounded_button</item>
+
+    <style name="AppFullScreenTheme" parent="@style/AppTheme">
+        <item name="windowNoTitle">true</item>
+        <item name="windowActionBar">false</item>
+        <item name="android:windowFullscreen">true</item>
+        <item name="android:windowContentOverlay">@null</item>
+    </style>
+
+    <!-- Define the edittext style -->
+    <style name="editText_normal_main" parent="@style/Widget.AppCompat.EditText">
+        <item name="android.spirithunt.win:font">fonts/lobster.ttf</item>
+        <item name="android:background">@drawable/edittext_normal_main</item>
+        <item name="android:paddingStart">8dp</item>
+        <item name="android:padding">5dp</item>
+        <item name="android:textColor">#FFFFFF</item>
+        <item name="android:textColorHint">#80FFFFFF</item>
+    </style>
+
+    <!-- Define the textview style -->
+    <style name="textView_normal_main" parent="@android:style/TextAppearance.Widget.TextView">
+        <item name="android.spirithunt.win:font">fonts/lobster.ttf</item>
+        <item name="android:textColor">#FFFFFF</item>
+        <item name="android:textColorHint">#80FFFFFF</item>
+        <item name="android:inputType">none</item>
+        <item name="android:cursorVisible">false</item>
+        <item name="android:focusable">false</item>
+        <item name="android:focusableInTouchMode">false</item>
+    </style>
+
+    <!-- Define the default Lobster font style -->
+    <style name="btn_lobster_default" parent="@android:style/Widget.Button">
         <item name="android.spirithunt.win:font">fonts/lobster.ttf</item>
         <item name="android:textColor">@color/colorButtonText</item>
         <item name="android:textAllCaps">false</item>
@@ -17,20 +47,54 @@
         <item name="android:shadowDy">2</item>
         <item name="android:shadowRadius">3</item>
     </style>
-    <style name="small_button" parent="@style/default_button">
+
+    <!-- Define button sizes -->
+    <style name="btn_normal_small" parent="@style/btn_lobster_default">
         <item name="android:layout_width">80dp</item>
         <item name="android:layout_height">30dp</item>
         <item name="android:textSize">15sp</item>
     </style>
-    <style name="medium_button" parent="@style/default_button">
+    <style name="btn_normal_medium" parent="@style/btn_lobster_default">
         <item name="android:layout_width">120dp</item>
         <item name="android:layout_height">35dp</item>
         <item name="android:textSize">20sp</item>
     </style>
-    <style name="large_button" parent="@style/default_button">
+    <style name="btn_normal_large" parent="@style/btn_lobster_default">
         <item name="android:layout_width">fill_parent</item>
         <item name="android:layout_height">40dp</item>
         <item name="android:textSize">25sp</item>
     </style>
 
+    <!-- Define the "main" button -->
+    <style name="btn_normal_main_small" parent="@style/btn_normal_small">
+        <item name="android:background">@drawable/btn_normal_main_style</item>
+    </style>
+    <style name="btn_normal_main_medium" parent="@style/btn_normal_medium">
+        <item name="android:background">@drawable/btn_normal_main_style</item>
+    </style>
+    <style name="btn_normal_main_large" parent="@style/btn_normal_large">
+        <item name="android:background">@drawable/btn_normal_main_style</item>
+    </style>
+
+    <!-- Define the "red" button -->
+    <style name="btn_normal_red_small" parent="@style/btn_normal_small">
+        <item name="android:background">@drawable/btn_normal_red_style</item>
+    </style>
+    <style name="btn_normal_red_medium" parent="@style/btn_normal_medium">
+        <item name="android:background">@drawable/btn_normal_red_style</item>
+    </style>
+    <style name="btn_normal_red_large" parent="@style/btn_normal_large">
+        <item name="android:background">@drawable/btn_normal_red_style</item>
+    </style>
+
+    <!-- Define the "blue" button -->
+    <style name="btn_normal_blue_small" parent="@style/btn_normal_small">
+        <item name="android:background">@drawable/btn_normal_blue_style</item>
+    </style>
+    <style name="btn_normal_blue_medium" parent="@style/btn_normal_medium">
+        <item name="android:background">@drawable/btn_normal_blue_style</item>
+    </style>
+    <style name="btn_normal_blue_large" parent="@style/btn_normal_large">
+        <item name="android:background">@drawable/btn_normal_blue_style</item>
+    </style>
 </resources>
