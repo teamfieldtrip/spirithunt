@@ -4,6 +4,7 @@
     <string name="saved_jwt">jwt</string>
     <string name="username_hint">E-mail address</string>
     <string name="password_hint">Password</string>
+    <string name="sign_up_text"><u>Sign up</u></string>
     <string name="btn_login">Login</string>
     <string name="authentication_progress_title">Authenticating</string>
     <string name="authentication_progress_content">Please wait</string>
