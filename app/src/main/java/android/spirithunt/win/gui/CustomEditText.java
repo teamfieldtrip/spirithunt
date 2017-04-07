@@ -10,7 +10,6 @@ import android.util.AttributeSet;
  * @author Remco Schipper
  * @see <a href="http://stackoverflow.com/a/16648457">How to set a particular font for a button text in android?</a>
  */
-
 public class CustomEditText extends AppCompatEditText {
     public CustomEditText(Context context) {
         super(context);
