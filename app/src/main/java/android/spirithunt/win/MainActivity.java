@@ -33,7 +33,7 @@ public class MainActivity extends AppCompatActivity {
         SharedPreferences sharedPref = this.getSharedPreferences(getString(R.string.preferences_file), Context.MODE_PRIVATE);
 
         if(sharedPref.contains(getString(R.string.saved_jwt))) {
-            this.showLogin();
+            this.showMenu();
         } else {
             this.showLogin();
         }
