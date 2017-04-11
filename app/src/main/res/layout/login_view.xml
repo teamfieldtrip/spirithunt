@@ -50,7 +50,6 @@
 
         <android.spirithunt.win.gui.CustomTextView
             style="@style/textView_normal_main"
-            android:background="@null"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:textAlignment="center"

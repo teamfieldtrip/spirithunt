@@ -18,4 +18,5 @@
     <string name="settings_summary_sound">Use in-game sound</string>
     <string name="settings_title_vibration">Vibration</string>
     <string name="settings_summary_vibration">Use in-game vibration</string>
+    <string name="title_activity_maps">Map</string>
 </resources>
