@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.LinearLayoutCompat
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:textAlignment="center"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:paddingBottom="@dimen/activity_vertical_margin">
+
+    <android.support.v7.widget.AppCompatTextView
+        style="@style/SpiritHunt.GameTitle"
+        android:id="@+id/game_status_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingBottom="@dimen/game_status_padding"
+        android:paddingTop="@dimen/game_status_padding"
+        android:text="@string/app_name" />
+
+    <android.spirithunt.win.gui.RadarDisplay
+        android:layout_gravity="center_vertical|center_horizontal"
+        android:id="@+id/game_status_radar"
+        android:layout_width="@dimen/radar_size"
+        android:layout_height="@dimen/radar_size"/>
+
+</android.support.v7.widget.LinearLayoutCompat>

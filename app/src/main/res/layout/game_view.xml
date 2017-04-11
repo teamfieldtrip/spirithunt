@@ -1,6 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/game_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin">
 
-</LinearLayout>
+    <!-- Top view -->
+    <include
+        layout="@layout/section_playermap" />
+
+    <!-- Bottom view -->
+
+    <ImageView
+        android:id="@+id/game_powerups"
+        android:layout_alignParentBottom="true"
+        android:src="@drawable/common_google_signin_btn_text_dark"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <android.spirithunt.win.gui.CustomButton
+        style="@style/btn_lobster_default"
+        android:id="@+id/game_consume"
+        android:layout_alignParentBottom="true"
+        android:layout_alignRight="@+id/game_powerups"
+        android:onClick="onClick"
+        android:layout_width="30dp"
+        android:layout_height="10dp"
+        android:text="@string/game_powerup_consume"/>
+
+    <!-- Tab bar interface -->
+    <!-- TODO -->
+
+</RelativeLayout>

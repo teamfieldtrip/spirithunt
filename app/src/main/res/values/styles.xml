@@ -32,6 +32,11 @@
         <item name="android:textAppearanceListItem">@style/PreferenceTextAppearance</item>
     </style>
 
+    <!-- Main Game view -->
+    <style name="SpiritHunt.GameTitle" parent="@style/btn_lobster_default">
+        <item name="android:textSize">20sp</item>
+    </style>
+
     <!-- Define the preferencetext style -->
     <style name="PreferenceTextAppearance">
         <item name="android:textColor">#fff</item>
