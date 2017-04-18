@@ -1,18 +1,17 @@
 package android.spirithunt.win.gui;
 
 import android.content.Context;
-import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Paint;
+import android.graphics.PixelFormat;
+import android.graphics.Point;
 import android.graphics.Rect;
-import android.location.Location;
 import android.spirithunt.win.controller.RadarRenderController;
 import android.spirithunt.win.model.Player;
 import android.util.AttributeSet;
 import android.util.Log;
+import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
-import java.util.List;
+import java.util.ArrayList;
 
 /**
  * Handles updating the radar
@@ -24,19 +23,64 @@ public class RadarDisplay extends SurfaceView {
 
     static String TAG = "Tag";
 
-    protected Location playerLocation;
-    protected List<Player> players;
     protected Rect size;
     protected RadarRenderController renderController;
 
+    /**
+     * Current player
+     */
+    protected Player activePlayer;
+
+    /**
+     * List of players
+     */
+    private ArrayList<Player> playerList;
+
+    private ArrayList<PlayerPosition> playerPositions;
+
     public RadarDisplay(Context context) {
         super(context);
-        renderController = new RadarRenderController(context);
+        setup();
+    }
+
+    public RadarDisplay(Context context, AttributeSet attributeSet) {
+        super(context, attributeSet);
+        setup();
+    }
+
+    private void setup() {
+        // Required for transparency
+        setZOrderOnTop(true);
+
+        // Try harder to get transparent
+        SurfaceHolder surfaceHolder = getHolder();
+        surfaceHolder.setFormat(PixelFormat.TRANSLUCENT);
+
+        // Add handler for the renderController
+        renderController = new RadarRenderController(this);
+    }
+
+    public void setActivePlayer(Player activePlayer) {
+        this.activePlayer = activePlayer;
+    }
+
+    public void setPlayerList(ArrayList<Player> playerList) {
+        this.playerList = playerList;
+    }
+
+    public Player getActivePlayer() {
+        return activePlayer;
+    }
+
+    public ArrayList<Player> getPlayerList() {
+        return playerList;
     }
 
     @Override
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
+
+        Log.d(TAG, "onAttachedToWindow: Starting and attaching RenderController...");
         renderController.start();
         getHolder().addCallback(renderController);
     }
@@ -44,12 +88,22 @@ public class RadarDisplay extends SurfaceView {
     @Override
     protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();
+
+        Log.d(TAG, "onDetachedFromWindow: Detaching and stopping RenderController");
         getHolder().removeCallback(renderController);
         renderController.interrupt();
     }
 
-    public RadarDisplay(Context context, AttributeSet attributeSet) {
-        super(context, attributeSet);
-        renderController = new RadarRenderController(context);
+    class PlayerPosition {
+        Player player;
+        Point position;
+
+        public PlayerPosition(Player player) {
+            this.player = player;
+        }
+
+        public void determinePosition(Player activePlayer) {
+//            android.spirithunt.win.model.Location
+        }
     }
 }
