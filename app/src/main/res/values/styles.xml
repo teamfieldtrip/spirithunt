@@ -98,4 +98,16 @@
     <style name="btn_normal_blue_large" parent="@style/btn_normal_large">
         <item name="android:background">@drawable/btn_normal_blue_style</item>
     </style>
+
+    <!-- Define the "arrow" button -->
+    <style name="btn_normal_arrow" parent="@android:style/Widget.Button">
+        <item name="android:layout_width">30dp</item>
+        <item name="android:layout_height">35dp</item>
+    </style>
+    <style name="btn_normal_arrow_left" parent="@style/btn_normal_arrow">
+        <item name="android:background">@drawable/btn_left_normal</item>
+    </style>
+    <style name="btn_normal_arrow_right" parent="@style/btn_normal_arrow">
+        <item name="android:background">@drawable/btn_right_normal</item>
+    </style>
 </resources>

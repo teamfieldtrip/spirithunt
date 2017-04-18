@@ -1,6 +1,8 @@
 <resources>
     <string name="app_name">Spirit Hunt</string>
     <string name="preferences_file">prefs</string>
+
+    <!-- Login String -->
     <string name="saved_jwt">jwt</string>
     <string name="username_hint">E-mail address</string>
     <string name="password_hint">Password</string>
@@ -11,6 +13,22 @@
     <string name="authentication_alert_title">Authentication error</string>
     <string name="authentication_alert_content">Unable to login, are you sure the e-mail/password combination is correct?</string>
     <string name="authentication_alert_button">Try again</string>
+
+    <!-- Create Game String -->
+    <string name="create_game_text_title">Create Game</string>
+    <string name="create_game_text_set_area">Set your game area</string>
+    <string name="create_game_text_time">min</string>
+    <string name="create_game_btn_create">Create</string>
+    <string name="create_game_btn_advanced">Advanced options</string>
+
+    <!-- Create Game Advanced String -->
+    <string name="create_game_advanced_text_title">Advanced options</string>
+    <string name="create_game_advanced_text_players">Players</string>
+    <string name="create_game_advanced_text_rounds">Rounds</string>
+    <string name="create_game_advanced_text_maxLifes">Max lifes</string>
+    <string name="create_game_advanced_text_powerUps">Power-ups</string>
+    <string name="create_game_advanced_btn_save">Save</string>
+
 
     <!--Setting String-->
     <string name="settings_title">Settings</string>
