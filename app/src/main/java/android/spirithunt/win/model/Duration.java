@@ -5,6 +5,7 @@ package android.spirithunt.win.model;
  */
 public class Duration {
     private int time;
+
     private String description;
 
     public Duration(int time, String description) {
@@ -15,6 +16,7 @@ public class Duration {
     public int getTime() {
         return this.time;
     }
+
     public String getDescription() {
         return this.description;
     }

@@ -2,6 +2,9 @@ package android.spirithunt.win.controller;
 
 import android.app.Activity;
 import android.app.FragmentManager;
+import android.app.ProgressDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.location.Location;
 import android.os.Bundle;
@@ -41,21 +44,45 @@ public class CreateGameController extends AppCompatActivity implements
     GoogleMap.OnMapClickListener,
     GoogleMap.OnMapLongClickListener,
     GoogleMap.OnMarkerClickListener {
+    private ProgressDialog progressDialog;
+
+    /**
+     * Stores a list with the possible amount of players
+     */
     private ArrayList<AmountOfPlayers> amountOfPlayers;
+
+    /**
+     * Stores a list with the possible amount of rounds
+     */
     private ArrayList<AmountOfRounds> amountOfRounds;
+
+    /**
+     * Stores a list with the possible amount of lifes
+     */
     private ArrayList<AmountOfLifes> amountOfLifes;
+
     private boolean powerUpsEnabled = true;
+
     private int amountOfPlayersIndex = 0;
+
     private int amountOfRoundsIndex = 0;
+
     private int amountOfLifesIndex = 0;
 
     private GoogleMap map;
+
     private Circle radiusCircle;
+
     private Marker centerMarker;
+
     private Marker borderMarker;
+
     private LatLng centerLatLng;
+
     private LatLng borderLatLng;
+
     private ArrayList<Duration> durations;
+
     private int timeIndicatorIndex;
 
     public CreateGameController() {
@@ -161,8 +188,6 @@ public class CreateGameController extends AppCompatActivity implements
     }
 
     public void openAdvanced(View view) {
-        Intent advancedSettingsIntent = new Intent(this, CreateGameAdvancedController.class);
-
         Bundle bundle = new Bundle();
         bundle.putInt("playersIndex", this.amountOfPlayersIndex);
         bundle.putInt("roundsIndex", this.amountOfRoundsIndex);
@@ -171,34 +196,43 @@ public class CreateGameController extends AppCompatActivity implements
         bundle.putParcelableArrayList("players", this.amountOfPlayers);
         bundle.putParcelableArrayList("rounds", this.amountOfRounds);
         bundle.putParcelableArrayList("lifes", this.amountOfLifes);
-        advancedSettingsIntent.putExtras(bundle);
 
+        Intent advancedSettingsIntent = new Intent(this, CreateGameAdvancedController.class);
+        advancedSettingsIntent.putExtras(bundle);
         startActivityForResult(advancedSettingsIntent, 1);
     }
 
     public void submit(View view) {
         if (this.centerLatLng != null && this.borderLatLng != null) {
+            this.showProgressDialog();
             GameCreate gameCreate = new GameCreate(
                 this.durations.get(this.timeIndicatorIndex).getTime(),
                 this.amountOfPlayers.get(this.amountOfLifesIndex).getAmount(),
                 this.amountOfRounds.get(this.amountOfRoundsIndex).getAmount(),
                 this.amountOfLifes.get(this.amountOfLifesIndex).getAmount(),
                 this.powerUpsEnabled,
-                this.centerLatLng.latitude,
-                this.centerLatLng.longitude,
-                this.borderLatLng.latitude,
-                this.borderLatLng.longitude
+                this.centerLatLng,
+                this.borderLatLng
             );
 
+            final CreateGameController self = this;
             Socket socket = SocketProvider.getInstance().getConnection();
             socket.emit("lobby:create", gameCreate, new Ack() {
                 @Override
-                public void call(Object... args) {
+                public void call(final Object... args) {
+                    self.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            self.hideProgressDialog();
 
+                            if(args[0] != null) {
+                                self.showErrorDialog(self);
+                            }
+                        }
+                    });
                 }
             });
-        }
-        else {
+        } else {
             new AlertDialog.Builder(this)
                 .setTitle("Hello Infidel")
                 .setMessage("Please select the area for your game")
@@ -209,13 +243,11 @@ public class CreateGameController extends AppCompatActivity implements
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == 1) {
-            if (resultCode == Activity.RESULT_OK) {
-                this.amountOfPlayersIndex = data.getIntExtra("playersIndex", 0);
-                this.amountOfRoundsIndex = data.getIntExtra("roundsIndex", 0);
-                this.amountOfLifesIndex = data.getIntExtra("lifesIndex", 0);
-                this.powerUpsEnabled = data.getBooleanExtra("powerUpsEnabled", true);
-            }
+        if (requestCode == 1 && resultCode == Activity.RESULT_OK) {
+            this.amountOfPlayersIndex = data.getIntExtra("playersIndex", 0);
+            this.amountOfRoundsIndex = data.getIntExtra("roundsIndex", 0);
+            this.amountOfLifesIndex = data.getIntExtra("lifesIndex", 0);
+            this.powerUpsEnabled = data.getBooleanExtra("powerUpsEnabled", true);
         }
     }
 
@@ -233,8 +265,7 @@ public class CreateGameController extends AppCompatActivity implements
             public void onMapReady(GoogleMap googleMap) {
                 try {
                     googleMap.setMyLocationEnabled(true);
-                }
-                catch (SecurityException e) {
+                } catch (SecurityException e) {
                     System.out.println(e.getMessage());
                 }
                 googleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
@@ -249,16 +280,14 @@ public class CreateGameController extends AppCompatActivity implements
     }
 
     @Override
-    public void onMapLongClick(LatLng point)
-    {
+    public void onMapLongClick(LatLng point) {
         if(this.centerMarker == null) {
             MarkerOptions markerOptions = new MarkerOptions()
                 .position(point)
                 .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE));
             this.centerMarker = map.addMarker(markerOptions);
             this.centerLatLng = point;
-        }
-        else {
+        } else {
             float [] dist = new float[1];
             Location.distanceBetween(this.centerLatLng.latitude,
                 this.centerLatLng.longitude,
@@ -279,15 +308,13 @@ public class CreateGameController extends AppCompatActivity implements
     }
 
     @Override
-    public boolean onMarkerClick(Marker marker)
-    {
+    public boolean onMarkerClick(Marker marker) {
         if(marker.equals(this.centerMarker)) {
             this.removeBorderMarker();
 
             this.centerMarker.remove();
             this.centerMarker = null;
-        }
-        else {
+        } else {
             this.removeBorderMarker();
         }
 
@@ -295,9 +322,37 @@ public class CreateGameController extends AppCompatActivity implements
     }
 
     @Override
-    public void onMapClick(LatLng point)
-    {
+    public void onMapClick(LatLng point) {
         Toast.makeText(getApplicationContext(),
             "Long Press to select locations", Toast.LENGTH_LONG).show();
+    }
+
+    private void hideProgressDialog() {
+        if(this.progressDialog != null) {
+            this.progressDialog.dismiss();
+        }
+    }
+
+    private void showProgressDialog() {
+        if(this.progressDialog == null) {
+            this.progressDialog = new ProgressDialog(this);
+            this.progressDialog.setTitle(getString(R.string.create_game_progress_title));
+            this.progressDialog.setMessage(getString(R.string.create_game_progress_content));
+            this.progressDialog.setCancelable(false);
+            this.progressDialog.show();
+        }
+    }
+
+    private void showErrorDialog(Context context) {
+        new android.app.AlertDialog.Builder(context)
+            .setTitle(getString(R.string.create_game_alert_title))
+            .setMessage(getString(R.string.create_game_alert_content))
+            .setNeutralButton(R.string.create_game_alert_button, new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
+                    // do nothing
+                }
+            })
+            .setIcon(android.R.drawable.ic_dialog_alert)
+            .show();
     }
 }

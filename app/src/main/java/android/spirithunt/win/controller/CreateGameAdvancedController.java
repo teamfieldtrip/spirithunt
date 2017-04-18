@@ -19,11 +19,17 @@ import java.util.ArrayList;
 
 public class CreateGameAdvancedController extends AppCompatActivity {
     private ArrayList<AmountOfPlayers> amountOfPlayers;
+
     private ArrayList<AmountOfRounds> amountOfRounds;
+
     private ArrayList<AmountOfLifes> amountOfLifes;
+
     private int amountOfPlayersIndex;
+
     private int amountOfRoundsIndex;
+
     private int amountOfLifesIndex;
+
     private boolean powerUpsEnabled;
 
     public CreateGameAdvancedController() {

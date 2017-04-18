@@ -9,6 +9,7 @@ import android.os.Parcelable;
 
 public class AmountOfRounds implements Parcelable {
     private int amount;
+
     private String description;
 
     private AmountOfRounds(Parcel parcel) {
@@ -23,6 +24,7 @@ public class AmountOfRounds implements Parcelable {
     public int getAmount() {
         return this.amount;
     }
+
     public String getDescription() {
         return this.description;
     }

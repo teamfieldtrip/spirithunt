@@ -6,11 +6,17 @@ package android.spirithunt.win.model;
 
 public class Player {
     private String id;
+
     public double latitude;
+
     public double longitude;
+
     public int score;
+
     public String target;
+
     public int team;
+
     public int result;
 
     public Player(String id) {

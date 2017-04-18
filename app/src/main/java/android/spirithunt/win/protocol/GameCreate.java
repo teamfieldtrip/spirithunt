@@ -1,5 +1,7 @@
 package android.spirithunt.win.protocol;
 
+import com.google.android.gms.maps.model.LatLng;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -13,20 +15,18 @@ public class GameCreate extends JSONObject {
                       int amountOfRounds,
                       int amountOfLifes,
                       boolean powerUpsEnabled,
-                      double centerLatitude,
-                      double centerLongitude,
-                      double borderLatitude,
-                      double borderLongitude) {
+                      LatLng center,
+                      LatLng border) {
         try {
             this.put("duration", duration);
             this.put("amountOfPlayers", amountOfPlayers);
             this.put("amountOfRounds", amountOfRounds);
             this.put("amountOfLifes", amountOfLifes);
             this.put("powerUpsEnabled", powerUpsEnabled);
-            this.put("centerLatitude", centerLatitude);
-            this.put("centerLongitude", centerLongitude);
-            this.put("borderLongitude", borderLatitude);
-            this.put("borderLatitude", borderLongitude);
+            this.put("centerLatitude", center.latitude);
+            this.put("centerLongitude", center.longitude);
+            this.put("borderLongitude", border.latitude);
+            this.put("borderLatitude", border.longitude);
         } catch(JSONException e) {
             System.out.println(e.getMessage());
         }
