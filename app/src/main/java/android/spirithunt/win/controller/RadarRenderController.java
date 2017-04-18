@@ -95,7 +95,7 @@ public class RadarRenderController extends Thread implements SurfaceHolder.Callb
         // HACK Backwards compatibility, Resources.getDrawable(int) is deprecated, but the replacing
         // API exists in API 21, which is too new for our min API level (19)
         radarBackgroundPicture = res.getDrawable(R.drawable.gui_el_blue_radar);
-        radarScannerPicture = res.getDrawable(R.drawable.gui_el_sweeper_red);
+        radarScannerPicture = res.getDrawable(R.drawable.gui_el_sweeper_blue);
     }
 
     /**
