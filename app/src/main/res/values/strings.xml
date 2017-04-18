@@ -37,4 +37,7 @@
     <string name="settings_title_vibration">Vibration</string>
     <string name="settings_summary_vibration">Use in-game vibration</string>
     <string name="title_activity_maps">Map</string>
+
+    <!--Google Maps API-->
+    <string name="google_maps_key" templateMergeStrategy="preserve" translatable="false">null</string>
 </resources>
