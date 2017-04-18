@@ -2,7 +2,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="android.spirithunt.win">
 
-
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
     <uses-permission android:name="android.permission.CAMERA"/>
     <uses-feature android:name="android:hardware.camera" android:required="false" />
@@ -13,7 +12,8 @@
         android:icon="@mipmap/ic_launcher_hooded"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:theme="@style/AppFullScreenTheme">
+        android:theme="@style/AppFullScreenTheme"
+        android:hardwareAccelerated="true">
 
         <!-- Declared activities -->
         <activity android:name=".MainActivity">
@@ -66,7 +66,10 @@
             android:theme="@style/AppPreferenceTheme"/>
 
         <!-- Activities in progress -->
-        <activity android:name=".controller.GameController" />
+        <activity
+            android:name=".controller.GameController"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait" />
 
         <!-- Metadata -->
         <meta-data
