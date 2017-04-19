@@ -2,6 +2,8 @@ package android.spirithunt.win.controller;
 
 import android.content.res.Resources;
 import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
 import android.graphics.PixelFormat;
 import android.graphics.Point;
 import android.graphics.PorterDuff;
@@ -82,11 +84,6 @@ public class RadarRenderController extends Thread implements SurfaceHolder.Callb
      */
     private Drawable radarScannerPicture;
 
-    /**
-     * Start with a context
-     *
-     * @param context Application context
-     */
     public RadarRenderController(RadarDisplay radarDisplay) {
        this.radarDisplay = radarDisplay;
 
@@ -221,8 +218,16 @@ public class RadarRenderController extends Thread implements SurfaceHolder.Callb
         // Draw radar background
         radarBackgroundPicture.draw(canvas);
 
+        Paint paint = new Paint();
+        paint.setStyle(Paint.Style.FILL);
+        paint.setColor(Color.WHITE);
+
         // Draw players
-        // TODO
+        for (PlayerDrawLocation player: playerLocations) {
+            if (player.location != null) {
+                canvas.drawCircle(player.location.x, player.location.y, 30, paint);
+            }
+        }
 
         // Draw sweeper
         // NOTE Rotating the whole flippin' canvas is quicker than rotating a Drawable for some
@@ -254,6 +259,8 @@ public class RadarRenderController extends Thread implements SurfaceHolder.Callb
         return res;
     }
 
+    private ArrayList<PlayerDrawLocation> playerLocations = null;
+
     @Override
     public void run() {
         super.run();
@@ -263,7 +270,6 @@ public class RadarRenderController extends Thread implements SurfaceHolder.Callb
 
         // Atomic list, updated at the end of a loop if required
         ArrayList<Player> players = radarDisplay.getPlayerList();
-        ArrayList<PlayerDrawLocation> playerLocations = null;
 
         while(!isInterrupted()) {
             if (!active || holder == null) {
@@ -279,13 +285,13 @@ public class RadarRenderController extends Thread implements SurfaceHolder.Callb
             }
 
             // Update the arrayList of players, if required
-            if (players != radarDisplay.getPlayerList()) {
+            //if (players != radarDisplay.getPlayerList()) {
                 players = radarDisplay.getPlayerList();
                 playerLocations = buildPlayerLocations(
                     players,
                     radarDisplay.getActivePlayer()
                 );
-            }
+            //}
 
             // Wait the normal frame duration, if we drop below it's no problem
             try {
@@ -297,29 +303,31 @@ public class RadarRenderController extends Thread implements SurfaceHolder.Callb
     }
 
     class PlayerDrawLocation {
-        Player player;
-        Point location;
+        private Player player;
+        public Point location;
 
         PlayerDrawLocation(Player player) {
             this.player = player;
         }
 
         void calibrate(Player alignmentPlayer) {
-            float[] gpsData = new float[3];
+            if (canvasCenter != null) {
+                float[] gpsData = new float[3];
 
-            Location.distanceBetween(
-                player.latitude,
-                player.longitude,
-                alignmentPlayer.latitude,
-                alignmentPlayer.longitude,
-                gpsData
-            );
+                Location.distanceBetween(
+                    player.latitude,
+                    player.longitude,
+                    alignmentPlayer.latitude,
+                    alignmentPlayer.longitude,
+                    gpsData
+                );
 
-            Location actPlyLoc = Location.build(player.latitude, player.longitude);
+                double bearing = Math.toRadians(gpsData[2]);
+                double pointX = canvasCenter.x + gpsData[0] * Math.cos(bearing);
+                double pointY = canvasCenter.y + gpsData[0] * Math.sin(bearing);
 
-
+                this.location = new Point((int) pointX, (int) pointY);
+            }
         }
-
-
     }
 }

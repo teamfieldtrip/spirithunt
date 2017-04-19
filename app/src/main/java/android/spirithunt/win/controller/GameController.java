@@ -44,13 +44,14 @@ public class GameController extends AppCompatActivity implements View.OnClickLis
         radar = (RadarDisplay) findViewById(R.id.game_status_radar);
 
         // Determine who we are
-        ownPlayer = buildPlayer(6.093206, 52.512121, 2);
+        ownPlayer = buildPlayer(52.331128, 5.540495, 2);
 
         // Flood the player list
-        players.add(buildPlayer(6.094408, 52.512813, 1));
-        players.add(buildPlayer(6.093850, 52.512813, 2));
-        players.add(buildPlayer(6.091683, 52.512199, 1));
-        players.add(buildPlayer(6.093056, 52.511455, 1));
+        players.add(buildPlayer(52.330392, 5.545027, 1));
+        players.add(buildPlayer(52.330445, 5.535500, 1));
+//        players.add(buildPlayer(6.093850, 52.512813, 2));
+//        players.add(buildPlayer(6.091683, 52.512199, 1));
+//        players.add(buildPlayer(6.093056, 52.511455, 1));
 
         radar.setActivePlayer(ownPlayer);
         radar.setPlayerList(players);
