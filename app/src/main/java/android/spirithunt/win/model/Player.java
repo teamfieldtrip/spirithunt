@@ -27,4 +27,5 @@ public class Player {
         return this.id;
     }
     public void setTeam(int team){this.team = team;}
+    public String toString(){return this.id;}
 }
