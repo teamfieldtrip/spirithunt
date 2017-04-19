@@ -19,33 +19,21 @@ import io.socket.client.Socket;
 
 public class LobbyController extends AppCompatActivity {
 
-    private int lobbyId;
-    private SocketProvider socketProvider = SocketProvider.getInstance();
-
     private ArrayList<Player> players = new ArrayList<Player>();    // General list of players
     private ArrayList<Player> teamRed = new ArrayList<Player>();    // Team 0
     private ArrayList<Player> teamBlue = new ArrayList<Player>();   // Team 1
-
-
-    /**
-     * Generate a lobby
-     *
-     * @param p Player model
-     */
-//    public LobbyController(Player p) {
-//
-//        // First add player to the general list of players, then assign to a team
-//        players.add(p);
-//        assignPlayer(p);
-//    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.lobby_view);
 
-        players.add(new Player("aoeu"));
-        players.add(new Player("asdf"));
+        for(int i = 0; i<100; i++){
+
+            Player p1 = new Player("Sven");
+            p1.setTeam(i%2);
+            assignPlayer(p1);
+        }
 
         updatePlayerList();
     }
@@ -59,24 +47,16 @@ public class LobbyController extends AppCompatActivity {
         switch (p.team) {
             case 0:
                 teamRed.add(p);
+                players.add(p);
                 break;
             case 1:
                 teamBlue.add(p);
+                players.add(p);
                 break;
             default:
-                // Handle noTeamException
+                Log.e("No team", "No team in Player model");
                 break;
         }
-    }
-
-    public void getLobbyFromServer() {
-
-        Socket socket = socketProvider.getConnection();
-
-//        TODO Socket connection
-//        lobbyId = idfromsocket;
-//        players.addAll(playersfromsocket);
-
     }
 
     /**
@@ -84,19 +64,27 @@ public class LobbyController extends AppCompatActivity {
      */
     public void updatePlayerList() {
 
-        ListView listView = (ListView) findViewById(R.id.listview_lobby);
+        ListView listViewTeamRed = (ListView) findViewById(R.id.listview_teamred_lobby);
+        ListView listViewTeamBlue = (ListView) findViewById(R.id.listview_teamblue_lobby);
 
-        ArrayList<String> playerNames = new ArrayList<String>();
-
-        for (Player p : players) {
-            playerNames.add(p.getId());
-        }
-
-        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(
+        ArrayAdapter<Player> arrayAdapterRed = new ArrayAdapter<>(
             this,
             android.R.layout.simple_list_item_1,
-            playerNames);
+            teamRed);
 
-        listView.setAdapter(arrayAdapter);
+        ArrayAdapter<Player> arrayAdapterBlue = new ArrayAdapter<>(
+            this,
+            android.R.layout.simple_list_item_1,
+            teamBlue);
+
+        listViewTeamRed.setAdapter(arrayAdapterRed);
+        listViewTeamBlue.setAdapter(arrayAdapterBlue);
+    }
+
+    public void getLobby() {
+
+        Socket socket = SocketProvider.getInstance().getConnection();
+
+        // Get player list
     }
 }

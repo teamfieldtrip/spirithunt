@@ -26,4 +26,5 @@ public class Player {
     public String getId() {
         return this.id;
     }
+    public void setTeam(int team){this.team = team;}
 }
