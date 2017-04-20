@@ -1,5 +1,6 @@
 package android.spirithunt.win.controller;
 
+import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -9,6 +10,8 @@ import android.graphics.Point;
 import android.graphics.PorterDuff;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
+import android.os.PowerManager;
 import android.spirithunt.win.R;
 import android.spirithunt.win.gui.RadarDisplay;
 import android.spirithunt.win.model.Location;
@@ -50,6 +53,12 @@ public class RadarRenderController extends Thread implements SurfaceHolder.Callb
     private static final int RATE_ACTIVE = 40;
 
     /**
+     * Number of frames per second to draw the radar. Determines the update-rate of the radar when
+     * in power-save mode.
+     */
+    private static final int RATE_ACTIVE_PS = 10;
+
+    /**
      * Split
      */
     private static final long ROTATION_SPLIT = (long) Math.floor(1000 * ROTATION_DURATION);
@@ -84,10 +93,24 @@ public class RadarRenderController extends Thread implements SurfaceHolder.Callb
      */
     private Drawable radarScannerPicture;
 
-    public RadarRenderController(RadarDisplay radarDisplay) {
-       this.radarDisplay = radarDisplay;
+    /**
+     * Returns true if power save mode is supported and currently active.
+     *
+     * @return
+     */
+    protected boolean isInPowerSaveMode() {
+        PowerManager powerManager = (PowerManager) radarDisplay.getContext().getSystemService(Context.POWER_SERVICE);
+        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            return powerManager.isPowerSaveMode();
+        } else {
+            return false;
+        }
+    }
 
-        Resources res = radarDisplay.getContext().getResources();
+    public RadarRenderController(RadarDisplay display) {
+       radarDisplay = display;
+
+        Resources res = display.getContext().getResources();
 
         // HACK Backwards compatibility, Resources.getDrawable(int) is deprecated, but the replacing
         // API exists in API 21, which is too new for our min API level (19)
@@ -159,7 +182,8 @@ public class RadarRenderController extends Thread implements SurfaceHolder.Callb
     }
 
     /**
-     * Recalculates
+     * Recalculates the size of all graphics when the canvas size changes.
+     *
      * @param size
      */
     protected void resizeGraphics(Rect size) {
@@ -207,10 +231,10 @@ public class RadarRenderController extends Thread implements SurfaceHolder.Callb
      * @param canvas
      * @return
      */
-    protected Canvas drawRadar(Canvas canvas) {
+    protected Canvas drawRadar(Canvas canvas, ArrayList<DrawablePlayer> players, Player currentPlayer, boolean inPowerSaveMode) {
         // Get a time
         long time = System.currentTimeMillis() % ROTATION_SPLIT;
-        float rotation = (float) ((time / 1000f) * (360 / ROTATION_DURATION)) % 360f;
+        float rotation = (float) ((time / 1000f) * (360f / ROTATION_DURATION)) % 360f;
 
         // Clear canvas
         canvas.drawColor(0, PorterDuff.Mode.CLEAR);
@@ -218,48 +242,63 @@ public class RadarRenderController extends Thread implements SurfaceHolder.Callb
         // Draw radar background
         radarBackgroundPicture.draw(canvas);
 
-        Paint paint = new Paint();
-        paint.setStyle(Paint.Style.FILL);
-        paint.setColor(Color.WHITE);
+        if (!inPowerSaveMode) {
+            // Draw sweeper
+            // NOTE Rotating the whole flippin' canvas is quicker than rotating a Drawable for some
+            // weird reason.
+            canvas.save();
 
-        // Draw players
-        for (PlayerDrawLocation player: playerLocations) {
-            if (player.location != null) {
-                canvas.drawCircle(player.location.x, player.location.y, 30, paint);
-            }
+            // Rotate the canvas 29°, to compensate the sweeper not being top-aligned.
+            canvas.rotate(29, canvasCenter.x, canvasCenter.y);
+            canvas.rotate(rotation, canvasCenter.x, canvasCenter.y);
+            radarScannerPicture.draw(canvas);
+            canvas.restore();
         }
 
-        // Draw sweeper
-        // NOTE Rotating the whole flippin' canvas is quicker than rotating a Drawable for some
-        // weird reason.
-        canvas.save();
-        canvas.rotate(rotation, canvasCenter.x, canvasCenter.y);
-        radarScannerPicture.draw(canvas);
-        canvas.restore();
+        // Determine paint for friendly target
+        Paint paintFriendly = new Paint();
+        paintFriendly.setStyle(Paint.Style.FILL);
+        paintFriendly.setColor(Color.WHITE);
+        paintFriendly.setAlpha(90);
+
+        // Determine paint for hostile target
+        Paint paintHostile = new Paint(paintFriendly);
+        paintHostile.setAlpha(200);
+
+        // Draw targets, both friendly and hostile.
+        for (DrawablePlayer player: players) {
+            player.draw(canvas, currentPlayer, paintFriendly, paintHostile, rotation, inPowerSaveMode);
+        }
 
         // Done
         return canvas;
     }
 
-    public ArrayList<PlayerDrawLocation> buildPlayerLocations(ArrayList<Player> players, Player activePlayer) {
+    /**
+     * Converts a list of Player objects to a list of PlayerDrawLocation objects, which contain
+     * information on where to draw the player.
+     *
+     * @param players
+     * @param perspectivePlayer
+     * @return List of players, with their respective draw locations
+     */
+    public ArrayList<DrawablePlayer> buildDrawablePlayerList(ArrayList<Player> players, Player perspectivePlayer) {
         if (players == null) {
             return new ArrayList<>();
         }
 
-        ArrayList<PlayerDrawLocation> res = new ArrayList<>();
+        ArrayList<DrawablePlayer> res = new ArrayList<>();
 
-        PlayerDrawLocation playerLocation;
+        DrawablePlayer playerLocation;
 
         for (Player player: players) {
-            playerLocation = new PlayerDrawLocation(player);
-            playerLocation.calibrate(activePlayer);
+            playerLocation = new DrawablePlayer(player);
+            playerLocation.preload(perspectivePlayer);
             res.add(playerLocation);
         }
 
         return res;
     }
-
-    private ArrayList<PlayerDrawLocation> playerLocations = null;
 
     @Override
     public void run() {
@@ -269,29 +308,46 @@ public class RadarRenderController extends Thread implements SurfaceHolder.Callb
         int rate;
 
         // Atomic list, updated at the end of a loop if required
-        ArrayList<Player> players = radarDisplay.getPlayerList();
+        ArrayList<Player> players = null;
+        ArrayList<DrawablePlayer> playerList = null;
+        Player activePlayer = null;
+        boolean changes;
+        boolean inPowerSaveMode = isInPowerSaveMode();
 
         while(!isInterrupted()) {
             if (!active || holder == null) {
                 rate = RATE_IDLE;
             } else {
-                rate = RATE_ACTIVE;
+                rate = inPowerSaveMode ? RATE_ACTIVE_PS : RATE_ACTIVE;
 
+                changes = false;
+
+                // Update or initialize the activePlayer variable
+                if (activePlayer == null || activePlayer != radarDisplay.getActivePlayer()) {
+                    activePlayer = radarDisplay.getActivePlayer();
+                    changes = true;
+                }
+
+                // Update or initialize the arrayList of players, if required
+                if (players != radarDisplay.getPlayerList()) {
+                    players = radarDisplay.getPlayerList();
+                    changes = true;
+                }
+
+                if (changes || playerList == null) {
+                    playerList = buildDrawablePlayerList(players, activePlayer);
+                }
+
+                // Get a lock on the canvas.
                 canvas = holder.lockCanvas();
                 if (canvas != null) {
-                    canvas = drawRadar(canvas);
+                    // Draw the radar
+                    canvas = drawRadar(canvas, playerList, activePlayer, inPowerSaveMode);
+
+                    // Release lock and update canvas contents
                     holder.unlockCanvasAndPost(canvas);
                 }
             }
-
-            // Update the arrayList of players, if required
-            //if (players != radarDisplay.getPlayerList()) {
-                players = radarDisplay.getPlayerList();
-                playerLocations = buildPlayerLocations(
-                    players,
-                    radarDisplay.getActivePlayer()
-                );
-            //}
 
             // Wait the normal frame duration, if we drop below it's no problem
             try {
@@ -302,32 +358,98 @@ public class RadarRenderController extends Thread implements SurfaceHolder.Callb
         }
     }
 
-    class PlayerDrawLocation {
-        private Player player;
-        public Point location;
+    class DrawablePlayer {
+        private static final double RADIAL_MULTIPLIER = ((2.0 * Math.PI) / 360.0);
+        private static final double MAX_DISTANCE = 650f;
+        private static final int CIRCLE_SIZE = 10;
+        private static final double HALF_PI = Math.PI * .5;
 
-        PlayerDrawLocation(Player player) {
+        Player player;
+
+        float distance = -1;
+        float bearing = -1;
+
+        DrawablePlayer(Player player) {
             this.player = player;
         }
 
-        void calibrate(Player alignmentPlayer) {
-            if (canvasCenter != null) {
-                float[] gpsData = new float[3];
+        /**
+         * Preload the distance and bearing calculation for the player, does not include the
+         * current bearing of the player, just the north-faced bearing.
+         *
+         * @param perspectivePlayer Player to use as alignment, basically the Player for this device.
+         */
+        void preload(Player perspectivePlayer) {
+            float[] results = new float[3];
 
-                Location.distanceBetween(
-                    player.latitude,
-                    player.longitude,
-                    alignmentPlayer.latitude,
-                    alignmentPlayer.longitude,
-                    gpsData
-                );
+            Location.distanceBetween(
+                player.latitude,
+                player.longitude,
+                perspectivePlayer.latitude,
+                perspectivePlayer.longitude,
+                results
+            );
 
-                double bearing = Math.toRadians(gpsData[2]);
-                double pointX = canvasCenter.x + gpsData[0] * Math.cos(bearing);
-                double pointY = canvasCenter.y + gpsData[0] * Math.sin(bearing);
+            bearing = 360f - results[2];
+            distance = results[0];
 
-                this.location = new Point((int) pointX, (int) pointY);
+            if (bearing >= 360f) {
+                bearing -= 360f;
             }
+
+            double latDist = perspectivePlayer.latitude - player.latitude;
+            double longDist = perspectivePlayer.longitude - player.longitude;
+
+            Log.d(TAG, String.format(
+                "preload: %d, (%.0f, %.0f), b: %.1f, d: %.1f",
+                player.team,
+                latDist * 10000f,
+                longDist * 10000f,
+                bearing,
+                distance
+            ));
+        }
+
+        /**
+         * Draws the player on the radar, using the given radar dimensions and center location.
+         * @param canvas
+         */
+        void draw(Canvas canvas, Player perspectivePlayer, Paint paintFriendly, Paint paintHostile, double sweeperRotation, boolean inPowerSaveMode) {
+            if (canvasCenter == null || bearing == -1 || distance == -1) {
+                return;
+            }
+
+            // Get canvas information
+            Rect canvasSize = canvas.getClipBounds();
+            Point canvasCenter = new Point(canvasSize.centerX(), canvasSize.centerY());
+
+            // Converts bearing in meters to bearing between 0 - 2π
+            double direction = bearing * RADIAL_MULTIPLIER;
+
+            // Converts distance in meters to distance in pixels from the center.
+            double distance = Math.min(MAX_DISTANCE, this.distance) * (canvasSize.height() * .45f / MAX_DISTANCE);
+
+            Point location = new Point(
+                canvasCenter.x + (int) Math.round(Math.sin(direction) * distance),
+                canvasCenter.y - (int) Math.round(Math.cos(direction) * distance)
+            );
+
+            Paint paint = new Paint((perspectivePlayer.team == player.team) ? paintFriendly : paintHostile);
+
+            if (!inPowerSaveMode) {
+                double rotationAlpha = sweeperRotation - bearing;
+
+                if (rotationAlpha < 0) {
+                    rotationAlpha += 360;
+                }
+
+                double alphaMultiplier = Math.cos(HALF_PI * Math.min(1, (rotationAlpha / 200f)) + HALF_PI) + 1;
+                double alphaBase = paint.getAlpha() / 255f * 150f;
+                int alpha = (int) Math.round(alphaBase + (255 - alphaBase) * alphaMultiplier);
+                paint.setAlpha(alpha);
+            }
+
+            canvas.drawCircle(location.x, location.y, CIRCLE_SIZE, paint);
         }
     }
 }

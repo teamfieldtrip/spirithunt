@@ -5,13 +5,11 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.spirithunt.win.R;
 import android.spirithunt.win.gui.RadarDisplay;
-import android.spirithunt.win.model.Location;
 import android.spirithunt.win.model.Player;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import static java.util.UUID.randomUUID;
 
@@ -24,6 +22,7 @@ import static java.util.UUID.randomUUID;
  */
 public class GameController extends AppCompatActivity implements View.OnClickListener {
 
+    private static final String TAG = "GameController";
     private RadarDisplay radar;
     private Player ownPlayer;
     private ArrayList<Player> players = new ArrayList<>();
@@ -44,14 +43,32 @@ public class GameController extends AppCompatActivity implements View.OnClickLis
         radar = (RadarDisplay) findViewById(R.id.game_status_radar);
 
         // Determine who we are
-        ownPlayer = buildPlayer(52.331128, 5.540495, 2);
+        ownPlayer = buildPlayer(52.512740, 6.093505, 2);
 
         // Flood the player list
-        players.add(buildPlayer(52.330392, 5.545027, 1));
-        players.add(buildPlayer(52.330445, 5.535500, 1));
-//        players.add(buildPlayer(6.093850, 52.512813, 2));
-//        players.add(buildPlayer(6.091683, 52.512199, 1));
-//        players.add(buildPlayer(6.093056, 52.511455, 1));
+        players.add(buildPlayer(
+            ownPlayer.latitude + 0.001000,
+            ownPlayer.longitude,
+            1
+        ));
+        players.add(buildPlayer(
+            ownPlayer.latitude - 0.002000,
+            ownPlayer.longitude,
+            2
+        ));
+        players.add(buildPlayer(
+            ownPlayer.latitude,
+            ownPlayer.longitude + 0.003000,
+            3
+        ));
+        players.add(buildPlayer(
+            ownPlayer.latitude,
+            ownPlayer.longitude - 0.004000,
+            4
+        ));
+//        players.add(buildPlayer(52.512813, 6.093850, 2));
+//        players.add(buildPlayer(52.512199, 6.091683, 1));
+//        players.add(buildPlayer(52.511455, 6.093056, 1));
 
         radar.setActivePlayer(ownPlayer);
         radar.setPlayerList(players);
