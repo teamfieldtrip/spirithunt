@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
 
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
@@ -12,7 +12,7 @@
     <style name="AppFullScreenTheme" parent="@style/AppTheme">
         <item name="windowNoTitle">true</item>
         <item name="windowActionBar">false</item>
-        <item name="android:windowFullscreen">true</item>
+        <item name="android:windowFullscreen">false</item>
         <item name="android:windowContentOverlay">@null</item>
         <item name="android:textAppearanceListItem">@style/PreferenceTextAppearance</item>
         <item name="android:textColorSecondary">#fff</item>
@@ -23,6 +23,10 @@
     <style name="PreferenceTextAppearance">
         <item name="android:textColor">#fff</item>
         <item name="android:textSize">15sp</item>
+    </style>
+
+    <style name="AppSignUpScreen" parent="@style/AppFullScreenTheme">
+        <item name="windowActionBar">true</item>
     </style>
 
     <!-- Define the edittext style -->
