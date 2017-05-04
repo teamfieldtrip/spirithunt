@@ -1,5 +1,6 @@
 package android.spirithunt.win.controller;
 
+import android.app.FragmentManager;
 import android.os.Bundle;
 import android.spirithunt.win.R;
 import android.spirithunt.win.model.Player;
@@ -8,6 +9,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapFragment;
+import com.google.android.gms.maps.OnMapReadyCallback;
 
 import java.util.ArrayList;
 
@@ -19,6 +24,11 @@ import io.socket.client.Socket;
 
 public class LobbyController extends AppCompatActivity {
 
+    private int lobbyId;
+    private SocketProvider socketProvider = SocketProvider.getInstance();
+
+    private GoogleMap map;
+
     private ArrayList<Player> players = new ArrayList<>();    // General list of players
     private ArrayList<Player> teamRed = new ArrayList<>();    // Team 0
     private ArrayList<Player> teamBlue = new ArrayList<>();   // Team 1
@@ -27,6 +37,27 @@ public class LobbyController extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.lobby_view);
+
+        FragmentManager manager = getFragmentManager();
+        MapFragment mapFragment = (MapFragment) manager.findFragmentById(R.id.lobby_map);
+
+
+
+        final LobbyController self = this;
+        mapFragment.getMapAsync(new OnMapReadyCallback() {
+            @Override
+            public void onMapReady(GoogleMap googleMap) {
+                try {
+                    googleMap.setMyLocationEnabled(true);
+                } catch (SecurityException e) {
+                    System.out.println(e.getMessage());
+                }
+
+                googleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+                googleMap.getUiSettings().setAllGesturesEnabled(false);
+                self.map = googleMap;
+            }
+        });
 
         for(int i = 0; i<100; i++){
 
@@ -59,6 +90,16 @@ public class LobbyController extends AppCompatActivity {
         }
     }
 
+    public void getLobbyFromServer() {
+
+        Socket socket = socketProvider.getConnection();
+
+//        TODO Socket connection
+//        lobbyId = idfromsocket;
+//        players.addAll(playersfromsocket);
+
+    }
+
     /**
      * Occupy the ListView with the list of players
      */
@@ -85,6 +126,6 @@ public class LobbyController extends AppCompatActivity {
 
         Socket socket = SocketProvider.getInstance().getConnection();
 
-        // Get player list
+        // TODO get lobby an set variable
     }
 }
