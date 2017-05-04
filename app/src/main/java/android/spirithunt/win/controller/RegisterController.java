@@ -97,18 +97,62 @@ public class RegisterController extends AuthorisationController {
                 @Override
                 public void run() {
                 if(args[0] == null) {
-                    self.saveJwt(args[1].toString());
-                    self.hideProgressDialog();
-                    self.showMainMenu(self);
+                    self.completeRegistration(args[1].toString());
                 } else {
-                    String message = args[0].toString();
-                    self.showError(self.getErrorFromDictionary(message));
-                    self.hideProgressDialog();
+                    self.failRegistration(args[0].toString());
                 }
                 }
             });
             }
         });
+    }
+
+    protected void failRegistration(String reason) {
+        EditText target = null;
+
+        switch (reason) {
+            case "empty-name":
+            case "short-name":
+                target = registerName;
+                break;
+            case "empty-pass":
+            case "short-pass":
+                target = registerPassword;
+                break;
+            case "empty-mail":
+            case "invalid-email":
+            case "taken-email":
+                target = registerEmail;
+        }
+
+        String error = getErrorFromDictionary(reason);
+        if (target != null) {
+            showFieldError(target, error);
+            target.requestFocus();
+        } else {
+            showErrorDialog(error);
+            showError(error);
+        }
+        hideProgressDialog();
+    }
+
+    /**
+     * Called after registration was successful. Stores the JWT and Starts the main menu activity,
+     * discarding this and the login activity, if it's the previous one.
+     *
+     * @param token
+     */
+    protected void completeRegistration(String token) {
+        saveJwt(token);
+        hideProgressDialog();
+
+        // Finish parent activity
+        if (getParent() != null) {
+            getParent().finish();
+        }
+
+        // Show main menu, finishes this activity
+        showMainMenu(this);
     }
 
     /**
@@ -118,6 +162,20 @@ public class RegisterController extends AuthorisationController {
         showProgressDialog(
             getString(R.string.register_busy_title),
             getString(R.string.register_busy_text)
+        );
+    }
+
+
+    /**
+     * Shows a registration failed message, with reason
+     *
+     * @param message Message to show as body
+     */
+    private void showErrorDialog(String message) {
+        showErrorDialog(
+            getString(R.string.register_alert_title),
+            message,
+            getString(R.string.register_alert_button)
         );
     }
 
@@ -131,15 +189,6 @@ public class RegisterController extends AuthorisationController {
         } else {
             target.setError(message);
         }
-    }
-
-    /**
-     * Shows an error underneath the sign up button. Accepts resource IDs
-     *
-     * @param messageNumber ID of the error message.
-     */
-    private void showError(int messageNumber) {
-        showError(getString(messageNumber));
     }
 
     /**

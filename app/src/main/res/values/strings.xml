@@ -72,6 +72,8 @@
     <string name="register_button_act">Sign up!</string>
     <string name="register_busy_title">Signing up</string>
     <string name="register_busy_text">Just a second, we\'re signing you up.</string>
+    <string name="register_alert_title">Registration failed</string>
+    <string name="register_alert_button">Close</string>
 
     <!-- Authorisation errors -->
     <string name="auth_error_wrong_combination">Sorry, these credentials appear to be invalid.</string>
