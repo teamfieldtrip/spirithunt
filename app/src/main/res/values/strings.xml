@@ -23,14 +23,15 @@
     <string name="create_game_progress_title">Creating</string>
     <string name="create_game_progress_content">Please wait</string>
     <string name="create_game_alert_title">Error</string>
-    <string name="create_game_alert_content">Unable to creat the game, please check the fields and try again.</string>
+    <string name="create_game_alert_content">Unable to create the game, please check the fields and try again.</string>
     <string name="create_game_alert_button">Try again</string>
+    <string name="create_game_select_location">"Long Press to select locations"</string>
 
     <!-- Create Game Advanced String -->
     <string name="create_game_advanced_text_title">Advanced options</string>
     <string name="create_game_advanced_text_players">Players</string>
     <string name="create_game_advanced_text_rounds">Rounds</string>
-    <string name="create_game_advanced_text_maxLifes">Max lifes</string>
+    <string name="create_game_advanced_text_maxLives">Max lives</string>
     <string name="create_game_advanced_text_powerUps">Power-ups</string>
     <string name="create_game_advanced_btn_save">Save</string>
 

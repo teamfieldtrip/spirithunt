@@ -10,7 +10,7 @@ import android.location.Location;
 import android.os.Bundle;
 import android.spirithunt.win.R;
 import android.spirithunt.win.gui.CustomTextView;
-import android.spirithunt.win.model.AmountOfLifes;
+import android.spirithunt.win.model.AmountOfLives;
 import android.spirithunt.win.model.AmountOfPlayers;
 import android.spirithunt.win.model.AmountOfRounds;
 import android.spirithunt.win.model.Duration;
@@ -57,9 +57,9 @@ public class CreateGameController extends AppCompatActivity implements
     private ArrayList<AmountOfRounds> amountOfRounds;
 
     /**
-     * Stores a list with the possible amount of lifes
+     * Stores a list with the possible amount of lives
      */
-    private ArrayList<AmountOfLifes> amountOfLifes;
+    private ArrayList<AmountOfLives> amountOfLives;
 
     private boolean powerUpsEnabled = true;
 
@@ -67,7 +67,7 @@ public class CreateGameController extends AppCompatActivity implements
 
     private int amountOfRoundsIndex = 0;
 
-    private int amountOfLifesIndex = 0;
+    private int amountOfLivesIndex = 0;
 
     private GoogleMap map;
 
@@ -107,16 +107,16 @@ public class CreateGameController extends AppCompatActivity implements
         this.amountOfRounds.add(new AmountOfRounds(9, "9"));
         this.amountOfRounds.add(new AmountOfRounds(10, "10"));
 
-        this.amountOfLifes = new ArrayList<>();
-        this.amountOfLifes.add(new AmountOfLifes(1, "1"));
-        this.amountOfLifes.add(new AmountOfLifes(2, "2"));
-        this.amountOfLifes.add(new AmountOfLifes(3, "3"));
-        this.amountOfLifes.add(new AmountOfLifes(4, "4"));
-        this.amountOfLifes.add(new AmountOfLifes(5, "5"));
-        this.amountOfLifes.add(new AmountOfLifes(6, "6"));
-        this.amountOfLifes.add(new AmountOfLifes(7, "7"));
-        this.amountOfLifes.add(new AmountOfLifes(8, "8"));
-        this.amountOfLifes.add(new AmountOfLifes(9, "9"));
+        this.amountOfLives = new ArrayList<>();
+        this.amountOfLives.add(new AmountOfLives(1, "1"));
+        this.amountOfLives.add(new AmountOfLives(2, "2"));
+        this.amountOfLives.add(new AmountOfLives(3, "3"));
+        this.amountOfLives.add(new AmountOfLives(4, "4"));
+        this.amountOfLives.add(new AmountOfLives(5, "5"));
+        this.amountOfLives.add(new AmountOfLives(6, "6"));
+        this.amountOfLives.add(new AmountOfLives(7, "7"));
+        this.amountOfLives.add(new AmountOfLives(8, "8"));
+        this.amountOfLives.add(new AmountOfLives(9, "9"));
 
         this.durations = new ArrayList<>();
         this.durations.add(new Duration(600, "10"));
@@ -191,11 +191,11 @@ public class CreateGameController extends AppCompatActivity implements
         Bundle bundle = new Bundle();
         bundle.putInt("playersIndex", this.amountOfPlayersIndex);
         bundle.putInt("roundsIndex", this.amountOfRoundsIndex);
-        bundle.putInt("lifesIndex", this.amountOfLifesIndex);
+        bundle.putInt("livesIndex", this.amountOfLivesIndex);
         bundle.putBoolean("powerUpsEnabled", this.powerUpsEnabled);
         bundle.putParcelableArrayList("players", this.amountOfPlayers);
         bundle.putParcelableArrayList("rounds", this.amountOfRounds);
-        bundle.putParcelableArrayList("lifes", this.amountOfLifes);
+        bundle.putParcelableArrayList("lives", this.amountOfLives);
 
         Intent advancedSettingsIntent = new Intent(this, CreateGameAdvancedController.class);
         advancedSettingsIntent.putExtras(bundle);
@@ -207,9 +207,9 @@ public class CreateGameController extends AppCompatActivity implements
             this.showProgressDialog();
             GameCreate gameCreate = new GameCreate(
                 this.durations.get(this.timeIndicatorIndex).getTime(),
-                this.amountOfPlayers.get(this.amountOfLifesIndex).getAmount(),
+                this.amountOfPlayers.get(this.amountOfLivesIndex).getAmount(),
                 this.amountOfRounds.get(this.amountOfRoundsIndex).getAmount(),
-                this.amountOfLifes.get(this.amountOfLifesIndex).getAmount(),
+                this.amountOfLives.get(this.amountOfLivesIndex).getAmount(),
                 this.powerUpsEnabled,
                 this.centerLatLng,
                 this.borderLatLng
@@ -246,7 +246,7 @@ public class CreateGameController extends AppCompatActivity implements
         if (requestCode == 1 && resultCode == Activity.RESULT_OK) {
             this.amountOfPlayersIndex = data.getIntExtra("playersIndex", 0);
             this.amountOfRoundsIndex = data.getIntExtra("roundsIndex", 0);
-            this.amountOfLifesIndex = data.getIntExtra("lifesIndex", 0);
+            this.amountOfLivesIndex = data.getIntExtra("livesIndex", 0);
             this.powerUpsEnabled = data.getBooleanExtra("powerUpsEnabled", true);
         }
     }
@@ -324,7 +324,7 @@ public class CreateGameController extends AppCompatActivity implements
     @Override
     public void onMapClick(LatLng point) {
         Toast.makeText(getApplicationContext(),
-            "Long Press to select locations", Toast.LENGTH_LONG).show();
+            getString(R.string.create_game_select_location), Toast.LENGTH_LONG).show();
     }
 
     private void hideProgressDialog() {

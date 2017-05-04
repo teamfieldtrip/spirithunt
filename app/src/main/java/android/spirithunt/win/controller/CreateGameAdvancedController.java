@@ -5,7 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.spirithunt.win.R;
 import android.spirithunt.win.gui.CustomTextView;
-import android.spirithunt.win.model.AmountOfLifes;
+import android.spirithunt.win.model.AmountOfLives;
 import android.spirithunt.win.model.AmountOfPlayers;
 import android.spirithunt.win.model.AmountOfRounds;
 import android.support.v7.app.AppCompatActivity;
@@ -22,20 +22,20 @@ public class CreateGameAdvancedController extends AppCompatActivity {
 
     private ArrayList<AmountOfRounds> amountOfRounds;
 
-    private ArrayList<AmountOfLifes> amountOfLifes;
+    private ArrayList<AmountOfLives> amountOfLives;
 
     private int amountOfPlayersIndex;
 
     private int amountOfRoundsIndex;
 
-    private int amountOfLifesIndex;
+    private int amountOfLivesIndex;
 
     private boolean powerUpsEnabled;
 
     public CreateGameAdvancedController() {
         this.amountOfPlayers = new ArrayList<>();
         this.amountOfRounds = new ArrayList<>();
-        this.amountOfLifes = new ArrayList<>();
+        this.amountOfLives = new ArrayList<>();
     }
 
     private void setAmountOfPlayers(int index) {
@@ -58,13 +58,13 @@ public class CreateGameAdvancedController extends AppCompatActivity {
         }
     }
 
-    private void setAmountOfLifes(int index) {
-        if(index > -1 && this.amountOfLifes.size() > index) {
-            this.amountOfLifesIndex = index;
+    private void setAmountOfLives(int index) {
+        if(index > -1 && this.amountOfLives.size() > index) {
+            this.amountOfLivesIndex = index;
 
-            AmountOfLifes amountOfLifes = this.amountOfLifes.get(this.amountOfLifesIndex);
-            CustomTextView view = (CustomTextView)findViewById(R.id.amount_of_lifes);
-            view.setText(amountOfLifes.getDescription());
+            AmountOfLives amountOfLives = this.amountOfLives.get(this.amountOfLivesIndex);
+            CustomTextView view = (CustomTextView)findViewById(R.id.amount_of_lives);
+            view.setText(amountOfLives.getDescription());
         }
     }
 
@@ -83,11 +83,11 @@ public class CreateGameAdvancedController extends AppCompatActivity {
 
         this.amountOfPlayers  = extras.getParcelableArrayList("players");
         this.amountOfRounds  = extras.getParcelableArrayList("rounds");
-        this.amountOfLifes  = extras.getParcelableArrayList("lifes");
+        this.amountOfLives  = extras.getParcelableArrayList("lives");
 
         this.setAmountOfPlayers(extras.getInt("playersIndex"));
         this.setAmountOfRounds(extras.getInt("roundsIndex"));
-        this.setAmountOfLifes(extras.getInt("lifesIndex"));
+        this.setAmountOfLives(extras.getInt("livesIndex"));
         this.setPowerUpsEnabled(extras.getBoolean("powerUpsEnabled"));
     }
 
@@ -107,12 +107,12 @@ public class CreateGameAdvancedController extends AppCompatActivity {
         this.setAmountOfRounds(this.amountOfRoundsIndex - 1);
     }
 
-    public void addAmountOfLifes(View view) {
-        this.setAmountOfLifes(this.amountOfLifesIndex + 1);
+    public void addAmountOfLives(View view) {
+        this.setAmountOfLives(this.amountOfLivesIndex + 1);
     }
 
-    public void subtractAmountOfLifes(View view) {
-        this.setAmountOfLifes(this.amountOfLifesIndex - 1);
+    public void subtractAmountOfLives(View view) {
+        this.setAmountOfLives(this.amountOfLivesIndex - 1);
     }
 
     public void enablePowerUps(View view) {
@@ -133,7 +133,7 @@ public class CreateGameAdvancedController extends AppCompatActivity {
         Intent returnIntent = new Intent();
         returnIntent.putExtra("playersIndex", this.amountOfPlayersIndex);
         returnIntent.putExtra("roundsIndex", this.amountOfRoundsIndex);
-        returnIntent.putExtra("lifesIndex", this.amountOfLifesIndex);
+        returnIntent.putExtra("livesIndex", this.amountOfLivesIndex);
         returnIntent.putExtra("powerUpsEnabled", this.powerUpsEnabled);
 
         this.setResult(Activity.RESULT_OK, returnIntent);

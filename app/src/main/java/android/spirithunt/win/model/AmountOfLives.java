@@ -7,16 +7,16 @@ import android.os.Parcelable;
  * @author Remco Schipper
  */
 
-public class AmountOfLifes implements Parcelable {
+public class AmountOfLives implements Parcelable {
     private int amount;
 
     private String description;
 
-    private AmountOfLifes(Parcel parcel) {
+    private AmountOfLives(Parcel parcel) {
         this(parcel.readInt(), parcel.readString());
     }
 
-    public AmountOfLifes(int amount, String description) {
+    public AmountOfLives(int amount, String description) {
         super();
         this.amount = amount;
         this.description = description;
@@ -41,13 +41,13 @@ public class AmountOfLifes implements Parcelable {
         dest.writeString(this.getDescription());
     }
 
-    public static final Parcelable.Creator<AmountOfLifes> CREATOR = new Parcelable.Creator<AmountOfLifes>() {
-        public AmountOfLifes createFromParcel(Parcel in) {
-            return new AmountOfLifes(in);
+    public static final Parcelable.Creator<AmountOfLives> CREATOR = new Parcelable.Creator<AmountOfLives>() {
+        public AmountOfLives createFromParcel(Parcel in) {
+            return new AmountOfLives(in);
         }
 
-        public AmountOfLifes[] newArray(int size) {
-            return new AmountOfLifes[size];
+        public AmountOfLives[] newArray(int size) {
+            return new AmountOfLives[size];
         }
 
     };

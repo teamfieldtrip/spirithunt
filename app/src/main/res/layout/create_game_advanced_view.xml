@@ -114,7 +114,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textSize="30sp"
-                    android:text="@string/create_game_advanced_text_maxLifes" />
+                    android:text="@string/create_game_advanced_text_maxLives" />
                 <RelativeLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content">
@@ -125,10 +125,10 @@
                         <android.spirithunt.win.gui.CustomButton
                             style="@style/btn_normal_arrow_left"
                             android:layout_marginEnd="5dp"
-                            android:onClick="subtractAmountOfLifes" />
+                            android:onClick="subtractAmountOfLives" />
                         <android.spirithunt.win.gui.CustomTextView
                             style="@style/textView_normal_main"
-                            android:id="@+id/amount_of_lifes"
+                            android:id="@+id/amount_of_lives"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:paddingBottom="5dp"
@@ -138,7 +138,7 @@
                         <android.spirithunt.win.gui.CustomButton
                             style="@style/btn_normal_arrow_right"
                             android:layout_marginStart="5dp"
-                            android:onClick="addAmountOfLifes" />
+                            android:onClick="addAmountOfLives" />
                     </android.support.v7.widget.LinearLayoutCompat>
                 </RelativeLayout>
             </android.support.v7.widget.LinearLayoutCompat>
