@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="android.spirithunt.win">
+
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -16,13 +18,30 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".controller.LoginController"
+        <activity
+            android:name=".controller.LoginController"
             android:configChanges="orientation"
-            android:screenOrientation="portrait"
             android:noHistory="true"
+            android:screenOrientation="portrait"
             android:theme="@style/AppFullScreenTheme" />
         <activity android:name=".controller.MenuController" />
         <activity android:name=".controller.SettingsController" />
+        <activity
+            android:name=".controller.CreateGameController"
+            android:parentActivityName=".controller.MenuController"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppFullScreenTheme" />
+        <activity
+            android:name=".controller.CreateGameAdvancedController"
+            android:parentActivityName=".controller.CreateGameController"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppFullScreenTheme" />
+
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="@string/google_maps_key" />
     </application>
 
 </manifest>

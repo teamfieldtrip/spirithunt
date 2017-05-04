@@ -12,14 +12,14 @@ import android.support.v7.app.AppCompatActivity;
 public class MainActivity extends AppCompatActivity {
     private void showLogin() {
         Intent intent = new Intent(this, LoginController.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(intent);
         finish();
     }
 
     private void showMenu() {
         Intent intent = new Intent(this, MenuController.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(intent);
         finish();
     }

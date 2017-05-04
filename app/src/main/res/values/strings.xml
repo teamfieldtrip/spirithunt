@@ -1,6 +1,8 @@
 <resources>
     <string name="app_name">Spirit Hunt</string>
     <string name="preferences_file">prefs</string>
+
+    <!-- Login String -->
     <string name="saved_jwt">jwt</string>
     <string name="username_hint">E-mail address</string>
     <string name="password_hint">Password</string>
@@ -12,10 +14,36 @@
     <string name="authentication_alert_content">Unable to login, are you sure the e-mail/password combination is correct?</string>
     <string name="authentication_alert_button">Try again</string>
 
+    <!-- Create Game String -->
+    <string name="create_game_text_title">Create Game</string>
+    <string name="create_game_text_set_area">Set your game area</string>
+    <string name="create_game_text_time">min</string>
+    <string name="create_game_btn_create">Create</string>
+    <string name="create_game_btn_advanced">Advanced options</string>
+    <string name="create_game_progress_title">Creating</string>
+    <string name="create_game_progress_content">Please wait</string>
+    <string name="create_game_alert_title">Error</string>
+    <string name="create_game_alert_content">Unable to create the game, please check the fields and try again.</string>
+    <string name="create_game_alert_button">Try again</string>
+    <string name="create_game_select_location">"Long Press to select locations"</string>
+
+    <!-- Create Game Advanced String -->
+    <string name="create_game_advanced_text_title">Advanced options</string>
+    <string name="create_game_advanced_text_players">Players</string>
+    <string name="create_game_advanced_text_rounds">Rounds</string>
+    <string name="create_game_advanced_text_maxLives">Max lives</string>
+    <string name="create_game_advanced_text_powerUps">Power-ups</string>
+    <string name="create_game_advanced_btn_save">Save</string>
+
+
     <!--Setting String-->
     <string name="settings_title">Settings</string>
     <string name="settings_title_sound">Sound</string>
     <string name="settings_summary_sound">Use in-game sound</string>
     <string name="settings_title_vibration">Vibration</string>
     <string name="settings_summary_vibration">Use in-game vibration</string>
+    <string name="title_activity_maps">Map</string>
+
+    <!--Google Maps API-->
+    <string name="google_maps_key" templateMergeStrategy="preserve" translatable="false">null</string>
 </resources>
