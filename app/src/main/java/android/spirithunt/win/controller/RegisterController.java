@@ -15,15 +15,17 @@ import io.socket.client.Socket;
 import static android.util.Patterns.EMAIL_ADDRESS;
 
 /**
+ * Handles registration of users. Auto sign-in when registration is successful.
+ *
  * @author Roelof Roos
  */
 
 public class RegisterController extends AuthorisationController {
     private TextView errorTextView;
 
-    private TextView registerName;
-    private TextView registerEmail;
-    private TextView registerPassword;
+    private EditText registerName;
+    private EditText registerEmail;
+    private EditText registerPassword;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,6 +37,8 @@ public class RegisterController extends AuthorisationController {
         registerEmail = (EditText) findViewById(R.id.register_email);
         registerPassword = (EditText) findViewById(R.id.register_password);
 
+        // Fix the width of the error message before it gets filled with content, otherwise the
+        // layout messes up and goes full-width.
         LinearLayoutCompat layout = (LinearLayoutCompat) errorTextView.getParent();
         errorTextView.setWidth(layout.getWidth());
     }
@@ -47,35 +51,36 @@ public class RegisterController extends AuthorisationController {
         String email = registerEmail.getText().toString().toLowerCase().trim();
         String password = registerPassword.getText().toString();
 
+        EditText target = null;
+
         showError(null);
 
         if (name.isEmpty()) {
-            showError(R.string.register_error_name_empty);
-            registerName.requestFocus();
-            return;
+            showFieldError(registerName, R.string.auth_error_name_empty);
+            target = registerName;
+        } else if (name.length() < 3) {
+            showFieldError(registerName, R.string.auth_error_name_short);
+            target = registerName;
         }
 
         if (email.isEmpty()) {
-            showError(R.string.register_error_email_empty);
-            registerEmail.requestFocus();
-            return;
-        }
-
-        if (!EMAIL_ADDRESS.matcher(email).matches()) {
-            showError(R.string.register_error_email_invalid);
-            registerEmail.requestFocus();
-            return;
+            showFieldError(registerEmail, R.string.auth_error_email_empty);
+            target = target != null ? target : registerEmail;
+        } else if (!EMAIL_ADDRESS.matcher(email).matches()) {
+            showFieldError(registerEmail, R.string.auth_error_email_invalid);
+            target = target != null ? target : registerEmail;
         }
 
         if (password.isEmpty()) {
-            showError(R.string.register_error_password_empty);
-            registerPassword.requestFocus();
-            return;
+            showFieldError(registerPassword, R.string.auth_error_password_empty);
+            target = target != null ? target : registerPassword;
+        } else if (password.length() < 4) {
+            showFieldError(registerPassword, R.string.auth_error_password_short);
+            target = target != null ? target : registerPassword;
         }
 
-        if (password.length() < 4) {
-            showError(R.string.register_error_password_short);
-            registerPassword.requestFocus();
+        if (target != null) {
+            target.requestFocus();
             return;
         }
 
@@ -88,24 +93,20 @@ public class RegisterController extends AuthorisationController {
         socket.emit("auth:register", new AuthRegister(name, email, password), new Ack() {
             @Override
             public void call(final Object... args) {
-                self.runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        self.hideProgressDialog();
-
-                        if(args[0] == null) {
-                            self.saveJwt(args[1].toString());
-                            self.showMainMenu(self);
-                        } else {
-                            String message = args[0].toString();
-                            if (message == "email-taken") {
-                                self.showError(R.string.register_error_email_taken);
-                            } else {
-                                self.showError(message);
-                            }
-                        }
-                    }
-                });
+            self.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                if(args[0] == null) {
+                    self.saveJwt(args[1].toString());
+                    self.hideProgressDialog();
+                    self.showMainMenu(self);
+                } else {
+                    String message = args[0].toString();
+                    self.showError(self.getErrorFromDictionary(message));
+                    self.hideProgressDialog();
+                }
+                }
+            });
             }
         });
     }
@@ -118,6 +119,18 @@ public class RegisterController extends AuthorisationController {
             getString(R.string.register_busy_title),
             getString(R.string.register_busy_text)
         );
+    }
+
+    private void showFieldError(EditText target, int message) {
+        showFieldError(target, getString(message));
+    }
+
+    private void showFieldError(EditText target, String message) {
+        if (message == null) {
+            target.setError("");
+        } else {
+            target.setError(message);
+        }
     }
 
     /**

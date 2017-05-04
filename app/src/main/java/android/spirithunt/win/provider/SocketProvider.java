@@ -19,7 +19,9 @@ public class SocketProvider {
 
     private SocketProvider() {
         try {
-            this.socket = IO.socket(ContextProvider.getInstance().getContext().getString(R.string.server_address));
+            String hostname = ContextProvider.getInstance().getContext().getString(R.string.server_address);
+            Log.d(TAG, "SocketProvider: Connecting to " + hostname);
+            this.socket = IO.socket(hostname);
         } catch (URISyntaxException e) {
             throw new RuntimeException(e);
         }

@@ -7,6 +7,10 @@ import android.content.SharedPreferences;
 import android.spirithunt.win.R;
 import android.support.v7.app.AppCompatActivity;
 
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * Contains shared methods for Login and Sign up forms.
  *
@@ -15,6 +19,28 @@ import android.support.v7.app.AppCompatActivity;
 
 abstract public class AuthorisationController extends AppCompatActivity {
     private ProgressDialog progressDialog;
+
+    /**
+     * Contains error messages for registration and sign up
+     */
+    protected static final Map<String, Integer> errorDictionary;
+
+    /**
+     * Initialise the errorDictionary with the right fields
+     */
+    static {
+        Map<String, Integer> errorMap = new HashMap<>();
+        errorMap.put("wrong-combination", R.string.auth_error_wrong_combination);
+        errorMap.put("empty-name", R.string.auth_error_name_empty);
+        errorMap.put("short-name", R.string.auth_error_name_short);
+        errorMap.put("empty-pass", R.string.auth_error_password_empty);
+        errorMap.put("short-pass", R.string.auth_error_password_short);
+        errorMap.put("empty-mail", R.string.auth_error_email_empty);
+        errorMap.put("invalid-email", R.string.auth_error_email_invalid);
+        errorMap.put("taken-email", R.string.auth_error_email_taken);
+
+        errorDictionary = Collections.unmodifiableMap(errorMap);
+    }
 
     /**
      * Closes an open progress dialog, if any.
@@ -65,5 +91,19 @@ abstract public class AuthorisationController extends AppCompatActivity {
         SharedPreferences.Editor editor = sharedPref.edit();
         editor.putString(getString(R.string.saved_jwt), token);
         editor.commit();
+    }
+
+    /**
+     * Gets a message from the dictionary, or returns the original message if not found.
+     *
+     * @param message
+     * @return
+     */
+    protected String getErrorFromDictionary(String message) {
+        if (errorDictionary.containsKey(message)) {
+            return getString(errorDictionary.get(message));
+        } else {
+            return message;
+        }
     }
 }
