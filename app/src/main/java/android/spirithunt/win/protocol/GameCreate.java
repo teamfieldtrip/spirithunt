@@ -13,7 +13,7 @@ public class GameCreate extends JSONObject {
     public GameCreate(int duration,
                       int amountOfPlayers,
                       int amountOfRounds,
-                      int amountOfLifes,
+                      int amountOfLives,
                       boolean powerUpsEnabled,
                       LatLng center,
                       LatLng border) {
@@ -21,7 +21,7 @@ public class GameCreate extends JSONObject {
             this.put("duration", duration);
             this.put("amountOfPlayers", amountOfPlayers);
             this.put("amountOfRounds", amountOfRounds);
-            this.put("amountOfLifes", amountOfLifes);
+            this.put("amountOfLives", amountOfLives);
             this.put("powerUpsEnabled", powerUpsEnabled);
             this.put("centerLatitude", center.latitude);
             this.put("centerLongitude", center.longitude);
