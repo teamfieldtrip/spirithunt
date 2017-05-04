@@ -1,4 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="server_address">http://sv1.spirithunt.win:8090</string>
+    <string name="server_address">https://sv1.spirithunt.win:8080</string>
 </resources>
