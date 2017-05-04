@@ -75,7 +75,7 @@ abstract public class AuthorisationController extends AppCompatActivity {
      */
     protected void showMainMenu(Context context) {
         Intent intent = new Intent(context, MenuController.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
         finish();
     }
