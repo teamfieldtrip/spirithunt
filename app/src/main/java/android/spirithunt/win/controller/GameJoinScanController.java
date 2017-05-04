@@ -27,9 +27,13 @@ import io.socket.client.Socket;
 
 public class GameJoinScanController extends AppCompatActivity implements QRCodeReaderView.OnQRCodeReadListener {
     private ProgressDialog progressDialog;
+
     private QRCodeReaderView qrCodeReaderView;
+
     private LinearLayoutCompat cameraContainer;
+
     private boolean hasPermission = false;
+
     private boolean isSending = false;
 
     @Override
