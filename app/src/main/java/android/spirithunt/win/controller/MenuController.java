@@ -6,10 +6,6 @@ import android.spirithunt.win.R;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
-import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
-import static android.content.Intent.FLAG_ACTIVITY_REORDER_TO_FRONT;
-
-
 /**
  * Created by sven on 30-3-17.
  *
