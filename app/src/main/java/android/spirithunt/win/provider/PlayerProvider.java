@@ -1,10 +1,9 @@
-package android.spirithunt.win.lib;
+package android.spirithunt.win.provider;
 
 import android.spirithunt.win.callback.PlayerCreateCallback;
 import android.spirithunt.win.model.Player;
 import android.spirithunt.win.protocol.PlayerCreate;
 import android.spirithunt.win.protocol.PlayerResume;
-import android.spirithunt.win.provider.SocketProvider;
 
 import io.socket.client.*;
 import io.socket.client.Socket;
@@ -14,16 +13,16 @@ import io.socket.emitter.Emitter;
  * @author Remco Schipper
  */
 
-public class PlayerManager {
-    private static PlayerManager instance;
+public class PlayerProvider {
+    private static PlayerProvider instance;
     private Player player;
     private Socket socket;
 
     /**
      * Attach the events to the socket object
      */
-    private PlayerManager() {
-        final PlayerManager self = this;
+    private PlayerProvider() {
+        final PlayerProvider self = this;
 
         this.socket = SocketProvider.getInstance().getConnection();
         this.socket.on(io.socket.client.Socket.EVENT_RECONNECT, new Emitter.Listener() {
@@ -49,7 +48,7 @@ public class PlayerManager {
      * @param callback Called with the (new) player instance
      */
     public void getNewPlayer(final PlayerCreateCallback callback) {
-        final PlayerManager self = this;
+        final PlayerProvider self = this;
         PlayerCreate createPlayer = new PlayerCreate();
 
         socket.emit("player:create", createPlayer, new Ack() {
@@ -70,9 +69,9 @@ public class PlayerManager {
      * Get the player manager instance
      * @return {PlayerManager}
      */
-    public static PlayerManager getInstance() {
+    public static PlayerProvider getInstance() {
         if(instance == null) {
-            instance = new PlayerManager();
+            instance = new PlayerProvider();
         }
 
         return instance;
