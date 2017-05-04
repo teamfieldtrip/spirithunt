@@ -56,8 +56,7 @@ public class GameJoinScanController extends AppCompatActivity implements QRCodeR
                                 int maxPlayers = Integer.parseInt(args[2].toString());
 
                                 self.onSuccess(currentPlayers, maxPlayers, args[3].toString(), text);
-                            }
-                            else {
+                            } else {
                                 self.onError(args[0].toString());
                             }
                         }
@@ -148,7 +147,7 @@ public class GameJoinScanController extends AppCompatActivity implements QRCodeR
         if (this.isSending) {
             this.isSending = false;
             this.hideProgressDialog();
-            int textId = R.string.join_game_text_error_data;
+            int textId;
 
             switch (error) {
                 case "error_lobby_not_found":
@@ -159,6 +158,9 @@ public class GameJoinScanController extends AppCompatActivity implements QRCodeR
                     break;
                 case "error_player_joined":
                     textId = R.string.join_game_text_error_player_joined;
+                    break;
+                default:
+                    textId = R.string.join_game_text_error_data;
                     break;
             }
 

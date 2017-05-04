@@ -44,8 +44,7 @@ public class GameJoinInfoController extends AppCompatActivity {
                         public void run() {
                         if (args[0] == null) {
                             self.onSuccess();
-                        }
-                        else {
+                        } else {
                             self.onError(args[0].toString());
                         }
                         }
@@ -62,13 +61,14 @@ public class GameJoinInfoController extends AppCompatActivity {
         setContentView(R.layout.game_join_info_view);
 
         Bundle extras = getIntent().getExtras();
-        int currentPlayers = extras.getInt("currentPlayers");
-        int maxPlayers = extras.getInt("maxPlayers");
-        String hostname = extras.getString("hostname");
-
         this.lobbyId = extras.getString("lobbyId");
+
+        String hostname = extras.getString("hostname");
         this.setText(getString(R.string.join_game_info_text_host), 25, hostname, 20, R.id.hostText);
         this.setText(getString(R.string.join_game_info_text_mode), 25, getString(R.string.join_game_info_text_mode_gotcha), 20, R.id.modeText);
+
+        int maxPlayers = extras.getInt("maxPlayers");
+        int currentPlayers = extras.getInt("currentPlayers");
         this.setText(getString(R.string.join_game_info_text_players), 25, currentPlayers + "/" + maxPlayers, 20, R.id.playersText);
     }
 
@@ -87,7 +87,7 @@ public class GameJoinInfoController extends AppCompatActivity {
     }
 
     private void onError(String error) {
-        int textId = R.string.join_game_text_error_data;
+        int textId;
 
         switch(error) {
             case "error_lobby_not_found":
@@ -98,6 +98,9 @@ public class GameJoinInfoController extends AppCompatActivity {
                 break;
             case "error_player_joined":
                 textId = R.string.join_game_text_error_player_joined;
+                break;
+            default:
+                textId = R.string.join_game_text_error_data;
                 break;
         }
 

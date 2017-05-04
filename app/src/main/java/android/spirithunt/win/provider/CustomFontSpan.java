@@ -13,8 +13,11 @@ import android.util.TypedValue;
 
 public class CustomFontSpan extends TypefaceSpan {
     private final String family;
+
     private Typeface typeface;
+
     private int dp;
+
     private int size;
 
     public CustomFontSpan(String family, int dp) {
