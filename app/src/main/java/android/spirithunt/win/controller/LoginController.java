@@ -32,17 +32,17 @@ public class LoginController extends AuthorisationController {
         );
     }
 
+    /**
+     * Shows a login failed message
+     *
+     * @param context
+     */
     private void showErrorDialog(Context context) {
-        new AlertDialog.Builder(context)
-            .setTitle(getString(R.string.authentication_alert_title))
-            .setMessage(getString(R.string.authentication_alert_content))
-            .setNeutralButton(R.string.authentication_alert_button, new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int which) {
-                    // do nothing
-                }
-            })
-            .setIcon(android.R.drawable.ic_dialog_alert)
-            .show();
+        showErrorDialog(
+            getString(R.string.authentication_alert_title),
+            getString(R.string.authentication_alert_content),
+            getString(R.string.authentication_alert_button)
+        );
     }
 
     @Override

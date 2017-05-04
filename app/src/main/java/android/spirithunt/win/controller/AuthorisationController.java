@@ -1,7 +1,9 @@
 package android.spirithunt.win.controller;
 
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.spirithunt.win.R;
@@ -66,6 +68,28 @@ abstract public class AuthorisationController extends AppCompatActivity {
             progressDialog.setCancelable(false);
             progressDialog.show();
         }
+    }
+
+    /**
+     * Shows an alert for failure to login or w/e
+     *
+     * @param title Title of alert
+     * @param content Message of alert
+     * @param button Content of dismiss button
+     */
+    protected void showErrorDialog(String title, String content, String button) {
+        new AlertDialog.Builder(this)
+            .setTitle(title)
+            .setMessage(content)
+            .setCancelable(true)
+            .setPositiveButton(button, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    // do nothing
+                }
+            })
+            .setIcon(android.R.drawable.ic_dialog_alert)
+            .show();
     }
 
     /**
