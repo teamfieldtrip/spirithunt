@@ -4,8 +4,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.spirithunt.win.controller.GameJoinScanController;
 import android.spirithunt.win.controller.LoginController;
+import android.spirithunt.win.controller.MenuController;
 import android.spirithunt.win.provider.ContextProvider;
 import android.support.v7.app.AppCompatActivity;
 
@@ -18,7 +18,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void showMenu() {
-        Intent intent = new Intent(this, GameJoinScanController.class);
+        Intent intent = new Intent(this, MenuController.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(intent);
         finish();
