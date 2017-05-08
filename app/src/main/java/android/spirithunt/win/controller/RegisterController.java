@@ -23,8 +23,19 @@ import static android.util.Patterns.EMAIL_ADDRESS;
 public class RegisterController extends AuthorisationController {
     private TextView errorTextView;
 
+    /**
+     * Points to the name field
+     */
     private EditText registerName;
+
+    /**
+     * Points to the e-mail address field
+     */
     private EditText registerEmail;
+
+    /**
+     * Points to the password field
+     */
     private EditText registerPassword;
 
     @Override
@@ -43,18 +54,50 @@ public class RegisterController extends AuthorisationController {
         errorTextView.setWidth(layout.getWidth());
     }
 
+    public String getRegisterName() {
+        return registerName.getText().toString().trim();
+    }
+
+    public String getRegisterEmail() {
+        return registerEmail.getText().toString().trim().toLowerCase();
+    }
+
+    public String getRegisterPassword() {
+        return registerPassword.getText().toString();
+    }
+
     public void submitForm(View view) {
-        final RegisterController self = this;
+        if (!validateFields()) {
+            return;
+        }
 
-        // Validate some fields
-        String name = registerName.getText().toString().trim();
-        String email = registerEmail.getText().toString().toLowerCase().trim();
-        String password = registerPassword.getText().toString();
+        // Communicate with online server to register account.
+        showProgressDialog();
 
+        Socket socket = SocketProvider.getInstance().getConnection();
+
+        // Acquire the fields
+        String name = getRegisterName();
+        String email = getRegisterEmail();
+        String password = getRegisterPassword();
+
+        // Get the acknowledgement handler
+        RegistrationAcknowledgement ack = new RegistrationAcknowledgement(this);
+
+        socket.emit("auth:register", new AuthRegister(name, email, password), ack);
+    }
+
+    /**
+     * Performs field validation
+     * @return True if there are no problems with the fields
+     */
+    protected boolean validateFields() {
         EditText target = null;
 
+        // Hide default error
         showError(null);
 
+        String name = getRegisterName();
         if (name.isEmpty()) {
             showFieldError(registerName, R.string.auth_error_name_empty);
             target = registerName;
@@ -63,6 +106,8 @@ public class RegisterController extends AuthorisationController {
             target = registerName;
         }
 
+
+        String email = getRegisterEmail();
         if (email.isEmpty()) {
             showFieldError(registerEmail, R.string.auth_error_email_empty);
             target = target != null ? target : registerEmail;
@@ -71,6 +116,7 @@ public class RegisterController extends AuthorisationController {
             target = target != null ? target : registerEmail;
         }
 
+        String password = getRegisterPassword();
         if (password.isEmpty()) {
             showFieldError(registerPassword, R.string.auth_error_password_empty);
             target = target != null ? target : registerPassword;
@@ -81,30 +127,10 @@ public class RegisterController extends AuthorisationController {
 
         if (target != null) {
             target.requestFocus();
-            return;
+            return false;
         }
 
-        // Communicate with online server to register account.
-
-        this.showProgressDialog();
-
-        Socket socket = SocketProvider.getInstance().getConnection();
-
-        socket.emit("auth:register", new AuthRegister(name, email, password), new Ack() {
-            @Override
-            public void call(final Object... args) {
-            self.runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                if(args[0] == null) {
-                    self.completeRegistration(args[1].toString());
-                } else {
-                    self.failRegistration(args[0].toString());
-                }
-                }
-            });
-            }
-        });
+        return true;
     }
 
     protected void failRegistration(String reason) {
@@ -203,5 +229,28 @@ public class RegisterController extends AuthorisationController {
             errorTextView.setText(message);
             errorTextView.setVisibility(View.VISIBLE);
         }
+    }
+}
+
+class RegistrationAcknowledgement implements Ack {
+
+    private final RegisterController controller;
+
+    RegistrationAcknowledgement(RegisterController controller) {
+        this.controller = controller;
+    }
+
+    @Override
+    public void call(final Object... args) {
+        controller.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                if(args[0] == null) {
+                    controller.completeRegistration(args[1].toString());
+                } else {
+                    controller.failRegistration(args[0].toString());
+                }
+            }
+        });
     }
 }
