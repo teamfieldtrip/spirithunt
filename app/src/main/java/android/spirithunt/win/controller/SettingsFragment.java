@@ -15,7 +15,7 @@ import android.spirithunt.win.R;
 
 public class SettingsFragment extends PreferenceFragment implements Preference.OnPreferenceClickListener {
 
-    private Preference logoutPreference;
+    private String logoutKey;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -24,14 +24,18 @@ public class SettingsFragment extends PreferenceFragment implements Preference.O
         // Load the preferences from an XML resource
         addPreferencesFromResource(R.xml.settings_view);
 
-        logoutPreference = findPreference(getString(R.string.setting_logout_key));
+        // Get the logout key, because caching everything FTW
+        logoutKey = getString(R.string.setting_logout_key);
+
+        // Get the preference and link it to this fragment
+        Preference logoutPreference = findPreference(logoutKey);
         logoutPreference.setOnPreferenceClickListener(this);
     }
 
     @Override
     public boolean onPreferenceClick(Preference preference) {
         // Don't handle click on non-logout action
-        if (preference != logoutPreference) return false;
+        if (!preference.getKey().equals(logoutKey)) return false;
 
         logoutUser();
         return true;
