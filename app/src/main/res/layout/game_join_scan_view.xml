@@ -9,6 +9,7 @@
         android:scaleType="centerCrop" />
     <android.support.v7.widget.LinearLayoutCompat
         android:orientation="vertical"
+        android:paddingTop="@dimen/activity_top_margin_short"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
         <android.support.v7.widget.AppCompatImageView
