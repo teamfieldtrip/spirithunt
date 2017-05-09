@@ -60,7 +60,8 @@
             android:name=".controller.SettingsController"
             android:parentActivityName=".controller.MenuController"
             android:configChanges="orientation"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait"
+            android:theme="@style/AppPreferenceTheme"/>
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
