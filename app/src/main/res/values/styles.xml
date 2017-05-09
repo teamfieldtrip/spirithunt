@@ -6,7 +6,7 @@
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">#fff</item>
+        <item name="colorAccent">@color/colorAccent</item>
     </style>
 
     <style name="AppFullScreenTheme" parent="@style/AppTheme">
@@ -14,10 +14,13 @@
         <item name="windowActionBar">false</item>
         <item name="android:windowFullscreen">false</item>
         <item name="android:windowContentOverlay">@null</item>
-        <item name="android:textAppearanceListItem">@style/PreferenceTextAppearance</item>
         <item name="android:textColorSecondary">#fff</item>
     </style>
 
+    <style name="AppPreferenceTheme" parent="@style/AppFullScreenTheme">
+        <item name="colorAccent">#fff</item>
+        <item name="android:textAppearanceListItem">@style/PreferenceTextAppearance</item>
+    </style>
 
     <!-- Define the preferencetext style -->
     <style name="PreferenceTextAppearance">
