@@ -3,6 +3,7 @@ package android.spirithunt.win.lib;
 import android.spirithunt.win.callback.GpsUpdateCallback;
 import android.spirithunt.win.protocol.GpsUpdate;
 import android.spirithunt.win.model.Player;
+import android.spirithunt.win.provider.PlayerProvider;
 import android.spirithunt.win.provider.SocketProvider;
 
 import io.socket.client.*;
@@ -43,14 +44,14 @@ public class GpsUpdater {
      * @param callback Callback called in case of an error or on success
      */
     public void setCoordinates(double latitude, double longitude, final GpsUpdateCallback callback) {
-        if(PlayerManager.getInstance().getPlayer() != null) {
+        if(PlayerProvider.getInstance().getPlayer() != null) {
             GpsUpdate update = new GpsUpdate(latitude, longitude, System.currentTimeMillis() / 1000);
 
             socket.emit("gps:update", update, new Ack() {
                 @Override
                 public void call(Object... args) {
                     if (args[0] == null) {
-                        Player player = PlayerManager.getInstance().getPlayer();
+                        Player player = PlayerProvider.getInstance().getPlayer();
 
                         if (player != null) {
                             player.latitude = Double.parseDouble(args[1].toString());

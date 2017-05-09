@@ -2,8 +2,11 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="android.spirithunt.win">
 
-    <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    <uses-permission android:name="android.permission.CAMERA"/>
+    <uses-feature android:name="android:hardware.camera" android:required="false" />
+    <uses-feature android:name="android.hardware.camera.autofocus" android:required="false" />
 
     <application
         android:allowBackup="true"
@@ -22,7 +25,17 @@
             android:name=".controller.LoginController"
             android:configChanges="orientation"
             android:noHistory="true"
-            android:screenOrientation="portrait" />
+
+            android:screenOrientation="portrait"
+            android:theme="@style/AppFullScreenTheme" />
+        <activity android:name=".controller.GameJoinScanController"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppFullScreenTheme" />
+        <activity android:name=".controller.GameJoinInfoController"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppFullScreenTheme" />
         <activity android:name=".controller.MenuController"
             android:configChanges="orientation"
             android:screenOrientation="portrait"/>

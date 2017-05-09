@@ -47,6 +47,22 @@
     <string name="settings_summary_sound">Use in-game sound</string>
     <string name="settings_title_vibration">Vibration</string>
     <string name="settings_summary_vibration">Use in-game vibration</string>
+
+    <!--Game Join String-->
+    <string name="join_game_text_title">Join game</string>
+    <string name="join_game_scan_text_progress_title">Please wait</string>
+    <string name="join_game_scan_text_progress_message">Retrieving the data</string>
+    <string name="join_game_text_error_title">Oops!</string>
+    <string name="join_game_text_error_button">OK</string>
+    <string name="join_game_text_error_lobby_not_found">Could not find the game lobby</string>
+    <string name="join_game_text_error_lobby_full">Unfortunately the lobby is already full</string>
+    <string name="join_game_text_error_player_joined">You already joined a game</string>
+    <string name="join_game_text_error_data">Server error, please try again</string>
+    <string name="join_game_info_text_host">Host</string>
+    <string name="join_game_info_text_mode">Mode</string>
+    <string name="join_game_info_text_mode_gotcha">Gotcha</string>
+    <string name="join_game_info_text_players">Players</string>
+    <string name="join_game_info_button_join">Join</string>
     <string name="title_activity_maps">Map</string>
 
     <!--Google Maps API-->
