@@ -19,7 +19,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void showMenu() {
-        Intent intent = new Intent(this, GameJoinScanController.class);
+        Intent intent = new Intent(this, MenuController.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(intent);
         finish();
