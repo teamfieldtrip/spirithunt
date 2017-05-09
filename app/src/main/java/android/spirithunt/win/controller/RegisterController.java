@@ -88,6 +88,46 @@ public class RegisterController extends AuthorisationController {
     }
 
     /**
+     * Validates a field, making sure it's of a given length
+     * @param value Value to check
+     * @param field Field to add the error on
+     * @param emptyString Message to show when forgotten
+     * @param shortString Message to show when short
+     * @param minLength Minimum length of the field
+     * @return true if valid
+     */
+    protected boolean validateField(String value, EditText field, int emptyString, int shortString, int minLength) {
+        if (value.isEmpty()) {
+            showFieldError(field, emptyString);
+            return false;
+        } else if (value.length() < minLength) {
+            showFieldError(field, shortString);
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     * Validates an e-mail address
+     *
+     * @param value E-mail address to check
+     * @param field E-mail field to set the error on
+     * @param emptyString Message to show when forgotten
+     * @param invalidString Message to show when empty
+     * @return true if non-empty and valid
+     */
+    protected boolean validateEmail(String value, EditText field, int emptyString, int invalidString) {
+        if (value.isEmpty()) {
+            showFieldError(field, emptyString);
+            return false;
+        } else if (!EMAIL_ADDRESS.matcher(value).matches()) {
+            showFieldError(field, invalidString);
+            return false;
+        }
+        return true;
+    }
+
+    /**
      * Performs field validation
      * @return True if there are no problems with the fields
      */
@@ -97,42 +137,33 @@ public class RegisterController extends AuthorisationController {
         // Hide default error
         showError(null);
 
-        String name = getRegisterName();
-        if (name.isEmpty()) {
-            showFieldError(registerName, R.string.auth_error_name_empty);
-            target = registerName;
-        } else if (name.length() < 3) {
-            showFieldError(registerName, R.string.auth_error_name_short);
+        if (validateField(getRegisterName(), registerName, R.string.auth_error_name_empty, R.string.auth_error_name_short, 3)) {
             target = registerName;
         }
 
-
-        String email = getRegisterEmail();
-        if (email.isEmpty()) {
-            showFieldError(registerEmail, R.string.auth_error_email_empty);
-            target = target != null ? target : registerEmail;
-        } else if (!EMAIL_ADDRESS.matcher(email).matches()) {
-            showFieldError(registerEmail, R.string.auth_error_email_invalid);
+        if (!validateEmail(getRegisterEmail(), registerEmail, R.string.auth_error_email_empty, R.string.auth_error_email_invalid)) {
             target = target != null ? target : registerEmail;
         }
 
-        String password = getRegisterPassword();
-        if (password.isEmpty()) {
-            showFieldError(registerPassword, R.string.auth_error_password_empty);
-            target = target != null ? target : registerPassword;
-        } else if (password.length() < 4) {
-            showFieldError(registerPassword, R.string.auth_error_password_short);
-            target = target != null ? target : registerPassword;
+        if (validateField(getRegisterPassword(), registerPassword, R.string.auth_error_password_empty, R.string.auth_error_password_short, 4)) {
+            target = target != null ? target : registerName;
         }
 
-        if (target != null) {
-            target.requestFocus();
-            return false;
+        if (target == null) {
+            return true;
         }
 
-        return true;
+        target.requestFocus();
+        return false;
+
     }
 
+    /**
+     * Makes a registration fail, showing the given error below the "Sign up" button. Usually
+     * called with a response from the server.
+     *
+     * @param reason Message to show.
+     */
     protected void failRegistration(String reason) {
         EditText target = null;
 
@@ -149,6 +180,10 @@ public class RegisterController extends AuthorisationController {
             case "invalid-email":
             case "taken-email":
                 target = registerEmail;
+                break;
+            default:
+                // Default means not linked to any field.
+                target = null;
         }
 
         String error = getErrorFromDictionary(reason);
@@ -205,10 +240,23 @@ public class RegisterController extends AuthorisationController {
         );
     }
 
+    /**
+     * Shows a message from the given resource ID on the given field. Internally calls
+     * showFieldError(EditText, String)
+     *
+     * @param target
+     * @param message
+     */
     private void showFieldError(EditText target, int message) {
         showFieldError(target, getString(message));
     }
 
+    /**
+     * Adds a message to the given field. Cleared when the user changes the field.
+     *
+     * @param target
+     * @param message
+     */
     private void showFieldError(EditText target, String message) {
         if (message == null) {
             target.setError("");
