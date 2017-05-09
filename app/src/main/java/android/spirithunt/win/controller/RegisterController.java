@@ -137,7 +137,7 @@ public class RegisterController extends AuthorisationController {
         // Hide default error
         showError(null);
 
-        if (validateField(getRegisterName(), registerName, R.string.auth_error_name_empty, R.string.auth_error_name_short, 3)) {
+        if (!validateField(getRegisterName(), registerName, R.string.auth_error_name_empty, R.string.auth_error_name_short, 3)) {
             target = registerName;
         }
 
@@ -145,7 +145,7 @@ public class RegisterController extends AuthorisationController {
             target = target != null ? target : registerEmail;
         }
 
-        if (validateField(getRegisterPassword(), registerPassword, R.string.auth_error_password_empty, R.string.auth_error_password_short, 4)) {
+        if (!validateField(getRegisterPassword(), registerPassword, R.string.auth_error_password_empty, R.string.auth_error_password_short, 4)) {
             target = target != null ? target : registerName;
         }
 
