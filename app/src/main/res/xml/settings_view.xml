@@ -19,6 +19,11 @@
         android:summary="@string/settings_summary_vibration"
         >
     </CheckBoxPreference>
+    <Preference
+        android:title="@string/setting_logout_title"
+        android:summary="@string/setting_logout_summary"
+        android:key="@string/setting_logout_key" />
+
     </PreferenceCategory>
 
 </PreferenceScreen>
