@@ -8,7 +8,8 @@ import android.view.View;
 
 /**
  * Created by sven on 30-3-17.
- * @author Remco Schipper
+ *
+ * @author Sven Boekelder
  */
 
 public class MenuController extends AppCompatActivity {
@@ -18,8 +19,27 @@ public class MenuController extends AppCompatActivity {
         setContentView(R.layout.menu_view);
     }
 
-    public void createGame(View view) {
-        Intent intent = new Intent(this, CreateGameController.class);
+    public void createGame(View view){
+        Intent intent = new Intent(view.getContext(), CreateGameController.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
+    }
+
+    public void joinGame(View view){
+        Intent intent = new Intent(view.getContext(), GameJoinScanController.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
+    }
+
+    public void store(View view){
+        Intent intent = new Intent(view.getContext(), StoreController.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
+    }
+
+    public void settings(View view){
+        Intent intent = new Intent(view.getContext(), SettingsController.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
     }
 }

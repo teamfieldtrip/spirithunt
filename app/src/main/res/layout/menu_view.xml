@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/menu_view"
     android:layout_width="match_parent"
@@ -10,11 +11,47 @@
     android:paddingRight="0dp"
     tools:context="controller.MenuController">
 
+    <android.support.v7.widget.LinearLayoutCompat
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:layout_centerInParent="true"
+        android:layout_gravity="center_vertical">
 
-    <android.spirithunt.win.gui.CustomButton
-        style="@style/btn_normal_main_large"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="create"
-        android:onClick="createGame"/>
-</LinearLayout>
+        <android.support.v7.widget.AppCompatImageView
+            android:src="@drawable/gui_el_logo_main"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:adjustViewBounds="true" />
+
+        <android.spirithunt.win.gui.CustomButton
+            style="@style/btn_normal_main_large"
+            android:id="@+id/create_game_button"
+            android:text="@string/btn_create_game"
+            android:onClick="createGame"
+            android:layout_marginBottom="25dp" />
+
+        <android.spirithunt.win.gui.CustomButton
+            style="@style/btn_normal_main_large"
+            android:id="@+id/join_game_button"
+            android:text="@string/btn_join_game"
+            android:onClick="joinGame"
+            android:layout_marginBottom="25dp" />
+
+        <android.spirithunt.win.gui.CustomButton
+            style="@style/btn_normal_main_large"
+            android:id="@+id/store_button"
+            android:text="@string/btn_store"
+            android:onClick="store"
+            android:layout_marginBottom="25dp" />
+
+        <android.spirithunt.win.gui.CustomButton
+            style="@style/btn_normal_main_large"
+            android:id="@+id/settings_button"
+            android:text="@string/btn_settings"
+            android:onClick="settings"
+            android:layout_marginBottom="25dp" />
+
+    </android.support.v7.widget.LinearLayoutCompat>
+</RelativeLayout>

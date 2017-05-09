@@ -27,7 +27,6 @@
             android:noHistory="true"
             android:screenOrientation="portrait"
             android:theme="@style/AppFullScreenTheme" />
-        <activity android:name=".controller.MenuController" />
         <activity android:name=".controller.SettingsController" />
 
         <activity android:name=".controller.GameJoinScanController"
@@ -38,6 +37,10 @@
             android:configChanges="orientation"
             android:screenOrientation="portrait"
             android:theme="@style/AppFullScreenTheme" />
+        <activity android:name=".controller.MenuController"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppFullScreenTheme"/>
         <activity
             android:name=".controller.CreateGameController"
             android:parentActivityName=".controller.MenuController"
@@ -47,6 +50,12 @@
         <activity
             android:name=".controller.CreateGameAdvancedController"
             android:parentActivityName=".controller.CreateGameController"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppFullScreenTheme" />
+        <activity
+            android:name=".controller.SettingsController"
+            android:parentActivityName=".controller.MenuController"
             android:configChanges="orientation"
             android:screenOrientation="portrait"
             android:theme="@style/AppFullScreenTheme" />

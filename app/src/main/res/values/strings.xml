@@ -2,12 +2,18 @@
     <string name="app_name">Spirit Hunt</string>
     <string name="preferences_file">prefs</string>
 
+    <!--Button String-->
+    <string name="btn_login">Login</string>
+    <string name="btn_create_game">Create Game</string>
+    <string name="btn_join_game">Join Game</string>
+    <string name="btn_store">Store</string>
+    <string name="btn_settings">Settings</string>
+
     <!-- Login String -->
     <string name="saved_jwt">jwt</string>
     <string name="username_hint">E-mail address</string>
     <string name="password_hint">Password</string>
     <string name="sign_up_text"><u>Sign up</u></string>
-    <string name="btn_login">Login</string>
     <string name="authentication_progress_title">Authenticating</string>
     <string name="authentication_progress_content">Please wait</string>
     <string name="authentication_alert_title">Authentication error</string>
@@ -34,7 +40,6 @@
     <string name="create_game_advanced_text_maxLives">Max lives</string>
     <string name="create_game_advanced_text_powerUps">Power-ups</string>
     <string name="create_game_advanced_btn_save">Save</string>
-
 
     <!--Setting String-->
     <string name="settings_title">Settings</string>
