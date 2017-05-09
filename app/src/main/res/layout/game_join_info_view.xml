@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <android.support.v7.widget.AppCompatImageView
+        android:src="@drawable/bg_main"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop" />
+    <android.support.v7.widget.LinearLayoutCompat
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <android.support.v7.widget.AppCompatImageView
+            android:src="@drawable/btn_exit_normal"
+            android:paddingStart="10dp"
+            android:paddingTop="5dp"
+            android:layout_width="40dp"
+            android:layout_height="wrap_content"
+            android:onClick="close"
+            android:adjustViewBounds="true" />
+        <android.spirithunt.win.gui.CustomTextView
+            style="@style/textView_normal_main"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="25dp"
+            android:textSize="40sp"
+            android:textAlignment="center"
+            android:text="@string/join_game_text_title" />
+        <android.support.v7.widget.LinearLayoutCompat
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="25dp"
+            android:layout_marginEnd="25dp"
+            android:orientation="horizontal">
+            <android.support.v7.widget.LinearLayoutCompat
+                android:layout_width="3dp"
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+                android:background="#ffffff">
+                <!--<android.support.v7.widget.AppCompatImageView-->
+                    <!--android:background="#000000"-->
+                    <!--android:src="@drawable/gui_el_join_game_border_left"-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="match_parent" />-->
+            </android.support.v7.widget.LinearLayoutCompat>
+            <android.support.v7.widget.LinearLayoutCompat
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+                <android.support.v7.widget.LinearLayoutCompat
+                    android:layout_width="match_parent"
+                    android:layout_height="3dp"
+                    android:orientation="horizontal"
+                    android:background="#ffffffff">
+                    <!--<android.support.v7.widget.AppCompatImageView-->
+                        <!--android:background="#FFFFFF"-->
+                        <!--android:src="@drawable/gui_el_join_game_border_top"-->
+                        <!--android:layout_width="match_parent"-->
+                        <!--android:layout_height="wrap_content" />-->
+                </android.support.v7.widget.LinearLayoutCompat>
+                <android.support.v7.widget.LinearLayoutCompat
+                    android:id="@+id/main_container"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/gui_el_join_game_bg"
+                    android:orientation="vertical">
+                    <android.support.v7.widget.LinearLayoutCompat
+                        android:id="@+id/qr_code"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center"
+                        android:layout_gravity="center_horizontal">
+                        <android.support.v7.widget.LinearLayoutCompat
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:padding="7dp"
+                            android:background="@drawable/gui_el_join_game_qr_border">
+                            <android.support.v7.widget.AppCompatImageView
+                                android:src="@drawable/gui_el_qr_placeholder"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content" />
+                        </android.support.v7.widget.LinearLayoutCompat>
+                    </android.support.v7.widget.LinearLayoutCompat>
+                    <FrameLayout
+                        android:id="@+id/host_info"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+                        <android.support.v7.widget.AppCompatImageView
+                            android:src="@drawable/gui_el_join_game_info_bg"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:scaleType="centerCrop" />
+                        <android.support.v7.widget.LinearLayoutCompat
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical">
+                            <android.spirithunt.win.gui.CustomTextView
+                                style="@style/textView_normal_main"
+                                android:id="@+id/hostText"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content" />
+                            <android.spirithunt.win.gui.CustomTextView
+                                style="@style/textView_normal_main"
+                                android:id="@+id/modeText"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:paddingTop="0dp" />
+                            <android.spirithunt.win.gui.CustomTextView
+                                style="@style/textView_normal_main"
+                                android:id="@+id/playersText"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:paddingTop="0dp" />
+                        </android.support.v7.widget.LinearLayoutCompat>
+                    </FrameLayout>
+                    <android.support.v7.widget.LinearLayoutCompat
+                        android:id="@+id/submit_button"
+                        android:layout_width="match_parent"
+                        android:layout_height="fill_parent"
+                        android:paddingTop="25dp"
+                        android:paddingBottom="25dp"
+                        android:orientation="horizontal"
+                        android:gravity="center"
+                        android:layout_gravity="center_horizontal">
+                        <android.spirithunt.win.gui.CustomButton
+                            style="@style/btn_normal_main_medium"
+                            android:text="@string/join_game_info_button_join"
+                            android:onClick="submit" />
+                    </android.support.v7.widget.LinearLayoutCompat>
+                </android.support.v7.widget.LinearLayoutCompat>
+                <android.support.v7.widget.LinearLayoutCompat
+                    android:layout_width="match_parent"
+                    android:layout_height="3dp"
+                    android:orientation="horizontal"
+                    android:background="#ffffffff">
+                    <!--<android.support.v7.widget.AppCompatImageView-->
+                        <!--android:background="#00ff4c"-->
+                        <!--android:src="@drawable/gui_el_join_game_border_bottom"-->
+                        <!--android:layout_width="match_parent"-->
+                        <!--android:layout_height="wrap_content" />-->
+                </android.support.v7.widget.LinearLayoutCompat>
+            </android.support.v7.widget.LinearLayoutCompat>
+            <android.support.v7.widget.LinearLayoutCompat
+                android:layout_width="3dp"
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+                android:background="#ffffff">
+                <!--<android.support.v7.widget.AppCompatImageView-->
+                    <!--android:background="#006fff"-->
+                    <!--android:src="@drawable/gui_el_join_game_border_right"-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="match_parent" />-->
+            </android.support.v7.widget.LinearLayoutCompat>
+        </android.support.v7.widget.LinearLayoutCompat>
+    </android.support.v7.widget.LinearLayoutCompat>
+</FrameLayout>
