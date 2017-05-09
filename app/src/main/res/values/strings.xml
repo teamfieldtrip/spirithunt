@@ -87,4 +87,7 @@
 
     <!--Google Maps API-->
     <string name="google_maps_key" templateMergeStrategy="preserve" translatable="false">null</string>
+    <string name="setting_logout_title">Log out</string>
+    <string name="setting_logout_summary">Clear all account data from this device</string>
+    <string name="setting_logout_key">logout</string>
 </resources>
