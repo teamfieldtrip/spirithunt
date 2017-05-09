@@ -1,13 +1,13 @@
 package android.spirithunt.win.controller;
 
-import android.app.Activity;
 import android.os.Bundle;
+import android.preference.PreferenceActivity;
 
 /**
  * Created by sven on 30-3-17.
  */
 
-public class SettingsController extends Activity{
+public class SettingsController extends PreferenceActivity{
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
