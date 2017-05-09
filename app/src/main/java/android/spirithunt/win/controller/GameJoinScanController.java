@@ -13,6 +13,7 @@ import android.spirithunt.win.provider.SocketProvider;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutCompat;
+import android.view.View;
 import android.view.ViewTreeObserver;
 import android.widget.LinearLayout;
 
@@ -35,6 +36,10 @@ public class GameJoinScanController extends AppCompatActivity implements QRCodeR
     private boolean hasPermission = false;
 
     private boolean isSending = false;
+
+    public void close(View view) {
+        this.finish();
+    }
 
     @Override
     public void onQRCodeRead(final String text, PointF[] points) {
