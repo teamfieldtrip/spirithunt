@@ -34,14 +34,15 @@
             android:layout_marginEnd="25dp"
             android:orientation="horizontal">
             <android.support.v7.widget.LinearLayoutCompat
-                android:layout_width="wrap_content"
+                android:layout_width="3dp"
                 android:layout_height="match_parent"
-                android:orientation="horizontal">
-                <android.support.v7.widget.AppCompatImageView
-                    android:background="#000000"
-                    android:src="@drawable/gui_el_join_game_border_left"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent" />
+                android:orientation="horizontal"
+                android:background="#ffffff">
+                <!--<android.support.v7.widget.AppCompatImageView-->
+                    <!--android:background="#000000"-->
+                    <!--android:src="@drawable/gui_el_join_game_border_left"-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="match_parent" />-->
             </android.support.v7.widget.LinearLayoutCompat>
             <android.support.v7.widget.LinearLayoutCompat
                 android:layout_width="0dp"
@@ -50,13 +51,14 @@
                 android:orientation="vertical">
                 <android.support.v7.widget.LinearLayoutCompat
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-                    <android.support.v7.widget.AppCompatImageView
-                        android:background="#FFFFFF"
-                        android:src="@drawable/gui_el_join_game_border_top"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content" />
+                    android:layout_height="3dp"
+                    android:orientation="horizontal"
+                    android:background="#ffffffff">
+                    <!--<android.support.v7.widget.AppCompatImageView-->
+                        <!--android:background="#FFFFFF"-->
+                        <!--android:src="@drawable/gui_el_join_game_border_top"-->
+                        <!--android:layout_width="match_parent"-->
+                        <!--android:layout_height="wrap_content" />-->
                 </android.support.v7.widget.LinearLayoutCompat>
                 <android.support.v7.widget.LinearLayoutCompat
                     android:id="@+id/main_container"
@@ -131,24 +133,26 @@
                 </android.support.v7.widget.LinearLayoutCompat>
                 <android.support.v7.widget.LinearLayoutCompat
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-                    <android.support.v7.widget.AppCompatImageView
-                        android:background="#00ff4c"
-                        android:src="@drawable/gui_el_join_game_border_bottom"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content" />
+                    android:layout_height="3dp"
+                    android:orientation="horizontal"
+                    android:background="#ffffffff">
+                    <!--<android.support.v7.widget.AppCompatImageView-->
+                        <!--android:background="#00ff4c"-->
+                        <!--android:src="@drawable/gui_el_join_game_border_bottom"-->
+                        <!--android:layout_width="match_parent"-->
+                        <!--android:layout_height="wrap_content" />-->
                 </android.support.v7.widget.LinearLayoutCompat>
             </android.support.v7.widget.LinearLayoutCompat>
             <android.support.v7.widget.LinearLayoutCompat
-                android:layout_width="wrap_content"
+                android:layout_width="3dp"
                 android:layout_height="match_parent"
-                android:orientation="horizontal">
-                <android.support.v7.widget.AppCompatImageView
-                    android:background="#006fff"
-                    android:src="@drawable/gui_el_join_game_border_right"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent" />
+                android:orientation="horizontal"
+                android:background="#ffffff">
+                <!--<android.support.v7.widget.AppCompatImageView-->
+                    <!--android:background="#006fff"-->
+                    <!--android:src="@drawable/gui_el_join_game_border_right"-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="match_parent" />-->
             </android.support.v7.widget.LinearLayoutCompat>
         </android.support.v7.widget.LinearLayoutCompat>
     </android.support.v7.widget.LinearLayoutCompat>
