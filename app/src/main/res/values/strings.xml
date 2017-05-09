@@ -65,6 +65,26 @@
     <string name="join_game_info_button_join">Join</string>
     <string name="title_activity_maps">Map</string>
 
+    <!-- Registration -->
+    <string name="register_field_name">Name</string>
+    <string name="register_field_email">E-mail</string>
+    <string name="register_field_password">Password</string>
+    <string name="register_button_act">Sign up!</string>
+    <string name="register_busy_title">Signing up</string>
+    <string name="register_busy_text">Just a second, we\'re signing you up.</string>
+    <string name="register_alert_title">Registration failed</string>
+    <string name="register_alert_button">Close</string>
+
+    <!-- Authorisation errors -->
+    <string name="auth_error_wrong_combination">Sorry, these credentials appear to be invalid.</string>
+    <string name="auth_error_name_empty">You forgot to enter a name. This doesn\'t have to be your real name.</string>
+    <string name="auth_error_name_short">Your name should be at least 3 characters.</string>
+    <string name="auth_error_email_empty">Looks like you didn\'t enter an e-mail address yet. Would you mind doing this?</string>
+    <string name="auth_error_email_taken">This e-mail has already been registered. Do you want to login instead?</string>
+    <string name="auth_error_email_invalid">This e-mail appears to be invalid. Please check it</string>
+    <string name="auth_error_password_empty">You forgot to enter a password.</string>
+    <string name="auth_error_password_short">Your password should be at least 4 characters long. Anything will do! \uD83D\uDE09</string>
+
     <!--Google Maps API-->
     <string name="google_maps_key" templateMergeStrategy="preserve" translatable="false">null</string>
 </resources>

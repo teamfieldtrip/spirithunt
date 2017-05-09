@@ -21,13 +21,20 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <!-- Login activity -->
         <activity
             android:name=".controller.LoginController"
             android:configChanges="orientation"
-            android:noHistory="true"
-
             android:screenOrientation="portrait"
             android:theme="@style/AppFullScreenTheme" />
+
+        <!-- Sign up activity -->
+        <activity android:name=".controller.RegisterController"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppSignUpScreen" />
+
         <activity android:name=".controller.GameJoinScanController"
             android:configChanges="orientation"
             android:screenOrientation="portrait"

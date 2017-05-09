@@ -7,4 +7,5 @@
     <color name="colorButtonGradientStart">#880f0f10</color>
     <color name="colorButtonGradientMiddle">#880d0d0f</color>
     <color name="colorButtonGradientEnd">#885d5d5e</color>
+    <color name="colorError">#ddffaaaa</color>
 </resources>

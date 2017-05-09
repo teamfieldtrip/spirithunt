@@ -1,16 +1,11 @@
 package android.spirithunt.win.controller;
 
-import android.app.AlertDialog;
-import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.spirithunt.win.R;
 import android.spirithunt.win.protocol.AuthLogin;
 import android.spirithunt.win.provider.SocketProvider;
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.TextView;
 
@@ -22,55 +17,25 @@ import io.socket.client.Socket;
  * @author Remco Schipper
  */
 
-public class LoginController extends AppCompatActivity {
-    private ProgressDialog progressDialog;
-
-    private void hideProgressDialog() {
-        if(this.progressDialog != null) {
-            this.progressDialog.dismiss();
-        }
-    }
-
-    private void showMenu(Context context) {
-        Intent intent = new Intent(context, MenuController.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
-        startActivity(intent);
-        finish();
-    }
-
+public class LoginController extends AuthorisationController {
     private void showProgressDialog() {
-        if(this.progressDialog == null) {
-            this.progressDialog = new ProgressDialog(this);
-            this.progressDialog.setTitle(getString(R.string.authentication_progress_title));
-            this.progressDialog.setMessage(getString(R.string.authentication_progress_content));
-            this.progressDialog.setCancelable(false);
-            this.progressDialog.show();
-        }
+        showProgressDialog(
+            getString(R.string.authentication_progress_title),
+            getString(R.string.authentication_progress_content)
+        );
     }
 
+    /**
+     * Shows a login failed message
+     *
+     * @param context
+     */
     private void showErrorDialog(Context context) {
-        new AlertDialog.Builder(context)
-            .setTitle(getString(R.string.authentication_alert_title))
-            .setMessage(getString(R.string.authentication_alert_content))
-            .setNeutralButton(R.string.authentication_alert_button, new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int which) {
-                    // do nothing
-                }
-            })
-            .setIcon(android.R.drawable.ic_dialog_alert)
-            .show();
-    }
-
-    private void saveJwt(String token) {
-        SharedPreferences sharedPref = this.getSharedPreferences(getString(R.string.preferences_file), Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPref.edit();
-        editor.putString(getString(R.string.saved_jwt), token);
-        editor.commit();
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
+        showErrorDialog(
+            getString(R.string.authentication_alert_title),
+            getString(R.string.authentication_alert_content),
+            getString(R.string.authentication_alert_button)
+        );
     }
 
     @Override
@@ -80,8 +45,8 @@ public class LoginController extends AppCompatActivity {
     }
 
     public void signUp(View view) {
-        //TODO: something useful
-        throw new UnsupportedOperationException();
+        Intent intent = new Intent(view.getContext(), RegisterController.class);
+        startActivity(intent);
     }
 
     public void submit(View view) {
@@ -103,7 +68,7 @@ public class LoginController extends AppCompatActivity {
 
                         if(args[0] == null) {
                             self.saveJwt(args[1].toString());
-                            self.showMenu(self);
+                            self.showMainMenu(self);
                         } else {
                             self.showErrorDialog(self);
                         }

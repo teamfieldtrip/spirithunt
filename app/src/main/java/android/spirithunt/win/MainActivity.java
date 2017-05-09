@@ -11,20 +11,6 @@ import android.spirithunt.win.provider.ContextProvider;
 import android.support.v7.app.AppCompatActivity;
 
 public class MainActivity extends AppCompatActivity {
-    private void showLogin() {
-        Intent intent = new Intent(this, LoginController.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        startActivity(intent);
-        finish();
-    }
-
-    private void showMenu() {
-        Intent intent = new Intent(this, MenuController.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        startActivity(intent);
-        finish();
-    }
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -33,10 +19,15 @@ public class MainActivity extends AppCompatActivity {
         ContextProvider.getInstance().setContext(this.getApplicationContext());
         SharedPreferences sharedPref = this.getSharedPreferences(getString(R.string.preferences_file), Context.MODE_PRIVATE);
 
+        Intent intent;
         if(sharedPref.contains(getString(R.string.saved_jwt))) {
-            this.showMenu();
+            intent = new Intent(this, MenuController.class);
         } else {
-            this.showLogin();
+            intent = new Intent(this, LoginController.class);
         }
+
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(intent);
+        finish();
     }
 }
