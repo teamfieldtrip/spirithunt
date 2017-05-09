@@ -184,6 +184,7 @@ public class RegisterController extends AuthorisationController {
             default:
                 // Default means not linked to any field.
                 target = null;
+                break;
         }
 
         String error = getErrorFromDictionary(reason);
