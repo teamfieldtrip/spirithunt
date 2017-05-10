@@ -18,6 +18,7 @@ import win.spirithunt.android.model.AmountOfRounds;
 import win.spirithunt.android.model.Duration;
 import win.spirithunt.android.model.Player;
 import win.spirithunt.android.protocol.GameCreate;
+import win.spirithunt.android.provider.PermissionProvider;
 import win.spirithunt.android.provider.PlayerProvider;
 import win.spirithunt.android.provider.SocketProvider;
 
@@ -274,6 +275,12 @@ public class CreateGameController extends AppCompatActivity implements
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.create_game_view);
+
+        PermissionProvider permissionProvider = PermissionProvider.getInstance();
+
+        if(!permissionProvider.hasPermission("location")){
+            permissionProvider.requestPermission(this,"location");
+        }
 
         FragmentManager manager = getFragmentManager();
         MapFragment mapFragment = (MapFragment) manager.findFragmentById(R.id.map);
