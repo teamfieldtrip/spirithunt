@@ -5,25 +5,23 @@
 
     <PreferenceCategory
         android:title="@string/settings_title">
-
-    <CheckBoxPreference
-        android:key="settings_sound"
-        android:title="@string/settings_title_sound"
-        android:summary="@string/settings_summary_sound"
-        >
-    </CheckBoxPreference>
-
-    <CheckBoxPreference
-        android:key="settings_vibration"
-        android:title="@string/settings_title_vibration"
-        android:summary="@string/settings_summary_vibration"
-        >
-    </CheckBoxPreference>
-    <Preference
-        android:title="@string/setting_logout_title"
-        android:summary="@string/setting_logout_summary"
-        android:key="@string/setting_logout_key" />
-
+        <CheckBoxPreference
+            android:key="settings_sound"
+            android:title="@string/settings_title_sound"
+            android:summary="@string/settings_summary_sound" />
+        <CheckBoxPreference
+            android:key="settings_vibration"
+            android:title="@string/settings_title_vibration"
+            android:summary="@string/settings_summary_vibration" />
     </PreferenceCategory>
+
+    <PreferenceCategory
+        android:title='@string/settings_cat_account'>
+        <Preference
+            android:title="@string/setting_logout_title"
+            android:summary="@string/setting_logout_summary"
+            android:key="@string/setting_logout_key" />
+    </PreferenceCategory>
+
 
 </PreferenceScreen>
