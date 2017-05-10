@@ -22,10 +22,6 @@ import java.util.ArrayList;
 
 public class LobbyController extends AppCompatActivity implements OnMapReadyCallback {
 
-    private SocketProvider socketProvider = SocketProvider.getInstance();
-
-    private GoogleMap map;
-
     private ArrayList<Player> players = new ArrayList<>();    // General list of players
 
     private ArrayList<Player> teamRed = new ArrayList<>();    // Team 0
@@ -40,9 +36,6 @@ public class LobbyController extends AppCompatActivity implements OnMapReadyCall
         FragmentManager manager = getFragmentManager();
         MapFragment mapFragment = (MapFragment) manager.findFragmentById(R.id.lobby_map);
 
-
-
-        final LobbyController self = this;
         mapFragment.getMapAsync(this);
 
         for(int i = 0; i<100; i++){
@@ -70,7 +63,7 @@ public class LobbyController extends AppCompatActivity implements OnMapReadyCall
 
         googleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
         googleMap.getUiSettings().setAllGesturesEnabled(false);
-        map = googleMap;
+//        map = googleMap;
     }
 
     /**
