@@ -134,6 +134,7 @@ public class GameJoinScanController extends AppCompatActivity implements QRCodeR
 
         this.cameraContainer = (LinearLayoutCompat)findViewById(R.id.camera_preview);
 
+
         final GameJoinScanController self = this;
         final LinearLayoutCompat container = (LinearLayoutCompat)findViewById(R.id.main_container);
 
@@ -150,6 +151,7 @@ public class GameJoinScanController extends AppCompatActivity implements QRCodeR
         this.hasPermission = (permission == PackageManager.PERMISSION_GRANTED);
 
         // Use the permission we have or ask for it.
+
         if (this.hasPermission) {
             startCamera();
             return;
