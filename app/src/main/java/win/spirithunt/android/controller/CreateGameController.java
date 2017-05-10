@@ -8,14 +8,19 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.location.Location;
 import android.os.Bundle;
+
 import win.spirithunt.android.R;
+import win.spirithunt.android.callback.PlayerCreateCallback;
 import win.spirithunt.android.gui.CustomTextView;
 import win.spirithunt.android.model.AmountOfLives;
 import win.spirithunt.android.model.AmountOfPlayers;
 import win.spirithunt.android.model.AmountOfRounds;
 import win.spirithunt.android.model.Duration;
+import win.spirithunt.android.model.Player;
 import win.spirithunt.android.protocol.GameCreate;
+import win.spirithunt.android.provider.PlayerProvider;
 import win.spirithunt.android.provider.SocketProvider;
+
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -131,7 +136,7 @@ public class CreateGameController extends AppCompatActivity implements
         int strokeColor = 0xffff0000;
         int shadeColor = 0x44ff0000;
 
-        float [] dist = new float[1];
+        float[] dist = new float[1];
         Location.distanceBetween(this.centerLatLng.latitude,
             this.centerLatLng.longitude,
             this.borderLatLng.latitude,
@@ -148,7 +153,7 @@ public class CreateGameController extends AppCompatActivity implements
     }
 
     private void removeCircle() {
-        if(this.radiusCircle != null) {
+        if (this.radiusCircle != null) {
             this.radiusCircle.remove();
         }
 
@@ -158,7 +163,7 @@ public class CreateGameController extends AppCompatActivity implements
     private void removeBorderMarker() {
         this.removeCircle();
 
-        if(this.borderMarker != null) {
+        if (this.borderMarker != null) {
             this.borderMarker.remove();
         }
 
@@ -166,11 +171,11 @@ public class CreateGameController extends AppCompatActivity implements
     }
 
     private void setTimeIndicator(int index) {
-        if(index > -1 && this.durations.size() > index) {
+        if (index > -1 && this.durations.size() > index) {
             this.timeIndicatorIndex = index;
 
             Duration duration = this.durations.get(this.timeIndicatorIndex);
-            CustomTextView view = (CustomTextView)findViewById(R.id.timeIndicator);
+            CustomTextView view = (CustomTextView) findViewById(R.id.timeIndicator);
             view.setText(duration.getDescription() + " " + this.getString(R.string.create_game_text_time));
         }
     }
@@ -205,7 +210,7 @@ public class CreateGameController extends AppCompatActivity implements
     public void submit(View view) {
         if (this.centerLatLng != null && this.borderLatLng != null) {
             this.showProgressDialog();
-            GameCreate gameCreate = new GameCreate(
+            final GameCreate gameCreate = new GameCreate(
                 this.durations.get(this.timeIndicatorIndex).getTime(),
                 this.amountOfPlayers.get(this.amountOfLivesIndex).getAmount(),
                 this.amountOfRounds.get(this.amountOfRoundsIndex).getAmount(),
@@ -216,26 +221,40 @@ public class CreateGameController extends AppCompatActivity implements
             );
 
             final CreateGameController self = this;
-            Socket socket = SocketProvider.getInstance().getConnection();
-            socket.emit("lobby:create", gameCreate, new Ack() {
-                @Override
-                public void call(final Object... args) {
-                    self.runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            self.hideProgressDialog();
 
-                            if(args[0] != null) {
-                                self.showErrorDialog(self);
-                            }
+
+            // Create new Player
+
+            PlayerProvider playerProvider = PlayerProvider.getInstance();
+            playerProvider.getNewPlayer(new PlayerCreateCallback() {
+                @Override
+                public void call(String error, Player player) {
+
+                    Socket socket = SocketProvider.getInstance().getConnection();
+                    socket.emit("lobby:create", gameCreate, new Ack() {
+                        @Override
+                        public void call(final Object... args) {
+                            self.runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    self.hideProgressDialog();
+
+                                    if (args[0] != null || args.length < 2) {
+                                        self.showErrorDialog(self);
+                                    }else{
+                                        Intent intent = new Intent(self, LobbyController.class);
+                                        startActivity(intent);
+                                    }
+                                }
+                            });
                         }
                     });
                 }
             });
         } else {
             new AlertDialog.Builder(this)
-                .setTitle("Hello Infidel")
-                .setMessage("Please select the area for your game")
+                .setTitle(getString(R.string.create_game_no_area_title))
+                .setMessage(getString(R.string.create_game_no_area_content))
                 .setIcon(android.R.drawable.ic_dialog_alert)
                 .show();
         }
@@ -281,21 +300,21 @@ public class CreateGameController extends AppCompatActivity implements
 
     @Override
     public void onMapLongClick(LatLng point) {
-        if(this.centerMarker == null) {
+        if (this.centerMarker == null) {
             MarkerOptions markerOptions = new MarkerOptions()
                 .position(point)
                 .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE));
             this.centerMarker = map.addMarker(markerOptions);
             this.centerLatLng = point;
         } else {
-            float [] dist = new float[1];
+            float[] dist = new float[1];
             Location.distanceBetween(this.centerLatLng.latitude,
                 this.centerLatLng.longitude,
                 point.latitude,
                 point.longitude,
                 dist);
 
-            if(dist[0] < 10000) {
+            if (dist[0] < 10000) {
                 this.removeBorderMarker();
 
                 MarkerOptions markerOptions = new MarkerOptions().position(point).alpha(0.0f);
@@ -309,7 +328,7 @@ public class CreateGameController extends AppCompatActivity implements
 
     @Override
     public boolean onMarkerClick(Marker marker) {
-        if(marker.equals(this.centerMarker)) {
+        if (marker.equals(this.centerMarker)) {
             this.removeBorderMarker();
 
             this.centerMarker.remove();
@@ -328,13 +347,13 @@ public class CreateGameController extends AppCompatActivity implements
     }
 
     private void hideProgressDialog() {
-        if(this.progressDialog != null) {
+        if (this.progressDialog != null) {
             this.progressDialog.dismiss();
         }
     }
 
     private void showProgressDialog() {
-        if(this.progressDialog == null) {
+        if (this.progressDialog == null) {
             this.progressDialog = new ProgressDialog(this);
             this.progressDialog.setTitle(getString(R.string.create_game_progress_title));
             this.progressDialog.setMessage(getString(R.string.create_game_progress_content));
