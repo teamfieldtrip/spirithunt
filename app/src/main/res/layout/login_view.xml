@@ -24,7 +24,7 @@
             android:layout_height="wrap_content"
             android:adjustViewBounds="true" />
 
-        <android.spirithunt.win.gui.CustomEditText style="@style/editText_normal_main"
+        <win.spirithunt.android.gui.CustomEditText style="@style/editText_normal_main"
             android:id="@+id/email"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
@@ -32,7 +32,7 @@
             android:inputType="textEmailAddress"
             android:layout_marginBottom="7dp" />
 
-        <android.spirithunt.win.gui.CustomEditText style="@style/editText_normal_main"
+        <win.spirithunt.android.gui.CustomEditText style="@style/editText_normal_main"
             android:id="@+id/password"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
@@ -41,14 +41,14 @@
             android:inputType="textPassword"
             android:layout_marginBottom="7dp" />
 
-        <android.spirithunt.win.gui.CustomButton
+        <win.spirithunt.android.gui.CustomButton
             style="@style/btn_normal_main_large"
             android:id="@+id/login_button"
             android:text="@string/btn_login"
             android:onClick="submit"
             android:layout_marginBottom="25dp" />
 
-        <android.spirithunt.win.gui.CustomTextView
+        <win.spirithunt.android.gui.CustomTextView
             style="@style/textView_normal_main"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"

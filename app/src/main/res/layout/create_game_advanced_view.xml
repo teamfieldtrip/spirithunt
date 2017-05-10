@@ -12,7 +12,7 @@
         android:layout_height="wrap_content"
         android:onClick="close"
         android:adjustViewBounds="true" />
-    <android.spirithunt.win.gui.CustomTextView
+    <win.spirithunt.android.gui.CustomTextView
         style="@style/textView_normal_main"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -34,7 +34,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
-                <android.spirithunt.win.gui.CustomTextView
+                <win.spirithunt.android.gui.CustomTextView
                     style="@style/textView_normal_main"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -47,11 +47,11 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentEnd="true">
-                        <android.spirithunt.win.gui.CustomButton
+                        <win.spirithunt.android.gui.CustomButton
                             style="@style/btn_normal_arrow_left"
                             android:layout_marginEnd="5dp"
                             android:onClick="subtractAmountOfPlayers"/>
-                        <android.spirithunt.win.gui.CustomTextView
+                        <win.spirithunt.android.gui.CustomTextView
                             style="@style/textView_normal_main"
                             android:id="@+id/amount_of_players"
                             android:layout_width="wrap_content"
@@ -60,7 +60,7 @@
                             android:paddingTop="5dp"
                             android:textSize="25sp"
                             android:textAlignment="center" />
-                        <android.spirithunt.win.gui.CustomButton
+                        <win.spirithunt.android.gui.CustomButton
                             style="@style/btn_normal_arrow_right"
                             android:layout_marginStart="5dp"
                             android:onClick="addAmountOfPlayers"/>
@@ -72,7 +72,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="15dp"
                 android:orientation="horizontal">
-                <android.spirithunt.win.gui.CustomTextView
+                <win.spirithunt.android.gui.CustomTextView
                     style="@style/textView_normal_main"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -85,11 +85,11 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentEnd="true">
-                        <android.spirithunt.win.gui.CustomButton
+                        <win.spirithunt.android.gui.CustomButton
                             style="@style/btn_normal_arrow_left"
                             android:layout_marginEnd="5dp"
                             android:onClick="subtractAmountOfRounds"/>
-                        <android.spirithunt.win.gui.CustomTextView
+                        <win.spirithunt.android.gui.CustomTextView
                             style="@style/textView_normal_main"
                             android:id="@+id/amount_of_rounds"
                             android:layout_width="wrap_content"
@@ -98,7 +98,7 @@
                             android:paddingTop="5dp"
                             android:textSize="25sp"
                             android:textAlignment="center" />
-                        <android.spirithunt.win.gui.CustomButton
+                        <win.spirithunt.android.gui.CustomButton
                             style="@style/btn_normal_arrow_right"
                             android:layout_marginStart="5dp"
                             android:onClick="addAmountOfRounds" />
@@ -110,7 +110,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="15dp"
                 android:orientation="horizontal">
-                <android.spirithunt.win.gui.CustomTextView
+                <win.spirithunt.android.gui.CustomTextView
                     style="@style/textView_normal_main"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -123,11 +123,11 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentEnd="true">
-                        <android.spirithunt.win.gui.CustomButton
+                        <win.spirithunt.android.gui.CustomButton
                             style="@style/btn_normal_arrow_left"
                             android:layout_marginEnd="5dp"
                             android:onClick="subtractAmountOfLives" />
-                        <android.spirithunt.win.gui.CustomTextView
+                        <win.spirithunt.android.gui.CustomTextView
                             style="@style/textView_normal_main"
                             android:id="@+id/amount_of_lives"
                             android:layout_width="wrap_content"
@@ -136,7 +136,7 @@
                             android:paddingTop="5dp"
                             android:textSize="25sp"
                             android:textAlignment="center" />
-                        <android.spirithunt.win.gui.CustomButton
+                        <win.spirithunt.android.gui.CustomButton
                             style="@style/btn_normal_arrow_right"
                             android:layout_marginStart="5dp"
                             android:onClick="addAmountOfLives" />
@@ -148,7 +148,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="15dp"
                 android:orientation="horizontal">
-                <android.spirithunt.win.gui.CustomTextView
+                <win.spirithunt.android.gui.CustomTextView
                     style="@style/textView_normal_main"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -161,11 +161,11 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentEnd="true">
-                        <android.spirithunt.win.gui.CustomButton
+                        <win.spirithunt.android.gui.CustomButton
                             style="@style/btn_normal_arrow_left"
                             android:layout_marginEnd="5dp"
                             android:onClick="disablePowerUps" />
-                        <android.spirithunt.win.gui.CustomTextView
+                        <win.spirithunt.android.gui.CustomTextView
                             style="@style/textView_normal_main"
                             android:id="@+id/power_ups_enabled"
                             android:layout_width="wrap_content"
@@ -174,7 +174,7 @@
                             android:paddingTop="5dp"
                             android:textSize="25sp"
                             android:textAlignment="center" />
-                        <android.spirithunt.win.gui.CustomButton
+                        <win.spirithunt.android.gui.CustomButton
                             style="@style/btn_normal_arrow_right"
                             android:layout_marginStart="5dp"
                             android:onClick="enablePowerUps" />
@@ -187,7 +187,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="30dp">
-        <android.spirithunt.win.gui.CustomButton
+        <win.spirithunt.android.gui.CustomButton
             style="@style/btn_normal_main_large"
             android:layout_width="220dp"
             android:layout_centerInParent="true"

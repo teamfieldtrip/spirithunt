@@ -8,7 +8,7 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_top_margin"
-    tools:context="android.spirithunt.win.MainActivity">
+    tools:context="win.spirithunt.android.MainActivity">
 
     <TextView
         android:id="@+id/mTextView"

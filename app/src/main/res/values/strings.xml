@@ -100,4 +100,21 @@
     <string name="store_alert_message">Sorry, the store is not available right now.\nThis feature is not included in the Alpha version</string>
     <string name="store_alert_button">Okay</string>
     <string name="settings_cat_account">My account</string>
+
+    <!-- Game screen -->
+    <string name="game_powerup_consume">Use</string>
+    <string name="game_powerup_consume_title">Consume powerup?</string>
+    <string name="game_powerup_consume_desc">Would you like to consume the %s powerup?\nIt\'ll be removed from your inventory.</string>
+    <string name="game_powerup_consume_yes">Yes</string>
+    <string name="game_powerup_consume_no">No</string>
+    <string name="join_game_scan_instruction">Scan the QR code of the game you\'d like to join.</string>
+
+    <!-- Join game camera prompt -->
+    <string name="join_game_camera_explain_title">Camera access required</string>
+    <string name="join_game_camera_explain_text"><![CDATA[
+    You can only join games by scanning QR codes.
+    Please grant access to your camera to continue.
+    ]]></string>
+    <string name="join_game_camera_explain_no">Not now</string>
+    <string name="join_game_camera_explain_yes">Ok</string>
 </resources>
