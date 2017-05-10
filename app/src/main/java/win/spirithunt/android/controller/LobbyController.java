@@ -2,9 +2,6 @@ package win.spirithunt.android.controller;
 
 import android.app.FragmentManager;
 import android.os.Bundle;
-import win.spirithunt.android.R;
-import win.spirithunt.android.model.Player;
-import win.spirithunt.android.provider.SocketProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.ArrayAdapter;
@@ -15,6 +12,9 @@ import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.OnMapReadyCallback;
 
 import java.util.ArrayList;
+
+import win.spirithunt.android.R;
+import win.spirithunt.android.model.Player;
 
 /**
  * Created by sven on 30-3-17.
