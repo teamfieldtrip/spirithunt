@@ -18,13 +18,10 @@ import static java.util.UUID.randomUUID;
  * Renders the main game interface, which consists of a radar, list of power ups, consume buttons
  * and a bottom navigation bar
  *
- * @author Roelof Roos <github@roelof.io>
+ * @author Roelof Roos [github@roelof.io]
  */
 public class GameController extends AppCompatActivity implements View.OnClickListener {
 
-    private static final String TAG = "GameController";
-    private RadarDisplay radar;
-    private Player ownPlayer;
     private ArrayList<Player> players = new ArrayList<>();
 
     protected Player buildPlayer(double lat, double lng, int team) {
@@ -40,10 +37,10 @@ public class GameController extends AppCompatActivity implements View.OnClickLis
         super.onCreate(savedInstanceState);
         setContentView(R.layout.game_view);
 
-        radar = (RadarDisplay) findViewById(R.id.game_status_radar);
+        RadarDisplay radar = (RadarDisplay) findViewById(R.id.game_status_radar);
 
         // Determine who we are
-        ownPlayer = buildPlayer(52.512740, 6.093505, 2);
+        Player ownPlayer = buildPlayer(52.512740, 6.093505, 2);
 
         // Flood the player list
         players.add(buildPlayer(

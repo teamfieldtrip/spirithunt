@@ -16,14 +16,13 @@ import java.util.ArrayList;
 /**
  * Handles updating the radar
  *
- * @author Roelof Roos <github@roelof.io>
+ * @author Roelof Roos [github@roelof.io]
  */
 
 public class RadarDisplay extends SurfaceView {
 
     static String TAG = "Tag";
 
-    protected Rect size;
     protected RadarRenderController renderController;
 
     /**
@@ -35,8 +34,6 @@ public class RadarDisplay extends SurfaceView {
      * List of players
      */
     private ArrayList<Player> playerList;
-
-    private ArrayList<PlayerPosition> playerPositions;
 
     public RadarDisplay(Context context) {
         super(context);
@@ -92,18 +89,5 @@ public class RadarDisplay extends SurfaceView {
         Log.d(TAG, "onDetachedFromWindow: Detaching and stopping RenderController");
         getHolder().removeCallback(renderController);
         renderController.interrupt();
-    }
-
-    class PlayerPosition {
-        Player player;
-        Point position;
-
-        public PlayerPosition(Player player) {
-            this.player = player;
-        }
-
-        public void determinePosition(Player activePlayer) {
-//            android.spirithunt.win.model.Location
-        }
     }
 }

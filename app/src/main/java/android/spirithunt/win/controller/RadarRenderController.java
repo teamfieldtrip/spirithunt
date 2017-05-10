@@ -25,7 +25,7 @@ import java.util.ArrayList;
 /**
  * Handles updating the radar in a separate thread
  *
- * @author Roelof Roos <github@roelof.io>
+ * @author Roelof Roos [github@roelof.io]
  */
 
 public class RadarRenderController extends Thread implements SurfaceHolder.Callback {
@@ -358,16 +358,21 @@ public class RadarRenderController extends Thread implements SurfaceHolder.Callb
         }
     }
 
+    @SuppressWarnings("WeakerAccess")
     class DrawablePlayer {
         private static final double RADIAL_MULTIPLIER = ((2.0 * Math.PI) / 360.0);
+
         private static final double MAX_DISTANCE = 650f;
+
         private static final int CIRCLE_SIZE = 10;
+
         private static final double HALF_PI = Math.PI * .5;
 
-        Player player;
+        private Player player;
 
-        float distance = -1;
-        float bearing = -1;
+        private float distance = -1;
+
+        private float bearing = -1;
 
         DrawablePlayer(Player player) {
             this.player = player;
@@ -379,7 +384,7 @@ public class RadarRenderController extends Thread implements SurfaceHolder.Callb
          *
          * @param perspectivePlayer Player to use as alignment, basically the Player for this device.
          */
-        void preload(Player perspectivePlayer) {
+        public void preload(Player perspectivePlayer) {
             float[] results = new float[3];
 
             Location.distanceBetween(
@@ -414,7 +419,7 @@ public class RadarRenderController extends Thread implements SurfaceHolder.Callb
          * Draws the player on the radar, using the given radar dimensions and center location.
          * @param canvas
          */
-        void draw(Canvas canvas, Player perspectivePlayer, Paint paintFriendly, Paint paintHostile, double sweeperRotation, boolean inPowerSaveMode) {
+        public void draw(Canvas canvas, Player perspectivePlayer, Paint paintFriendly, Paint paintHostile, double sweeperRotation, boolean inPowerSaveMode) {
             if (canvasCenter == null || bearing == -1 || distance == -1) {
                 return;
             }
