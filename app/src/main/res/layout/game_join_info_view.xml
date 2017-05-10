@@ -20,7 +20,7 @@
             android:layout_height="wrap_content"
             android:onClick="close"
             android:adjustViewBounds="true" />
-        <android.spirithunt.win.gui.CustomTextView
+        <win.spirithunt.android.gui.CustomTextView
             style="@style/textView_normal_main"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -98,18 +98,18 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:orientation="vertical">
-                            <android.spirithunt.win.gui.CustomTextView
+                            <win.spirithunt.android.gui.CustomTextView
                                 style="@style/textView_normal_main"
                                 android:id="@+id/hostText"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content" />
-                            <android.spirithunt.win.gui.CustomTextView
+                            <win.spirithunt.android.gui.CustomTextView
                                 style="@style/textView_normal_main"
                                 android:id="@+id/modeText"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:paddingTop="0dp" />
-                            <android.spirithunt.win.gui.CustomTextView
+                            <win.spirithunt.android.gui.CustomTextView
                                 style="@style/textView_normal_main"
                                 android:id="@+id/playersText"
                                 android:layout_width="match_parent"
@@ -126,7 +126,7 @@
                         android:orientation="horizontal"
                         android:gravity="center"
                         android:layout_gravity="center_horizontal">
-                        <android.spirithunt.win.gui.CustomButton
+                        <win.spirithunt.android.gui.CustomButton
                             style="@style/btn_normal_main_medium"
                             android:text="@string/join_game_info_button_join"
                             android:onClick="submit" />
