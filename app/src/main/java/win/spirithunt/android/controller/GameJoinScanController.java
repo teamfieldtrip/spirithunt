@@ -290,6 +290,8 @@ public class GameJoinScanController extends AppCompatActivity implements QRCodeR
                 }
                 return;
             }
+            default:
+                break;
         }
     }
 }
