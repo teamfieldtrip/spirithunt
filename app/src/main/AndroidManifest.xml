@@ -66,6 +66,8 @@
             android:configChanges="orientation"
             android:screenOrientation="portrait"
             android:theme="@style/AppPreferenceTheme"/>
+        <activity android:name=".controller.LobbyController"
+            android:theme="@style/AppFullScreenTheme" />
 
         <!-- Activities in progress -->
         <activity
