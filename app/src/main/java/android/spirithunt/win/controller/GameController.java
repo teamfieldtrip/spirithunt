@@ -37,8 +37,6 @@ public class GameController extends AppCompatActivity implements View.OnClickLis
         super.onCreate(savedInstanceState);
         setContentView(R.layout.game_view);
 
-        RadarDisplay radar = (RadarDisplay) findViewById(R.id.game_status_radar);
-
         // Determine who we are
         Player ownPlayer = buildPlayer(52.512740, 6.093505, 2);
 
@@ -63,10 +61,8 @@ public class GameController extends AppCompatActivity implements View.OnClickLis
             ownPlayer.longitude - 0.004000,
             4
         ));
-//        players.add(buildPlayer(52.512813, 6.093850, 2));
-//        players.add(buildPlayer(52.512199, 6.091683, 1));
-//        players.add(buildPlayer(52.511455, 6.093056, 1));
 
+        RadarDisplay radar = (RadarDisplay) findViewById(R.id.game_status_radar);
         radar.setActivePlayer(ownPlayer);
         radar.setPlayerList(players);
     }

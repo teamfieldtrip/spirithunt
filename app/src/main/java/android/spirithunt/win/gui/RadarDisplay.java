@@ -2,8 +2,6 @@ package android.spirithunt.win.gui;
 
 import android.content.Context;
 import android.graphics.PixelFormat;
-import android.graphics.Point;
-import android.graphics.Rect;
 import android.spirithunt.win.controller.RadarRenderController;
 import android.spirithunt.win.model.Player;
 import android.util.AttributeSet;
@@ -21,7 +19,7 @@ import java.util.ArrayList;
 
 public class RadarDisplay extends SurfaceView {
 
-    static String TAG = "Tag";
+    private static String TAG = "RadarDisplay";
 
     protected RadarRenderController renderController;
 
