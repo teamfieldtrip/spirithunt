@@ -6,4 +6,6 @@
     <dimen name="button_border_radius">12dip</dimen>
     <dimen name="activity_top_margin">40dp</dimen>
     <dimen name="activity_top_margin_short">24dp</dimen>
+    <dimen name="game_status_padding">4dp</dimen>
+    <dimen name="radar_size">320dp</dimen>
 </resources>
