@@ -14,7 +14,7 @@
         android:layout_height="wrap_content"
         android:onClick="close"
         android:adjustViewBounds="true" />
-    <android.spirithunt.win.gui.CustomTextView
+    <win.spirithunt.android.gui.CustomTextView
         style="@style/textView_normal_main"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -72,7 +72,7 @@
                         android:layout_marginRight="7dp"
                         android:layout_width="260dp"
                         android:layout_height="260dp" />
-                    <android.spirithunt.win.gui.CustomTextView
+                    <win.spirithunt.android.gui.CustomTextView
                         style="@style/textView_normal_main"
                         android:background="@drawable/gui_el_game_area"
                         android:layout_width="match_parent"
@@ -91,25 +91,25 @@
         android:paddingRight="24dp"
         android:paddingLeft="24dp"
         android:orientation="horizontal">
-        <android.spirithunt.win.gui.CustomButton
+        <win.spirithunt.android.gui.CustomButton
             style="@style/btn_normal_arrow_left"
             android:layout_marginEnd="5dp"
             android:onClick="subtractTime" />
-        <android.spirithunt.win.gui.CustomTextView
+        <win.spirithunt.android.gui.CustomTextView
             style="@style/textView_normal_main"
             android:id="@+id/timeIndicator"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:textSize="25sp"
             android:textAlignment="center" />
-        <android.spirithunt.win.gui.CustomButton
+        <win.spirithunt.android.gui.CustomButton
             style="@style/btn_normal_arrow_right"
             android:layout_marginStart="5dp"
             android:onClick="addTime" />
         <RelativeLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content" >
-            <android.spirithunt.win.gui.CustomButton
+            <win.spirithunt.android.gui.CustomButton
                 style="@style/btn_normal_main_large"
                 android:layout_width="160dp"
                 android:layout_alignParentEnd="true"
@@ -120,7 +120,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="fill_parent" >
-        <android.spirithunt.win.gui.CustomTextView
+        <win.spirithunt.android.gui.CustomTextView
             style="@style/textView_normal_main"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

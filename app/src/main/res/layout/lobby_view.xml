@@ -18,7 +18,7 @@
         android:layout_weight="1"
         android:orientation="vertical">
 
-        <android.spirithunt.win.gui.CustomTextView
+        <win.spirithunt.android.gui.CustomTextView
             style="@style/textView_normal_main"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
@@ -27,7 +27,7 @@
             android:textAlignment="center"
             android:textSize="42sp" />
 
-        <android.spirithunt.win.gui.CustomTextView
+        <win.spirithunt.android.gui.CustomTextView
             style="@style/textView_normal_main"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"

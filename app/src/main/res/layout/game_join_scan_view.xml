@@ -20,7 +20,7 @@
             android:layout_height="wrap_content"
             android:onClick="close"
             android:adjustViewBounds="true" />
-        <android.spirithunt.win.gui.CustomTextView
+        <win.spirithunt.android.gui.CustomTextView
             style="@style/textView_normal_main"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
