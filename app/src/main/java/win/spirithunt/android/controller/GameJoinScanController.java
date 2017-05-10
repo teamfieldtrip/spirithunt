@@ -81,17 +81,6 @@ public class GameJoinScanController extends AppCompatActivity implements QRCodeR
         this.hasPermission = (permission == PackageManager.PERMISSION_GRANTED);
         this.cameraContainer = (LinearLayoutCompat)findViewById(R.id.camera_preview);
 
-        final GameJoinScanController self = this;
-        final LinearLayoutCompat container = (LinearLayoutCompat)findViewById(R.id.main_container);
-
-        container.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-            @Override
-            public void onGlobalLayout() {
-                self.cameraContainer.getLayoutParams().height = container.getHeight();
-                container.getViewTreeObserver().removeOnGlobalLayoutListener(this);
-            }
-        });
-
         if (this.hasPermission) {
             qrCodeReaderView = new QRCodeReaderView(this);
             qrCodeReaderView.setLayoutParams(new LinearLayout.LayoutParams(
