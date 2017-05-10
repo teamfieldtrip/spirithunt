@@ -66,7 +66,7 @@ public class LoginController extends AuthorisationController {
                     public void run() {
                         self.hideProgressDialog();
 
-                        if(args[0] == null) {
+                        if(args.length >= 2 && args[0] == null) {
                             self.saveJwt(args[1].toString());
                             self.showMainMenu(self);
                         } else {

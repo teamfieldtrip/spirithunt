@@ -62,7 +62,7 @@ abstract public class AuthorisationController extends AppCompatActivity {
      */
     protected void showProgressDialog(String title, String body) {
         if(progressDialog == null) {
-            progressDialog = new ProgressDialog(this);
+            progressDialog = new ProgressDialog(this, R.style.AppDialog);
             progressDialog.setTitle(title);
             progressDialog.setMessage(body);
             progressDialog.setCancelable(false);
@@ -78,7 +78,7 @@ abstract public class AuthorisationController extends AppCompatActivity {
      * @param button Content of dismiss button
      */
     protected void showErrorDialog(String title, String content, String button) {
-        new AlertDialog.Builder(this)
+        new AlertDialog.Builder(this, R.style.AppDialog)
             .setTitle(title)
             .setMessage(content)
             .setCancelable(true)

@@ -18,6 +18,15 @@
         <item name="android:textColorSecondary">#fff</item>
     </style>
 
+    <style name="AppDialog" parent="Theme.AppCompat.Dialog.Alert">
+        <!-- Used for the buttons -->
+        <item name="colorAccent">@color/colorButtonText</item>
+        <!-- Used for the title and text -->
+        <item name="android:textColorPrimary">@color/colorText</item>
+        <!-- Used for the background -->
+        <item name="android:background">@color/colorPrimaryDark</item>
+    </style>
+
     <style name="AppPreferenceTheme" parent="@style/AppFullScreenTheme">
         <item name="colorAccent">#fff</item>
         <item name="android:textAppearanceListItem">@style/PreferenceTextAppearance</item>
@@ -138,4 +147,6 @@
     <style name="btn_normal_arrow_right" parent="@style/btn_normal_arrow">
         <item name="android:background">@drawable/btn_right_normal</item>
     </style>
+
+    <color name="colorText">#CCFFFFFF</color>
 </resources>
