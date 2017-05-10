@@ -1,5 +1,8 @@
 package android.spirithunt.win.provider;
 
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.spirithunt.win.R;
 import android.spirithunt.win.callback.PlayerCreateCallback;
 import android.spirithunt.win.model.Player;
 import android.spirithunt.win.protocol.PlayerCreate;
@@ -48,8 +51,10 @@ public class PlayerProvider {
      * @param callback Called with the (new) player instance
      */
     public void getNewPlayer(final PlayerCreateCallback callback) {
+        Context context = ContextProvider.getInstance().getContext();
+        SharedPreferences sharedPref = context.getSharedPreferences(context.getString(R.string.preferences_file), Context.MODE_PRIVATE);
         final PlayerProvider self = this;
-        PlayerCreate createPlayer = new PlayerCreate();
+        PlayerCreate createPlayer = new PlayerCreate(sharedPref.getString(context.getString(R.string.saved_jwt), null));
 
         socket.emit("player:create", createPlayer, new Ack() {
             @Override
