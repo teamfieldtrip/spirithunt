@@ -2,6 +2,7 @@
 <android.support.v7.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
+    android:paddingTop="@dimen/activity_top_margin_short"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".controller.CreateGameController">
