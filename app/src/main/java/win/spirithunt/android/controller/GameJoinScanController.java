@@ -145,8 +145,7 @@ public class GameJoinScanController extends AppCompatActivity implements QRCodeR
                 container.getViewTreeObserver().removeOnGlobalLayoutListener(this);
             }
         });
-
-
+        
         int permission = ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA);
         this.hasPermission = (permission == PackageManager.PERMISSION_GRANTED);
 
