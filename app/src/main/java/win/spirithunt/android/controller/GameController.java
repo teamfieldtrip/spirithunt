@@ -22,6 +22,12 @@ import win.spirithunt.android.provider.SocketProvider;
 import win.spirithunt.android.model.PowerUp;
 import win.spirithunt.android.protocol.GameTag;
 import win.spirithunt.android.provider.SocketProvider;
+import win.spirithunt.android.R;
+import win.spirithunt.android.gui.RadarDisplay;
+import win.spirithunt.android.model.Player;
+
+import static java.lang.Math.sqrt;
+import static java.util.UUID.randomUUID;
 
 import static java.lang.Math.sqrt;
 
@@ -53,6 +59,7 @@ public class GameController extends AppCompatActivity implements View.OnClickLis
     private Player target = buildPlayer("db1cd8e0-abc4-4072-b46b-f63df0b80654", 52.512240, 6.093405, 0);
 
     private ArrayList<Player> players = new ArrayList<>();
+    private double range = 2;
 
     protected Player buildPlayer(String Uuid, double lat, double lng, int team) {
         Player out = new Player(Uuid);
@@ -185,7 +192,6 @@ public class GameController extends AppCompatActivity implements View.OnClickLis
      * @param p Player object to compare distance to
      * @return boolean if Player can be tagged
      */
-
     public boolean checkTagable(Player p) {
         double deltaX = ownPlayer.longitude - p.longitude;
         double deltaY = ownPlayer.latitude - p.latitude;
