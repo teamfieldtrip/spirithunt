@@ -29,7 +29,7 @@ public class PermissionProvider {
     /**
      * Get the permission provider instance
      *
-     * @return {PermissionProvider}
+     * @return Singleton instance of the PermissionProvider
      */
     public static PermissionProvider getInstance() {
         if (instance == null) {
@@ -62,14 +62,10 @@ public class PermissionProvider {
      * @param permission PERMISSION_* constant of the permission you want to check
      * @return           Boolean if the permission has been granted.
      */
-    public boolean hasPermission(int permission) {
+    public boolean hasPermission(Context context, int permission) {
         String permissionName = getPermissionName(permission);
-        if (permissionName == null) {
-            return false;
-        }
-
-        Context context = ContextProvider.getInstance().getContext();
-        return (ContextCompat.checkSelfPermission(context, permissionName) == PackageManager.PERMISSION_GRANTED);
+        return permissionName != null &&
+            (ContextCompat.checkSelfPermission(context, permissionName) == PackageManager.PERMISSION_GRANTED);
     }
 
     /**
@@ -78,7 +74,6 @@ public class PermissionProvider {
      * permission instantly.
      *
      * <strong>Make sure your permission request is async!</strong>
-     *
      *
      * @param activity Used to check if the given activity has asked for access earlier on
      * @param permission PERMISSION_* constant of the permission you'd like to use.
