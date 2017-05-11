@@ -124,6 +124,7 @@
     <string name="game_powerup_consume_desc">Would you like to consume the %s powerup?\nIt\'ll be removed from your inventory.</string>
     <string name="game_powerup_consume_yes">Yes</string>
     <string name="game_powerup_consume_no">No</string>
+    <string name="game_tag">Tag Target!</string>
     <string name="join_game_scan_instruction">Scan the QR code of the game you\'d like to join.</string>
 
     <!-- Join game camera prompt -->
