@@ -278,8 +278,9 @@ public class CreateGameController extends AppCompatActivity implements
 
         PermissionProvider permissionProvider = PermissionProvider.getInstance();
 
-        if(!permissionProvider.hasPermission("location")){
-            permissionProvider.requestPermission(this,"location");
+        // TODO Add question support!
+        if(!permissionProvider.hasPermission(PermissionProvider.PERMISSION_LOCATION)){
+            permissionProvider.requestPermission(this, PermissionProvider.PERMISSION_LOCATION);
         }
 
         FragmentManager manager = getFragmentManager();
