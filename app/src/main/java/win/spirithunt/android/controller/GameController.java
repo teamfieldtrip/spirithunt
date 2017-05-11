@@ -1,9 +1,12 @@
 package win.spirithunt.android.controller;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -17,6 +20,9 @@ import win.spirithunt.android.gui.RadarDisplay;
 import win.spirithunt.android.model.Player;
 import win.spirithunt.android.protocol.GameTag;
 import win.spirithunt.android.provider.SocketProvider;
+
+import static java.lang.Math.sqrt;
+import static java.util.UUID.randomUUID;
 
 import static java.lang.Math.sqrt;
 
@@ -48,6 +54,7 @@ public class GameController extends AppCompatActivity implements View.OnClickLis
     private Player target = buildPlayer("db1cd8e0-abc4-4072-b46b-f63df0b80654", 52.512240, 6.093405, 0);
 
     private ArrayList<Player> players = new ArrayList<>();
+    private double range = 2;
 
     protected Player buildPlayer(String Uuid, double lat, double lng, int team) {
         Player out = new Player(Uuid);
@@ -127,7 +134,6 @@ public class GameController extends AppCompatActivity implements View.OnClickLis
 
     /**
      * Handle the OnClick events of Views in the layout
-     *
      * @param view the View that triggered the event
      */
     @Override
@@ -136,6 +142,19 @@ public class GameController extends AppCompatActivity implements View.OnClickLis
         switch (view.getId()) {
             case R.id.game_tag:
                 tagPlayer();
+            case R.id.game_consume:
+                DialogInterface.OnClickListener listener = new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        // do nothing
+                    }
+                };
+
+                new AlertDialog.Builder(view.getContext(), R.style.AppDialog)
+                    .setTitle(getString(R.string.game_powerup_consume_title))
+                    .setMessage(getString(R.string.game_powerup_consume_desc))
+                    .setPositiveButton(R.string.game_powerup_consume_yes, listener)
+                    .setNegativeButton(R.string.game_powerup_consume_no, listener)
+                    .show();
                 break;
             default:
                 break;
