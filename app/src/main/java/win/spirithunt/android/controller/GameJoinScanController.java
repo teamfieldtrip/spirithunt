@@ -1,6 +1,5 @@
 package win.spirithunt.android.controller;
 
-import android.Manifest;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
@@ -8,24 +7,20 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.PointF;
 import android.os.Bundle;
-import win.spirithunt.android.R;
-import win.spirithunt.android.protocol.LobbyInfo;
-import win.spirithunt.android.provider.PermissionProvider;
-import win.spirithunt.android.provider.SocketProvider;
-
 import android.support.annotation.NonNull;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutCompat;
 import android.view.View;
-import android.view.ViewTreeObserver;
 import android.widget.LinearLayout;
 
 import com.dlazaro66.qrcodereaderview.QRCodeReaderView;
 
 import io.socket.client.Ack;
 import io.socket.client.Socket;
+import win.spirithunt.android.R;
+import win.spirithunt.android.protocol.LobbyInfo;
+import win.spirithunt.android.provider.PermissionProvider;
+import win.spirithunt.android.provider.SocketProvider;
 
 /**
  * @author Remco Schipper
