@@ -8,13 +8,23 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 
 /**
- * Created by sven on 10-5-17.
+ * Handles prompting for permissions and checking if they're granted or should be explained.
+ *
+ * @author Sven Boekelder
+ * @author Roelof Roos
  */
-
-// TODO callbacks
-
 public class PermissionProvider {
     private static PermissionProvider instance;
+
+    /**
+     * Request access to the camera
+     */
+    public static final int PERMISSION_CAMERA = 1;
+
+    /**
+     * Request access to the user's GPS location
+     */
+    public static final int PERMISSION_LOCATION = 2;
 
     /**
      * Get the permission provider instance
@@ -30,50 +40,83 @@ public class PermissionProvider {
     }
 
     /**
-     * Check if the permission has been granted yet
+     * Returns the permission name for the given permission constant.
      *
-     * @param permission    Permission that needs to be checked
-     * @return              Boolean if the permission has been granted yet
+     * @param permission One of the PERMISSION_ constants.
+     * @return permission name, or null if invalid.
      */
-    public boolean hasPermission(String permission) {
-        Context context = ContextProvider.getInstance().getContext();
-        int PERMISSION = 0;
+    private String getPermissionName(int permission) {
         switch (permission) {
-            case "location":
-                PERMISSION = ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION);
-                break;
-            case "camera":
-                PERMISSION = ContextCompat.checkSelfPermission(context, Manifest.permission.CAMERA);
-                break;
+            case PERMISSION_LOCATION:
+                return Manifest.permission.ACCESS_FINE_LOCATION;
+            case PERMISSION_CAMERA:
+                return Manifest.permission.CAMERA;
             default:
-                break;
+                return null;
         }
-        return (PERMISSION == PackageManager.PERMISSION_GRANTED);
     }
 
     /**
-     * Request a certain permission
+     * Check if the permission has been granted yet.
      *
-     * @param activity      Current activity to show the request dialog on
-     * @param permission    Permission that needs to be requested
+     * @param permission PERMISSION_* constant of the permission you want to check
+     * @return           Boolean if the permission has been granted.
      */
-    public int requestPermission(Activity activity, String permission) {
-        int PERMISSION = 0;
-        switch (permission) {
-            case "location":
-                ActivityCompat.requestPermissions(activity,
-                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
-                    PERMISSION);
-                break;
-            case "camera":
-                ActivityCompat.requestPermissions(activity,
-                    new String[]{Manifest.permission.CAMERA},
-                    PERMISSION);
-                break;
-            default:
-                break;
+    public boolean hasPermission(int permission) {
+        String permissionName = getPermissionName(permission);
+        if (permissionName == null) {
+            return false;
         }
 
-        return PERMISSION;
+        Context context = ContextProvider.getInstance().getContext();
+        return (ContextCompat.checkSelfPermission(context, permissionName) == PackageManager.PERMISSION_GRANTED);
+    }
+
+    /**
+     * Checks if you should explain why you need the requested permission. Returns TRUE if you
+     * should explain WHY you need access to the given system, or false if you can prompt for the
+     * permission instantly.
+     *
+     * <strong>Make sure your permission request is async!</strong>
+     *
+     *
+     * @param activity Used to check if the given activity has asked for access earlier on
+     * @param permission PERMISSION_* constant of the permission you'd like to use.
+     * @return true if you should explain why you need the permission, false if you can prompt.
+     */
+    public boolean shouldShowRationale(Activity activity, int permission) {
+        String permissionName = getPermissionName(permission);
+        if (permissionName == null) {
+            return false;
+        }
+
+        return ActivityCompat.shouldShowRequestPermissionRationale(activity, permissionName);
+    }
+
+    /**
+     * Request a certain permission. Make sure to check if you need to explain why you need this
+     * permission if {@link #shouldShowRationale} returns true.
+     *
+     * This method returns false if the permission can't be requested. <em>It does
+     * <strong>not</strong> return true if the permission is granted, just when the request has
+     * been sent!</em>
+     *
+     * @param activity   Current activity to show the request dialog on
+     * @param permission Permission that needs to be requested
+     * @return false if the permission couldn't be requested, true if the request is made.
+     */
+    public Boolean requestPermission(Activity activity, int permission) {
+        String permissionName = getPermissionName(permission);
+        if (permissionName == null) {
+            return false;
+        }
+
+        ActivityCompat.requestPermissions(
+            activity,
+            new String[]{permissionName},
+            permission
+        );
+
+        return true;
     }
 }
