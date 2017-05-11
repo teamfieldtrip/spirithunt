@@ -80,6 +80,8 @@ public class CreateGameController extends AppCompatActivity implements
 
     private int amountOfLivesIndex = 0;
 
+    private View mainView;
+
     private GoogleMap map;
 
     private Circle radiusCircle;
@@ -98,26 +100,28 @@ public class CreateGameController extends AppCompatActivity implements
 
     private PermissionProvider permissionProvider;
 
+    private MapFragment mapView;
+
     public CreateGameController() {
         permissionProvider = PermissionProvider.getInstance();
 
         this.amountOfPlayers = new ArrayList<>();
-        for (int i = 4; i < 16; i+= 2) {
+        for (int i = 4; i <= 16; i+= 2) {
             this.amountOfPlayers.add(new AmountOfPlayers(i, Integer.toString(i)));
         }
 
         this.amountOfRounds = new ArrayList<>();
-        for (int i = 1; i < 10; i++) {
+        for (int i = 1; i <= 10; i++) {
             this.amountOfRounds.add(new AmountOfRounds(i, Integer.toString(i)));
         }
 
         this.amountOfLives = new ArrayList<>();
-        for (int i = 1; i < 9; i++) {
+        for (int i = 1; i <= 9; i++) {
             this.amountOfLives.add(new AmountOfLives(i, Integer.toString(i)));
         }
 
         this.durations = new ArrayList<>();
-        for (int i = 10; i < 60; i+=10) {
+        for (int i = 10; i <= 60; i+=10) {
             this.durations.add(new Duration(i * 60, Integer.toString(i)));
         }
     }
@@ -279,12 +283,17 @@ public class CreateGameController extends AppCompatActivity implements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.create_game_view);
 
-        // TODO Add question support!
-        askForLocationAccess();
+        // Get the container
 
         FragmentManager manager = getFragmentManager();
-        MapFragment mapFragment = (MapFragment) manager.findFragmentById(R.id.map);
-        mapFragment.getMapAsync(this);
+        mapView = (MapFragment) manager.findFragmentById(R.id.map);
+        mapView.getMapAsync(this);
+
+        // Set defaults
+        setTimeIndicator(0);
+
+        // TODO Add question support!
+        askForLocationAccess();
     }
 
     /**
@@ -364,6 +373,9 @@ public class CreateGameController extends AppCompatActivity implements
                 this.borderLatLng = point;
 
                 this.createCircle();
+            } else {
+                Toast.makeText(getApplicationContext(),
+                    getString(R.string.create_game_area_too_large), Toast.LENGTH_SHORT).show();
             }
         }
     }

@@ -43,16 +43,16 @@ public class GameJoinScanController extends AppCompatActivity implements QRCodeR
     private boolean isSending = false;
 
     public void close(View view) {
-        this.finish();
+        finish();
     }
 
     @Override
     public void onQRCodeRead(final String text, PointF[] points) {
-        if (this.hasPermission && !this.isSending) {
+        if (hasPermission && !isSending) {
             final GameJoinScanController self = this;
-            this.isSending = true;
-            this.qrCodeReaderView.stopCamera();
-            this.showProgressDialog();
+            isSending = true;
+            qrCodeReaderView.stopCamera();
+            showProgressDialog();
 
             Socket socket = SocketProvider.getInstance().getConnection();
             socket.emit("lobby:info", new LobbyInfo(text), new Ack() {
@@ -76,6 +76,9 @@ public class GameJoinScanController extends AppCompatActivity implements QRCodeR
         }
     }
 
+    /**
+     * Starts the QR code reader
+     */
     protected void startCamera() {
         qrCodeReaderView = new QRCodeReaderView(this);
         qrCodeReaderView.setLayoutParams(new LinearLayout.LayoutParams(
@@ -85,17 +88,22 @@ public class GameJoinScanController extends AppCompatActivity implements QRCodeR
         qrCodeReaderView.setQRDecodingEnabled(true);
         qrCodeReaderView.setAutofocusInterval(2000L);
         qrCodeReaderView.setBackCamera();
-        this.cameraContainer.addView(qrCodeReaderView);
+        cameraContainer.addView(qrCodeReaderView);
     }
 
+    /**
+     * Explains why we need the camera access
+     */
     protected void describeCameraAccess() {
-        final GameJoinScanController self = this;
-
-        if (this.isFinishing()) {
+        if (isFinishing()) {
             Log.w(TAG, "describeCameraAccess: Activity is already finishing");
             return;
         }
 
+        Log.d(TAG, "describeCameraAccess: Describing why we need the camera");
+
+        // Alert the user why we need the camera.
+        final GameJoinScanController self = this;
         new AlertDialog.Builder(this, R.style.AppDialog)
             .setTitle(getString(R.string.join_game_camera_explain_title))
             .setMessage(getString(R.string.join_game_camera_explain_text))
@@ -131,6 +139,8 @@ public class GameJoinScanController extends AppCompatActivity implements QRCodeR
      * Asks the OS for camera access
      */
     protected void askForCameraAccess() {
+        Log.d(TAG, "askForCameraAccess: Asking for camera access");
+
         permissionProvider.requestPermission(this, PermissionProvider.PERMISSION_CAMERA);
     }
 
@@ -141,10 +151,11 @@ public class GameJoinScanController extends AppCompatActivity implements QRCodeR
 
         Log.i(TAG, "onCreate: ONCREATE fired!");
 
-        this.cameraContainer = (LinearLayoutCompat)findViewById(R.id.camera_preview);
+        cameraContainer = (LinearLayoutCompat)findViewById(R.id.camera_preview);
+        hasPermission = permissionProvider.hasPermission(this, PermissionProvider.PERMISSION_CAMERA);
 
         // If we've already got permission,
-        if (permissionProvider.hasPermission(this, PermissionProvider.PERMISSION_CAMERA)) {
+        if (hasPermission) {
             startCamera();
             return;
         }
@@ -163,12 +174,10 @@ public class GameJoinScanController extends AppCompatActivity implements QRCodeR
     protected void onResume() {
         super.onResume();
 
-        this.isSending = false;
+        isSending = false;
 
-        if (this.hasPermission) {
+        if (hasPermission) {
             qrCodeReaderView.startCamera();
-        } else {
-            finish();
         }
     }
 
@@ -176,7 +185,7 @@ public class GameJoinScanController extends AppCompatActivity implements QRCodeR
     protected void onPause() {
         super.onPause();
 
-        if (this.hasPermission) {
+        if (hasPermission) {
             qrCodeReaderView.stopCamera();
         }
     }
@@ -184,13 +193,13 @@ public class GameJoinScanController extends AppCompatActivity implements QRCodeR
     protected void onDestroy() {
         super.onDestroy();
 
-        this.cameraContainer = null;
+        cameraContainer = null;
     }
 
     private void onSuccess(int currentPlayers, int maxPlayers, String hostname, String lobbyId) {
-        if (this.isSending) {
-            this.isSending = false;
-            this.hideProgressDialog();
+        if (isSending) {
+            isSending = false;
+            hideProgressDialog();
 
             Bundle bundle = new Bundle();
             bundle.putInt("maxPlayers", maxPlayers);
@@ -205,9 +214,9 @@ public class GameJoinScanController extends AppCompatActivity implements QRCodeR
     }
 
     private void onError(String error) {
-        if (this.isSending) {
-            this.isSending = false;
-            this.hideProgressDialog();
+        if (isSending) {
+            isSending = false;
+            hideProgressDialog();
             int textId;
 
             switch (error) {
@@ -225,27 +234,27 @@ public class GameJoinScanController extends AppCompatActivity implements QRCodeR
                     break;
             }
 
-            this.showErrorDialog(getString(textId));
+            showErrorDialog(getString(textId));
 
-            if (this.hasPermission) {
-                this.qrCodeReaderView.startCamera();
+            if (hasPermission) {
+                qrCodeReaderView.startCamera();
             }
         }
     }
 
     private void hideProgressDialog() {
-        if(this.progressDialog != null) {
-            this.progressDialog.dismiss();
+        if(progressDialog != null) {
+            progressDialog.dismiss();
         }
     }
 
     private void showProgressDialog() {
-        if(this.progressDialog == null) {
-            this.progressDialog = new ProgressDialog(this);
-            this.progressDialog.setTitle(getString(R.string.join_game_scan_text_progress_title));
-            this.progressDialog.setMessage(getString(R.string.join_game_scan_text_progress_message));
-            this.progressDialog.setCancelable(false);
-            this.progressDialog.show();
+        if(progressDialog == null) {
+            progressDialog = new ProgressDialog(this);
+            progressDialog.setTitle(getString(R.string.join_game_scan_text_progress_title));
+            progressDialog.setMessage(getString(R.string.join_game_scan_text_progress_message));
+            progressDialog.setCancelable(false);
+            progressDialog.show();
         }
     }
 
@@ -281,7 +290,7 @@ public class GameJoinScanController extends AppCompatActivity implements QRCodeR
         Log.d(TAG, "onRequestPermissionsResult: Recieved a result, which is " + grantResults[0]);
         // If request is cancelled, the result arrays are empty.
         if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-            this.hasPermission = true;
+            hasPermission = true;
             startCamera();
         } else {
             finish();

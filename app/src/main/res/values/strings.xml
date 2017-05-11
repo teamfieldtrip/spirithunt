@@ -34,6 +34,7 @@
     <string name="create_game_select_location">"Long Press to select locations"</string>
     <string name="create_game_no_area_title">No area selected</string>
     <string name="create_game_no_area_content">Please select a game area</string>
+    <string name="create_game_area_too_large">The given area is too large.</string>
 
     <!-- Create Game Advanced String -->
     <string name="create_game_advanced_text_title">Advanced options</string>
