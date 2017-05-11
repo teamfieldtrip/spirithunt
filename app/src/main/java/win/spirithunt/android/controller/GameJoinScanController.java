@@ -27,7 +27,6 @@ import win.spirithunt.android.provider.SocketProvider;
  */
 
 public class GameJoinScanController extends AppCompatActivity implements QRCodeReaderView.OnQRCodeReadListener {
-    private static final int CAMERA_PERMISSION = 2;
 
     private static final PermissionProvider permissionProvider = PermissionProvider.getInstance();
 
