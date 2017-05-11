@@ -10,6 +10,7 @@ import android.graphics.PointF;
 import android.os.Bundle;
 import win.spirithunt.android.R;
 import win.spirithunt.android.protocol.LobbyInfo;
+import win.spirithunt.android.provider.PermissionProvider;
 import win.spirithunt.android.provider.SocketProvider;
 
 import android.support.annotation.NonNull;
@@ -32,6 +33,8 @@ import io.socket.client.Socket;
 
 public class GameJoinScanController extends AppCompatActivity implements QRCodeReaderView.OnQRCodeReadListener {
     private static final int CAMERA_PERMISSION = 2;
+
+    private static final PermissionProvider permissionProvider = PermissionProvider.getInstance();
 
     private ProgressDialog progressDialog;
 
@@ -121,10 +124,7 @@ public class GameJoinScanController extends AppCompatActivity implements QRCodeR
      * Asks the OS for camera access
      */
     protected void askForCameraAccess() {
-        ActivityCompat.requestPermissions(this, new String[]{
-                Manifest.permission.CAMERA
-        }, CAMERA_PERMISSION);
-
+        permissionProvider.requestPermission(this, PermissionProvider.PERMISSION_CAMERA);
     }
 
     @Override
@@ -134,21 +134,14 @@ public class GameJoinScanController extends AppCompatActivity implements QRCodeR
 
         this.cameraContainer = (LinearLayoutCompat)findViewById(R.id.camera_preview);
 
-
-        final GameJoinScanController self = this;
-        final LinearLayoutCompat container = (LinearLayoutCompat)findViewById(R.id.main_container);
-
-        int permission = ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA);
-        this.hasPermission = (permission == PackageManager.PERMISSION_GRANTED);
-
-        // Use the permission we have or ask for it.
-
-        if (this.hasPermission) {
+        // If we've already got permission,
+        if (permissionProvider.hasPermission(PermissionProvider.PERMISSION_CAMERA)) {
             startCamera();
             return;
         }
 
-        if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.CAMERA)) {
+        // Should we explain why we need the permission?
+        if (permissionProvider.shouldShowRationale(this, PermissionProvider.PERMISSION_CAMERA)) {
             describeCameraAccess();
         } else {
             askForCameraAccess();
@@ -272,19 +265,14 @@ public class GameJoinScanController extends AppCompatActivity implements QRCodeR
      */
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String permissions[], @NonNull int[] grantResults) {
-        switch (requestCode) {
-            case CAMERA_PERMISSION: {
-                // If request is cancelled, the result arrays are empty.
-                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    this.hasPermission = true;
-                    startCamera();
-                } else {
-                    finish();
-                }
-                return;
-            }
-            default:
-                break;
+        if (requestCode != PermissionProvider.PERMISSION_CAMERA) return;
+
+        // If request is cancelled, the result arrays are empty.
+        if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+            this.hasPermission = true;
+            startCamera();
+        } else {
+            finish();
         }
     }
 }
