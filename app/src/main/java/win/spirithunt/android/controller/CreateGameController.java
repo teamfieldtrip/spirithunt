@@ -6,27 +6,16 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
-
-import win.spirithunt.android.R;
-import win.spirithunt.android.callback.PlayerCreateCallback;
-import win.spirithunt.android.gui.CustomTextView;
-import win.spirithunt.android.model.AmountOfLives;
-import win.spirithunt.android.model.AmountOfPlayers;
-import win.spirithunt.android.model.AmountOfRounds;
-import win.spirithunt.android.model.Duration;
-import win.spirithunt.android.model.Player;
-import win.spirithunt.android.protocol.GameCreate;
-import win.spirithunt.android.provider.PermissionProvider;
-import win.spirithunt.android.provider.PlayerProvider;
-import win.spirithunt.android.provider.SocketProvider;
-
+import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Toast;
 
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -41,6 +30,18 @@ import java.util.ArrayList;
 
 import io.socket.client.Ack;
 import io.socket.client.Socket;
+import win.spirithunt.android.R;
+import win.spirithunt.android.callback.PlayerCreateCallback;
+import win.spirithunt.android.gui.CustomTextView;
+import win.spirithunt.android.model.AmountOfLives;
+import win.spirithunt.android.model.AmountOfPlayers;
+import win.spirithunt.android.model.AmountOfRounds;
+import win.spirithunt.android.model.Duration;
+import win.spirithunt.android.model.Player;
+import win.spirithunt.android.protocol.GameCreate;
+import win.spirithunt.android.provider.PermissionProvider;
+import win.spirithunt.android.provider.PlayerProvider;
+import win.spirithunt.android.provider.SocketProvider;
 
 /**
  * @author Remco Schipper
@@ -49,7 +50,9 @@ import io.socket.client.Socket;
 public class CreateGameController extends AppCompatActivity implements
     GoogleMap.OnMapClickListener,
     GoogleMap.OnMapLongClickListener,
-    GoogleMap.OnMarkerClickListener {
+    GoogleMap.OnMarkerClickListener,
+    GoogleMap.OnCameraMoveStartedListener,
+    OnMapReadyCallback {
     private ProgressDialog progressDialog;
 
     /**
@@ -68,6 +71,8 @@ public class CreateGameController extends AppCompatActivity implements
     private ArrayList<AmountOfLives> amountOfLives;
 
     private boolean powerUpsEnabled = true;
+
+    private boolean mapWasMoved = false;
 
     private int amountOfPlayersIndex = 0;
 
@@ -91,7 +96,11 @@ public class CreateGameController extends AppCompatActivity implements
 
     private int timeIndicatorIndex;
 
+    private PermissionProvider permissionProvider;
+
     public CreateGameController() {
+        permissionProvider = PermissionProvider.getInstance();
+
         this.amountOfPlayers = new ArrayList<>();
         for (int i = 4; i < 16; i+= 2) {
             this.amountOfPlayers.add(new AmountOfPlayers(i, Integer.toString(i)));
@@ -233,7 +242,7 @@ public class CreateGameController extends AppCompatActivity implements
                 }
             });
         } else {
-            new AlertDialog.Builder(this)
+            new AlertDialog.Builder(this, R.style.AppDialog)
                 .setTitle(getString(R.string.create_game_no_area_title))
                 .setMessage(getString(R.string.create_game_no_area_content))
                 .setIcon(android.R.drawable.ic_dialog_alert)
@@ -251,46 +260,78 @@ public class CreateGameController extends AppCompatActivity implements
         }
     }
 
+    /**
+     * Asks the OS for camera access
+     */
+    protected void askForLocationAccess() {
+        // Check if we already have permission to use it
+        if(permissionProvider.hasPermission(this, PermissionProvider.PERMISSION_LOCATION)) return;
+
+        // Check if we should explain why we're asking, cancel if we do.
+        if(permissionProvider.shouldShowRationale(this, PermissionProvider.PERMISSION_LOCATION)) return;
+
+        // Request location access
+        permissionProvider.requestPermission(this, PermissionProvider.PERMISSION_LOCATION);
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.create_game_view);
 
-        PermissionProvider permissionProvider = PermissionProvider.getInstance();
-
         // TODO Add question support!
-        if(!permissionProvider.hasPermission(PermissionProvider.PERMISSION_LOCATION)){
-            permissionProvider.requestPermission(this, PermissionProvider.PERMISSION_LOCATION);
-        }
+        askForLocationAccess();
 
         FragmentManager manager = getFragmentManager();
         MapFragment mapFragment = (MapFragment) manager.findFragmentById(R.id.map);
+        mapFragment.getMapAsync(this);
+    }
 
-        final CreateGameController self = this;
-        mapFragment.getMapAsync(new OnMapReadyCallback() {
-            @Override
-            public void onMapReady(GoogleMap googleMap) {
-                try {
-                    googleMap.setMyLocationEnabled(true);
-                } catch (SecurityException e) {
-                    System.out.println(e.getMessage());
-                }
-                // Disable some display types
-                googleMap.setIndoorEnabled(false);
-                googleMap.setTrafficEnabled(false);
+    /**
+     * Moves the map to the player position or The Netherlands if no location is available. Handles
+     * displaying of the "Your location" button.
+     */
+    @SuppressWarnings("MissingPermission")
+    private void updateMapPosition() {
+        if (map == null) return;
 
-                // Sets the map type
-                googleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+        boolean hasPerm = permissionProvider.hasPermission(this, PermissionProvider.PERMISSION_LOCATION);
+        map.setMyLocationEnabled(hasPerm);
 
-                // Add listeners
-                googleMap.setOnMapClickListener(self);
-                googleMap.setOnMapLongClickListener(self);
-                googleMap.setOnMarkerClickListener(self);
-                self.map = googleMap;
-            }
-        });
+        if (mapWasMoved) return;
 
-        this.setTimeIndicator(0);
+        if (!hasPerm) {
+            LatLng goalPos = new LatLng(52.132633, 5.2912659999999505);
+            map.animateCamera(CameraUpdateFactory.newLatLngZoom(goalPos, 8f));
+        }
+
+    }
+
+    /**
+     * Assign some properties on the map.
+     *
+     * @param googleMap
+     */
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+        // Disable some display types
+        googleMap.setIndoorEnabled(false);
+        googleMap.setTrafficEnabled(false);
+
+        // Sets the map type
+        googleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+
+        // Add listeners
+        googleMap.setOnMapClickListener(this);
+        googleMap.setOnMapLongClickListener(this);
+        googleMap.setOnMarkerClickListener(this);
+        googleMap.setOnCameraMoveStartedListener(this);
+
+        // Assign to self
+        map = googleMap;
+
+        // Update map location
+        updateMapPosition();
     }
 
     /**
@@ -301,15 +342,15 @@ public class CreateGameController extends AppCompatActivity implements
      */
     @Override
     public void onMapLongClick(LatLng point) {
-        if (this.centerMarker == null) {
+        if (centerMarker == null) {
             MarkerOptions markerOptions = new MarkerOptions()
                 .position(point)
                 .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE));
-            this.centerMarker = map.addMarker(markerOptions);
-            this.centerLatLng = point;
+            centerMarker = map.addMarker(markerOptions);
+            centerLatLng = point;
         } else {
             float[] dist = new float[1];
-            Location.distanceBetween(this.centerLatLng.latitude,
+            Location.distanceBetween(centerLatLng.latitude,
                 this.centerLatLng.longitude,
                 point.latitude,
                 point.longitude,
@@ -330,15 +371,16 @@ public class CreateGameController extends AppCompatActivity implements
     /**
      * Handles clicking on markers, which removes the border by default, unless the centerMarker is
      * clicked.
+     *
      * @return true, always
      */
     @Override
     public boolean onMarkerClick(Marker marker) {
         this.removeBorderMarker();
 
-        if (marker.equals(this.centerMarker)) {
-            this.centerMarker.remove();
-            this.centerMarker = null;
+        if (marker.equals(centerMarker)) {
+            centerMarker.remove();
+            centerMarker = null;
         }
 
         return true;
@@ -356,11 +398,34 @@ public class CreateGameController extends AppCompatActivity implements
     }
 
     /**
+     * Mark the map as manually moved when the user does so. Prevents the map from moving when a
+     * location update is received.
+     *
+     * @param reason Reason the camera started moving, OnCameraMoveStartedListener constant.
+     */
+    @Override
+    public void onCameraMoveStarted(int reason) {
+        if (reason != GoogleMap.OnCameraMoveStartedListener.REASON_DEVELOPER_ANIMATION) {
+            mapWasMoved = true;
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String permissions[], @NonNull int[] grantResults) {
+        if (requestCode != PermissionProvider.PERMISSION_LOCATION) return;
+
+        // If request is cancelled, the result arrays are empty.
+        if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+            updateMapPosition();
+        }
+    }
+
+    /**
      * Hides the progress bar.
      */
     private void hideProgressDialog() {
-        if (this.progressDialog != null) {
-            this.progressDialog.dismiss();
+        if (progressDialog != null) {
+            progressDialog.dismiss();
         }
     }
 
@@ -368,12 +433,12 @@ public class CreateGameController extends AppCompatActivity implements
      * Shows a progress dialog
      */
     private void showProgressDialog() {
-        if (this.progressDialog == null) {
-            this.progressDialog = new ProgressDialog(this);
-            this.progressDialog.setTitle(getString(R.string.create_game_progress_title));
-            this.progressDialog.setMessage(getString(R.string.create_game_progress_content));
-            this.progressDialog.setCancelable(false);
-            this.progressDialog.show();
+        if (progressDialog == null) {
+            progressDialog = new ProgressDialog(this, R.style.AppDialog);
+            progressDialog.setTitle(getString(R.string.create_game_progress_title));
+            progressDialog.setMessage(getString(R.string.create_game_progress_content));
+            progressDialog.setCancelable(false);
+            progressDialog.show();
         }
     }
 
@@ -383,7 +448,7 @@ public class CreateGameController extends AppCompatActivity implements
      * @param context
      */
     private void showErrorDialog(Context context) {
-        new android.app.AlertDialog.Builder(context)
+        new android.app.AlertDialog.Builder(context, R.style.AppDialog)
             .setTitle(getString(R.string.create_game_alert_title))
             .setMessage(getString(R.string.create_game_alert_content))
             .setNeutralButton(R.string.create_game_alert_button, new DialogInterface.OnClickListener() {
