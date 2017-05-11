@@ -127,6 +127,15 @@
                     android:layout_gravity="center"
                     android:onClick="onClick"
                     android:text="@string/game_tag" />
+
+                <win.spirithunt.android.gui.CustomButton
+                    style="@style/btn_normal_main_large"
+                    android:id="@+id/game_consume"
+                    android:layout_width="100dp"
+                    android:layout_height="50dp"
+                    android:onClick="onClick"
+                    android:visibility="gone"
+                    android:text="@string/game_powerup_consume" />
             </LinearLayout>
         </LinearLayout>
     </LinearLayout>
