@@ -1,7 +1,9 @@
 package win.spirithunt.android.controller;
 
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.view.menu.MenuBuilder;
 import android.support.v7.widget.Toolbar;
@@ -49,6 +51,7 @@ public class GameController extends AppCompatActivity implements View.OnClickLis
     private Player target = buildPlayer("db1cd8e0-abc4-4072-b46b-f63df0b80654", 52.512240, 6.093405, 0);
 
     private ArrayList<Player> players = new ArrayList<>();
+    private double range = 2;
 
     protected Player buildPlayer(String Uuid, double lat, double lng, int team) {
         Player out = new Player(Uuid);
@@ -96,9 +99,9 @@ public class GameController extends AppCompatActivity implements View.OnClickLis
         ));
         players.add(buildPlayer(
             "52768d1b-20ee-4330-aa4f-96d8f0e29ea8",
-            ownPlayer.latitude,
-            ownPlayer.longitude + 0.003000,
-            0
+            ownPlayer.latitude - 0.000500,
+            ownPlayer.longitude - 0.00100,
+            2
         ));
         players.add(buildPlayer(
             "857be781-3629-4976-8e22-d177a656ba3b",
@@ -112,7 +115,6 @@ public class GameController extends AppCompatActivity implements View.OnClickLis
         radar.setPlayerList(players);
 
         // TODO Register subscriber
-
         onUpdateLocation();
     }
 
@@ -123,15 +125,30 @@ public class GameController extends AppCompatActivity implements View.OnClickLis
 
     /**
      * Handle the OnClick events of Views in the layout
-     *
+
      * @param view the View that triggered the event
      */
     @Override
     public void onClick(View view) {
 
         switch (view.getId()) {
+            case R.id.game_consume:
+                DialogInterface.OnClickListener listener = new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        // do nothing
+                    }
+                };
+
+                new AlertDialog.Builder(view.getContext(), R.style.AppDialog)
+                    .setTitle(getString(R.string.game_powerup_consume_title))
+                    .setMessage(getString(R.string.game_powerup_consume_desc))
+                    .setPositiveButton(R.string.game_powerup_consume_yes, listener)
+                    .setNegativeButton(R.string.game_powerup_consume_no, listener)
+                    .show();
+                break;
             case R.id.game_tag:
-                tagPlayer();
+                Log.d("TAGGED", "TAGGED");
+                // TODO emit person tagged to server
                 break;
             default:
                 break;

@@ -73,7 +73,7 @@ public class LobbyController extends AppCompatActivity {
                 });
             }
         });
-        
+
         socket.on("lobby:started", new Emitter.Listener() {
             @Override
             public void call(final Object... args) {
