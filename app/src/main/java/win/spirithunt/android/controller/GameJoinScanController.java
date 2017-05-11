@@ -11,6 +11,7 @@ import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutCompat;
 import android.view.View;
+import android.util.Log;
 import android.widget.LinearLayout;
 
 import com.dlazaro66.qrcodereaderview.QRCodeReaderView;
@@ -29,6 +30,7 @@ import win.spirithunt.android.provider.SocketProvider;
 public class GameJoinScanController extends AppCompatActivity implements QRCodeReaderView.OnQRCodeReadListener {
 
     private static final PermissionProvider permissionProvider = PermissionProvider.getInstance();
+    private static final String TAG = "JoinScanner";
 
     private ProgressDialog progressDialog;
 
@@ -89,6 +91,11 @@ public class GameJoinScanController extends AppCompatActivity implements QRCodeR
     protected void describeCameraAccess() {
         final GameJoinScanController self = this;
 
+        if (this.isFinishing()) {
+            Log.w(TAG, "describeCameraAccess: Activity is already finishing");
+            return;
+        }
+
         new AlertDialog.Builder(this, R.style.AppDialog)
             .setTitle(getString(R.string.join_game_camera_explain_title))
             .setMessage(getString(R.string.join_game_camera_explain_text))
@@ -111,6 +118,12 @@ public class GameJoinScanController extends AppCompatActivity implements QRCodeR
                     self.finish();
                 }
             })
+            .setOnCancelListener(new DialogInterface.OnCancelListener() {
+                @Override
+                public void onCancel(DialogInterface dialog) {
+                    self.finish();
+                }
+            })
             .show();
     }
 
@@ -126,6 +139,8 @@ public class GameJoinScanController extends AppCompatActivity implements QRCodeR
         super.onCreate(savedInstanceState);
         setContentView(R.layout.game_join_scan_view);
 
+        Log.i(TAG, "onCreate: ONCREATE fired!");
+
         this.cameraContainer = (LinearLayoutCompat)findViewById(R.id.camera_preview);
 
         // If we've already got permission,
@@ -136,8 +151,10 @@ public class GameJoinScanController extends AppCompatActivity implements QRCodeR
 
         // Should we explain why we need the permission?
         if (permissionProvider.shouldShowRationale(this, PermissionProvider.PERMISSION_CAMERA)) {
+            Log.d(TAG, "onCreate: Describing why we need the camera");
             describeCameraAccess();
         } else {
+            Log.d(TAG, "onCreate: Asking for camera access");
             askForCameraAccess();
         }
     }
@@ -261,6 +278,7 @@ public class GameJoinScanController extends AppCompatActivity implements QRCodeR
     public void onRequestPermissionsResult(int requestCode, @NonNull String permissions[], @NonNull int[] grantResults) {
         if (requestCode != PermissionProvider.PERMISSION_CAMERA) return;
 
+        Log.d(TAG, "onRequestPermissionsResult: Recieved a result, which is " + grantResults[0]);
         // If request is cancelled, the result arrays are empty.
         if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
             this.hasPermission = true;
