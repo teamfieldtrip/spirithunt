@@ -9,6 +9,9 @@ import win.spirithunt.android.model.Player;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
+import com.linkedin.android.shaky.EmailShakeDelegate;
+import com.linkedin.android.shaky.Shaky;
+
 import java.util.ArrayList;
 
 import static java.util.UUID.randomUUID;
@@ -65,6 +68,9 @@ public class GameController extends AppCompatActivity implements View.OnClickLis
         RadarDisplay radar = (RadarDisplay) findViewById(R.id.game_status_radar);
         radar.setActivePlayer(ownPlayer);
         radar.setPlayerList(players);
+
+        // Add feedback support
+        Shaky.with(this.getApplication(), new EmailShakeDelegate("hello@world.com"));
     }
 
     @Override
