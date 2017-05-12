@@ -1,17 +1,21 @@
 package win.spirithunt.android.controller;
 
 import android.app.AlertDialog;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import win.spirithunt.android.R;
+import android.os.Bundle;
+import android.os.PersistableBundle;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+
+import win.spirithunt.android.R;
+import win.spirithunt.android.provider.DialogProvider;
 
 /**
  * Contains shared methods for Login and Sign up forms.
@@ -20,7 +24,7 @@ import java.util.Map;
  */
 
 abstract public class AuthorisationController extends AppCompatActivity {
-    private ProgressDialog progressDialog;
+    private DialogProvider dialogProvider;
 
     /**
      * Contains error messages for registration and sign up
@@ -44,14 +48,17 @@ abstract public class AuthorisationController extends AppCompatActivity {
         errorDictionary = Collections.unmodifiableMap(errorMap);
     }
 
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState, @Nullable PersistableBundle persistentState) {
+        super.onCreate(savedInstanceState, persistentState);
+        dialogProvider = new DialogProvider(this);
+    }
+
     /**
      * Closes an open progress dialog, if any.
      */
     protected void hideProgressDialog() {
-        if(progressDialog != null) {
-            progressDialog.dismiss();
-            progressDialog = null;
-        }
+        dialogProvider.hideProgressDialog();
     }
 
     /**
@@ -61,13 +68,10 @@ abstract public class AuthorisationController extends AppCompatActivity {
      * @param body Body of the dialog
      */
     protected void showProgressDialog(String title, String body) {
-        if(progressDialog == null) {
-            progressDialog = new ProgressDialog(this, R.style.AppDialog);
-            progressDialog.setTitle(title);
-            progressDialog.setMessage(body);
-            progressDialog.setCancelable(false);
-            progressDialog.show();
+        if (dialogProvider.isProgressDialogOpen()) {
+            hideProgressDialog();
         }
+        dialogProvider.showProgressDialog(title, body);
     }
 
     /**
