@@ -117,4 +117,9 @@
     ]]></string>
     <string name="join_game_camera_explain_no">Not now</string>
     <string name="join_game_camera_explain_yes">Ok</string>
+
+    <!-- Lobby -->
+    <string name="lobby_text_progress_title">Loading</string>
+    <string name="lobby_text_progress_content">Please wait</string>
+    <string name="lobby_btn_start">Start</string>
 </resources>

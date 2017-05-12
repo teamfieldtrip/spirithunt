@@ -1,0 +1,46 @@
+<android.support.v7.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <android.support.v7.widget.LinearLayoutCompat
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/gui_el_lobby_info"
+            android:layout_marginTop="15dp">
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="300dp"
+                android:layout_margin="12dp"
+                android:id="@+id/map_container" />
+        </android.support.v7.widget.LinearLayoutCompat>
+        <android.support.v7.widget.LinearLayoutCompat
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_gravity="center_horizontal"
+            android:gravity="center">
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/gui_el_lobby_header"
+                android:padding="5dp">
+                <android.support.v7.widget.AppCompatImageView
+                    android:src="@drawable/gui_el_lobby_info_header"
+                    android:scaleType="fitCenter"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+                <win.spirithunt.android.gui.CustomTextView
+                    style="@style/textView_normal_main"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:gravity="center"
+                    android:textSize="20sp"
+                    android:textAlignment="center"
+                    android:text="Map" />
+            </RelativeLayout>
+        </android.support.v7.widget.LinearLayoutCompat>
+    </FrameLayout>
+</android.support.v7.widget.LinearLayoutCompat>

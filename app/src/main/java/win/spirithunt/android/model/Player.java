@@ -7,6 +7,8 @@ package win.spirithunt.android.model;
 public class Player {
     private String id;
 
+    public String name;
+
     public double latitude;
 
     public double longitude;
@@ -30,8 +32,11 @@ public class Player {
     public void setTeam(int team){
         this.team = team;
     }
+    public void setName(String name) {
+        this.name = name;
+    }
 
     public String toString() {
-        return this.id;
+        return this.name;
     }
 }
