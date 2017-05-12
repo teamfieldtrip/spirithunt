@@ -60,6 +60,7 @@ abstract public class AuthorisationController extends AppCompatActivity {
         if (dialogProvider == null) {
             dialogProvider = new DialogProvider(this);
         }
+
         dialogProvider.hideProgressDialog();
     }
 
@@ -70,6 +71,7 @@ abstract public class AuthorisationController extends AppCompatActivity {
      * @param body  Body of the dialog
      */
     protected void showProgressDialog(String title, String body) {
+
         if (dialogProvider == null) {
             dialogProvider = new DialogProvider(this);
         }
