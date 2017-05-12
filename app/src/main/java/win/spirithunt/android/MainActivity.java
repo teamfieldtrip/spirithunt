@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 
-import win.spirithunt.android.controller.GameController;
 import win.spirithunt.android.controller.LoginController;
 import win.spirithunt.android.controller.MenuController;
 import win.spirithunt.android.provider.ContextProvider;
@@ -23,7 +22,7 @@ public class MainActivity extends AppCompatActivity {
 
         Intent intent;
         if(sharedPref.contains(getString(R.string.saved_jwt))) {
-            intent = new Intent(this, GameController.class);
+            intent = new Intent(this, MenuController.class);
         } else {
             intent = new Intent(this, LoginController.class);
         }
