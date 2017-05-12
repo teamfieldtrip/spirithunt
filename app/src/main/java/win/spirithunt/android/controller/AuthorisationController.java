@@ -24,6 +24,7 @@ import win.spirithunt.android.provider.DialogProvider;
  */
 
 abstract public class AuthorisationController extends AppCompatActivity {
+
     /**
      * Contains error messages for registration and sign up
      */
@@ -47,7 +48,6 @@ abstract public class AuthorisationController extends AppCompatActivity {
     }
 
     private DialogProvider dialogProvider;
-
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState, @Nullable PersistableBundle persistentState) {
         super.onCreate(savedInstanceState, persistentState);
@@ -74,6 +74,7 @@ abstract public class AuthorisationController extends AppCompatActivity {
         if (dialogProvider == null) {
             dialogProvider = new DialogProvider(this);
         }
+
         if (dialogProvider.isProgressDialogOpen()) {
             hideProgressDialog();
         }
