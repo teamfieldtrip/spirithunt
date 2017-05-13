@@ -94,6 +94,11 @@ public class RadarRenderController extends Thread implements SurfaceHolder.Callb
     private Drawable radarScannerPicture;
 
     /**
+     * Current team.
+     */
+    private int team;
+
+    /**
      * Returns true if power save mode is supported and currently active.
      *
      * @return
@@ -107,15 +112,52 @@ public class RadarRenderController extends Thread implements SurfaceHolder.Callb
         }
     }
 
-    public RadarRenderController(RadarDisplay display) {
-       radarDisplay = display;
+    public RadarRenderController(RadarDisplay display, int theme) {
+        radarDisplay = display;
 
-        Resources res = display.getContext().getResources();
+        setTeam(theme);
+    }
 
-        // HACK Backwards compatibility, Resources.getDrawable(int) is deprecated, but the replacing
-        // API exists in API 21, which is too new for our min API level (19)
-        radarBackgroundPicture = res.getDrawable(R.drawable.gui_el_blue_radar);
-        radarScannerPicture = res.getDrawable(R.drawable.gui_el_sweeper_blue);
+    /**
+     * Returns the ID of the current team the app is on.
+     * @return
+     */
+    public int getTeam() {
+        return team;
+    }
+
+    /**
+     * Changes the team we're on.
+     * @param team
+     */
+    public void setTeam(int team) {
+        Log.d(TAG, "setTeam() called with: team = [" + team + "]");
+        Resources res = radarDisplay.getContext().getResources();
+        this.team = team;
+
+        int backgroundResource;
+        int sweeperResource;
+
+        if (team == GameController.TEAM_RED) {
+            backgroundResource = R.drawable.gui_el_red_radar;
+            sweeperResource = R.drawable.gui_el_sweeper_red;
+        } else {
+            backgroundResource = R.drawable.gui_el_blue_radar;
+            sweeperResource = R.drawable.gui_el_sweeper_blue;
+        }
+
+        // Support API > 21 with skins, we should be able to link resources to it, but whatever.
+        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            radarBackgroundPicture = res.getDrawable(backgroundResource, null);
+            radarScannerPicture = res.getDrawable(sweeperResource, null);
+        } else {
+            radarBackgroundPicture = res.getDrawable(backgroundResource);
+            radarScannerPicture = res.getDrawable(sweeperResource);
+        }
+
+        if (holder != null) {
+            resizeGraphics(holder.getSurfaceFrame());
+        }
     }
 
     /**
@@ -210,11 +252,6 @@ public class RadarRenderController extends Thread implements SurfaceHolder.Callb
             cx,
             cy
         );
-        // Log info
-        Log.d(TAG, String.format(
-            "resizeGraphics: %s",
-            radarSweepRect.toString()
-        ));
 
         // Apply bounds to picture
         radarBackgroundPicture.setBounds(radarBackgroundArea);
