@@ -37,6 +37,7 @@ import win.spirithunt.android.provider.SocketProvider;
 
 public class LobbyController extends AppCompatActivity {
     private String lobbyId;
+
     private boolean lobbyHost;
 
     private ArrayList<Player> players = new ArrayList<>();    // General list of players
@@ -114,7 +115,7 @@ public class LobbyController extends AppCompatActivity {
         socket.emit("lobby:start", null, new Ack() {
             @Override
             public void call(Object... args) {
-
+                Log.d("Lobby", "Lobby started");
             }
         });
     }
