@@ -12,6 +12,7 @@ public class Player {
     public String target;
     public int team;
     public int result;
+
     private String id;
 
     public Player(String id) {
