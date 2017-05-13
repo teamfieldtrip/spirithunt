@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 
 import java.util.ArrayList;
 import java.util.UUID;
@@ -37,8 +38,8 @@ public class GameController extends AppCompatActivity implements View.OnClickLis
     private static final double MAX_RANGE = 2d;
 
     // Determine who we are
-    private Player ownPlayer = buildPlayer(52.512740, 6.093505, 2);
 
+    Player ownPlayer = buildPlayer(52.512740, 6.093505, 0);
     private ArrayList<Player> players = new ArrayList<>();
 
     protected Player buildPlayer(double lat, double lng, int team) {
@@ -90,6 +91,7 @@ public class GameController extends AppCompatActivity implements View.OnClickLis
 
     /**
      * Handle the OnClick events of Views in the layout
+     *
      * @param view the View that triggered the event
      */
     @Override
@@ -100,8 +102,11 @@ public class GameController extends AppCompatActivity implements View.OnClickLis
 //                usePowerup(view);
 //                break;
             case R.id.game_tag:
-                Log.d(TAG, "onClick: Person has been tagged");
+                Log.d("TAGGED", "TAGGED");
+                Button btnTag = (Button) findViewById(R.id.game_tag);
+                btnTag.setVisibility(View.INVISIBLE);
                 // TODO emit person tagged to server
+                // TODO hold button for 3 seconds to tag person
                 break;
             default:
                 break;
@@ -109,10 +114,21 @@ public class GameController extends AppCompatActivity implements View.OnClickLis
     }
 
     public void onUpdateLocation() {
-        for (Player p :
-            players) {
-            if (checkTagable(p)) {
-                // TODO show R.id.game_tag
+        Button btnTag = (Button) findViewById(R.id.game_tag);
+
+        ownPlayer.target = "c4";
+
+        // Debug if-statement because of incomplete Player model
+        if (ownPlayer.target != null) {
+            for (Player p : players) {
+                // If p is the ownPlayer's target
+                if (ownPlayer.target.equals(p.getId())) {
+                    if (checkTagable(p)) {
+                        btnTag.setVisibility(View.VISIBLE);
+                    } else {
+                        btnTag.setVisibility(View.INVISIBLE);
+                    }
+                }
             }
         }
     }
@@ -123,6 +139,7 @@ public class GameController extends AppCompatActivity implements View.OnClickLis
      * @param p Player object to compare distance to
      * @return boolean if Player can be tagged
      */
+
     public boolean checkTagable(Player p) {
         double deltaX = ownPlayer.longitude - p.longitude;
         double deltaY = ownPlayer.latitude - p.latitude;
