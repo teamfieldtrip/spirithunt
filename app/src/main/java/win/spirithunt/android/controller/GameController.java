@@ -26,6 +26,10 @@ import static java.util.UUID.randomUUID;
  */
 public class GameController extends AppCompatActivity implements View.OnClickListener {
 
+    public static final int TEAM_RED = 0;
+
+    public static final int TEAM_BLUE = 1;
+
     // Determine who we are
     Player ownPlayer = buildPlayer(52.512740, 6.093505, 2);
     private ArrayList<Player> players = new ArrayList<>();
