@@ -146,7 +146,6 @@ public class RadarRenderController extends Thread implements SurfaceHolder.Callb
             radarBackgroundPicture = res.getDrawable(backgroundResource);
             radarScannerPicture = res.getDrawable(sweeperResource);
         }
-
         if (holder != null) {
             resizeGraphics(holder.getSurfaceFrame());
         }
