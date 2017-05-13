@@ -13,6 +13,7 @@ import android.view.View;
 import android.widget.Button;
 
 import java.util.ArrayList;
+import java.util.UUID;
 
 import io.socket.client.Ack;
 import io.socket.client.Socket;
@@ -21,6 +22,7 @@ import win.spirithunt.android.gui.RadarDisplay;
 import win.spirithunt.android.model.Player;
 import win.spirithunt.android.protocol.GameTag;
 import win.spirithunt.android.provider.SocketProvider;
+import win.spirithunt.android.model.PowerUp;
 
 import static java.lang.Math.sqrt;
 import static java.util.UUID.randomUUID;
@@ -54,8 +56,8 @@ public class GameController extends AppCompatActivity implements View.OnClickLis
 
     private Player target = buildPlayer("db1cd8e0-abc4-4072-b46b-f63df0b80654", 52.512240, 6.093405, 0);
 
+
     private ArrayList<Player> players = new ArrayList<>();
-    private double range = 2;
 
     protected Player buildPlayer(String Uuid, double lat, double lng, int team) {
         Player out = new Player(Uuid);
