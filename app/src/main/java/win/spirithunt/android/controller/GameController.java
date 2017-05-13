@@ -144,6 +144,7 @@ public class GameController extends AppCompatActivity implements View.OnClickLis
 
     /**
      * Handle the OnClick events of Views in the layout
+     *
      * @param view the View that triggered the event
      */
     @Override
@@ -193,6 +194,7 @@ public class GameController extends AppCompatActivity implements View.OnClickLis
      * @param p Player object to compare distance to
      * @return boolean if Player can be tagged
      */
+
     public boolean checkTagable(Player p) {
         double deltaX = ownPlayer.longitude - p.longitude;
         double deltaY = ownPlayer.latitude - p.latitude;
