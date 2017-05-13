@@ -55,7 +55,6 @@ public class GameController extends AppCompatActivity implements View.OnClickLis
 
     private Player target = buildPlayer("db1cd8e0-abc4-4072-b46b-f63df0b80654", 52.512240, 6.093405, 0);
 
-
     private ArrayList<Player> players = new ArrayList<>();
 
     protected Player buildPlayer(String Uuid, double lat, double lng, int team) {
@@ -136,6 +135,7 @@ public class GameController extends AppCompatActivity implements View.OnClickLis
 
     /**
      * Handle the OnClick events of Views in the layout
+     *
      * @param view the View that triggered the event
      */
     @Override
