@@ -5,19 +5,15 @@ package win.spirithunt.android.model;
  */
 
 public class Player {
-    private String id;
-
+    public String name;
     public double latitude;
-
     public double longitude;
-
     public int score;
-
     public String target;
-
     public int team;
-
     public int result;
+
+    private String id;
 
     public Player(String id) {
         this.id = id;
@@ -27,11 +23,15 @@ public class Player {
         return this.id;
     }
 
-    public void setTeam(int team){
+    public void setTeam(int team) {
         this.team = team;
     }
 
+    public void setName(String name) {
+        this.name = name;
+    }
+
     public String toString() {
-        return this.id;
+        return this.name;
     }
 }
