@@ -34,6 +34,7 @@
     <string name="create_game_select_location">"Long Press to select locations"</string>
     <string name="create_game_no_area_title">No area selected</string>
     <string name="create_game_no_area_content">Please select a game area</string>
+    <string name="create_game_area_too_large">The given area is too large.</string>
 
     <!-- Create Game Advanced String -->
     <string name="create_game_advanced_text_title">Advanced options</string>
@@ -93,6 +94,8 @@
 
     <!--Google Maps API-->
     <string name="google_maps_key" templateMergeStrategy="preserve" translatable="false">null</string>
+
+    <!-- Settings -->
     <string name="setting_logout_title">Log out</string>
     <string name="setting_logout_summary">Clear all account data from this device</string>
     <string name="setting_logout_key">logout</string>
@@ -118,8 +121,20 @@
     <string name="join_game_camera_explain_no">Not now</string>
     <string name="join_game_camera_explain_yes">Ok</string>
 
-    <!-- Lobby -->
     <string name="lobby_text_progress_title">Loading</string>
     <string name="lobby_text_progress_content">Please wait</string>
     <string name="lobby_btn_start">Start</string>
+  
+    <!-- Game location prompt -->
+    <string name="game_location_explain_title">Location access required</string>
+    <string name="game_location_explain_text_create"><![CDATA[
+    Before you can start this game, you need to share your location.
+    This is required for the game to function.
+    ]]></string>
+    <string name="game_location_explain_text_join"><![CDATA[
+    Before you can join this game, you need to share your location.
+    This is required for the game to function.
+    ]]></string>
+    <string name="game_location_explain_no">Cancel</string>
+    <string name="game_location_explain_yes">Ok</string>
 </resources>
