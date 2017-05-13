@@ -38,8 +38,6 @@ import win.spirithunt.android.provider.SocketProvider;
 public class LobbyController extends AppCompatActivity {
     private String lobbyId;
 
-    private boolean lobbyHost;
-
     private ArrayList<Player> players = new ArrayList<>();    // General list of players
 
     private ArrayList<Player> teamRed = new ArrayList<>();    // Team 0
@@ -52,10 +50,12 @@ public class LobbyController extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.lobby_view);
 
-        this.lobbyId = this.getIntent().getStringExtra("lobbyId");
-        this.lobbyHost = this.getIntent().getBooleanExtra("lobbyHost", false);
+        boolean isLobbyHost;
 
-        if (this.lobbyHost) {
+        this.lobbyId = this.getIntent().getStringExtra("lobbyId");
+        isLobbyHost = this.getIntent().getBooleanExtra("lobbyHost", false);
+
+        if (isLobbyHost) {
             View view = findViewById(R.id.btn_start);
             view.setVisibility(View.VISIBLE);
         }
