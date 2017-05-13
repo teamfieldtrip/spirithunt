@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 
-import win.spirithunt.android.controller.LobbyController;
 import win.spirithunt.android.controller.LoginController;
 import win.spirithunt.android.controller.MenuController;
 import win.spirithunt.android.provider.ContextProvider;

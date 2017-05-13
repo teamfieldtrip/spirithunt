@@ -31,6 +31,7 @@ import win.spirithunt.android.provider.SocketProvider;
 
 /**
  * Created by sven on 30-3-17.
+ *
  * @author Remco Schipper
  */
 
@@ -44,9 +45,6 @@ public class LobbyController extends AppCompatActivity {
 
     private ArrayList<Player> teamBlue = new ArrayList<>();   // Team 1
 
-    private ViewPager mPager;
-
-    private PagerAdapter mPagerAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,7 +59,10 @@ public class LobbyController extends AppCompatActivity {
             view.setVisibility(View.VISIBLE);
         }
 
-        mPager = (ViewPager)findViewById(R.id.pager);
+        ViewPager mPager;
+        PagerAdapter mPagerAdapter;
+
+        mPager = (ViewPager) findViewById(R.id.pager);
         mPagerAdapter = new ScreenSlidePagerAdapter(this.lobbyId, getSupportFragmentManager());
         mPager.setAdapter(mPagerAdapter);
     }
@@ -77,7 +78,7 @@ public class LobbyController extends AppCompatActivity {
                 self.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        self.assignPlayer(self.createPlayer((JSONObject)args[0]));
+                        self.assignPlayer(self.createPlayer((JSONObject) args[0]));
                         self.updatePlayerList();
                     }
                 });
@@ -120,6 +121,7 @@ public class LobbyController extends AppCompatActivity {
 
     /**
      * Assign player to team
+     *
      * @param player Player model
      */
     private void assignPlayer(Player player) {
@@ -167,9 +169,10 @@ public class LobbyController extends AppCompatActivity {
             @Override
             public void call(Object... args) {
                 if (args[0] != null || args.length < 2) {
+                    Log.e("Lobby", "Error retrieving lobby");
                     //handle error
                 } else {
-                    self.fillLobbyFromServer((JSONArray)args[1]);
+                    self.fillLobbyFromServer((JSONArray) args[1]);
                 }
             }
         });
@@ -223,8 +226,7 @@ public class LobbyController extends AppCompatActivity {
         public Fragment getItem(int position) {
             if (position == 0) {
                 return new LobbyMapFragment();
-            }
-            else {
+            } else {
                 Bundle bundle = new Bundle();
                 bundle.putString("lobbyId", this.lobbyId);
 
