@@ -2,6 +2,8 @@ package win.spirithunt.android.gui;
 
 import android.content.Context;
 import android.graphics.PixelFormat;
+
+import win.spirithunt.android.controller.GameController;
 import win.spirithunt.android.controller.RadarRenderController;
 import win.spirithunt.android.model.Player;
 import android.util.AttributeSet;
@@ -52,11 +54,12 @@ public class RadarDisplay extends SurfaceView {
         surfaceHolder.setFormat(PixelFormat.TRANSLUCENT);
 
         // Add handler for the renderController
-        renderController = new RadarRenderController(this);
+        renderController = new RadarRenderController(this, GameController.TEAM_BLUE);
     }
 
     public void setActivePlayer(Player activePlayer) {
         this.activePlayer = activePlayer;
+        renderController.setTeam(activePlayer.team);
     }
 
     public void setPlayerList(ArrayList<Player> playerList) {
