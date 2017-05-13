@@ -19,12 +19,9 @@ import io.socket.client.Socket;
 import win.spirithunt.android.R;
 import win.spirithunt.android.gui.RadarDisplay;
 import win.spirithunt.android.model.Player;
-<<<<<<< e693b9bfdea5dd9d829bd241ccb5e4485a0a584d
 import win.spirithunt.android.protocol.GameTag;
 import win.spirithunt.android.provider.SocketProvider;
-=======
 import win.spirithunt.android.model.PowerUp;
->>>>>>> game layout changes, event handling
 
 import static java.lang.Math.sqrt;
 
@@ -45,7 +42,6 @@ public class GameController extends AppCompatActivity implements View.OnClickLis
 
     private static final double MAX_RANGE = 2d;
 
-<<<<<<< e693b9bfdea5dd9d829bd241ccb5e4485a0a584d
     /**
      * Sent from the server when the client action (tag or consume) is approved.
      */
@@ -55,10 +51,6 @@ public class GameController extends AppCompatActivity implements View.OnClickLis
     private Player ownPlayer = buildPlayer("b95c67ec-38ed-463d-866d-763f6369a439", 52.512740, 6.093505, 0);
 
     private Player target = buildPlayer("db1cd8e0-abc4-4072-b46b-f63df0b80654", 52.512240, 6.093405, 0);
-=======
-    // Determine who we are
-    private Player ownPlayer = buildPlayer(52.512740, 6.093505, 2);
->>>>>>> game layout changes, event handling
 
     private ArrayList<Player> players = new ArrayList<>();
 
@@ -134,7 +126,6 @@ public class GameController extends AppCompatActivity implements View.OnClickLis
 
     /**
      * Handle the OnClick events of Views in the layout
-
      * @param view the View that triggered the event
      */
     @Override
@@ -145,8 +136,11 @@ public class GameController extends AppCompatActivity implements View.OnClickLis
 //                usePowerup(view);
 //                break;
             case R.id.game_tag:
-                Log.d(TAG, "onClick: Person has been tagged");
+                Log.d("TAGGED", "TAGGED");
+                Button btnTag = (Button) findViewById(R.id.game_tag);
+                btnTag.setVisibility(View.INVISIBLE);
                 // TODO emit person tagged to server
+                // TODO hold button for 3 seconds to tag person
                 break;
             default:
                 break;
@@ -198,7 +192,6 @@ public class GameController extends AppCompatActivity implements View.OnClickLis
         return (distance > MAX_RANGE * -1 && distance < MAX_RANGE);
     }
 
-<<<<<<< e693b9bfdea5dd9d829bd241ccb5e4485a0a584d
     /**
      * Tags the target player, sends this information to the server and blocks the UI in the
      * meantime.
@@ -234,45 +227,6 @@ public class GameController extends AppCompatActivity implements View.OnClickLis
         } else {
             Log.d(TAG, "tagComplete: Tag denied");
             // TODO inform player of failure
-=======
-    private void usePowerup(View view) {
-        PowerUp powerUp = new PowerUp(UUID.randomUUID().toString(), "Baked cookies", false);
-
-        PowerUpUseHandler listener = new PowerUpUseHandler(powerUp);
-
-        String message = getString(R.string.game_powerup_consume_desc, powerUp.getName());
-
-        new AlertDialog.Builder(view.getContext(), R.style.AppDialog)
-            .setTitle(getString(R.string.game_powerup_consume_title))
-            .setMessage(message)
-            .setPositiveButton(R.string.game_powerup_consume_yes, listener)
-            .setNegativeButton(R.string.game_powerup_consume_no, listener)
-            .show();
-    }
-
-    private void tagPlayer() {
-
-    }
-}
-
-class PowerUpUseHandler implements
-    DialogInterface.OnClickListener {
-
-    private static final String TAG = "PowerUpUseHandler";
-
-    private final PowerUp powerUp;
-
-    public PowerUpUseHandler(PowerUp powerUp) {
-        this.powerUp = powerUp;
-    }
-
-    @Override
-    public void onClick(DialogInterface dialog, int which) {
-        if (which == DialogInterface.BUTTON_POSITIVE) {
-            Log.d(TAG, "onClick: Consuming powerup " + powerUp.getName());
-        } else if(which == DialogInterface.BUTTON_NEGATIVE) {
-            Log.d(TAG, "onClick: Not consuming " + powerUp.getName());
->>>>>>> game layout changes, event handling
         }
     }
 }
