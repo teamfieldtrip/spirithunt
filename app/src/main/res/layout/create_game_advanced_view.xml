@@ -59,6 +59,7 @@
                             android:paddingBottom="5dp"
                             android:paddingTop="5dp"
                             android:textSize="25sp"
+                            android:minWidth="75sp"
                             android:textAlignment="center" />
                         <win.spirithunt.android.gui.CustomButton
                             style="@style/btn_normal_arrow_right"
@@ -97,6 +98,7 @@
                             android:paddingBottom="5dp"
                             android:paddingTop="5dp"
                             android:textSize="25sp"
+                            android:minWidth="75sp"
                             android:textAlignment="center" />
                         <win.spirithunt.android.gui.CustomButton
                             style="@style/btn_normal_arrow_right"
@@ -135,6 +137,7 @@
                             android:paddingBottom="5dp"
                             android:paddingTop="5dp"
                             android:textSize="25sp"
+                            android:minWidth="75sp"
                             android:textAlignment="center" />
                         <win.spirithunt.android.gui.CustomButton
                             style="@style/btn_normal_arrow_right"
@@ -173,6 +176,7 @@
                             android:paddingBottom="5dp"
                             android:paddingTop="5dp"
                             android:textSize="25sp"
+                            android:minWidth="75sp"
                             android:textAlignment="center" />
                         <win.spirithunt.android.gui.CustomButton
                             style="@style/btn_normal_arrow_right"
