@@ -8,10 +8,12 @@ import android.util.Log;
 import android.view.View;
 
 import java.util.ArrayList;
+import java.util.UUID;
 
 import win.spirithunt.android.R;
 import win.spirithunt.android.gui.RadarDisplay;
 import win.spirithunt.android.model.Player;
+import win.spirithunt.android.model.PowerUp;
 
 import static java.lang.Math.sqrt;
 import static java.util.UUID.randomUUID;
@@ -30,10 +32,14 @@ public class GameController extends AppCompatActivity implements View.OnClickLis
 
     public static final int TEAM_BLUE = 1;
 
+    private static final String TAG = "GameController";
+
+    private static final double MAX_RANGE = 2d;
+
     // Determine who we are
-    Player ownPlayer = buildPlayer(52.512740, 6.093505, 2);
+    private Player ownPlayer = buildPlayer(52.512740, 6.093505, 2);
+
     private ArrayList<Player> players = new ArrayList<>();
-    private double range = 2;
 
     protected Player buildPlayer(double lat, double lng, int team) {
         Player out = new Player(randomUUID().toString());
@@ -90,22 +96,11 @@ public class GameController extends AppCompatActivity implements View.OnClickLis
     public void onClick(View view) {
 
         switch (view.getId()) {
-            case R.id.game_consume:
-                DialogInterface.OnClickListener listener = new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        // do nothing
-                    }
-                };
-
-                new AlertDialog.Builder(view.getContext(), R.style.AppDialog)
-                    .setTitle(getString(R.string.game_powerup_consume_title))
-                    .setMessage(getString(R.string.game_powerup_consume_desc))
-                    .setPositiveButton(R.string.game_powerup_consume_yes, listener)
-                    .setNegativeButton(R.string.game_powerup_consume_no, listener)
-                    .show();
-                break;
+//            case R.id.game_consume:
+//                usePowerup(view);
+//                break;
             case R.id.game_tag:
-                Log.d("TAGGED", "TAGGED");
+                Log.d(TAG, "onClick: Person has been tagged");
                 // TODO emit person tagged to server
                 break;
             default:
@@ -133,6 +128,46 @@ public class GameController extends AppCompatActivity implements View.OnClickLis
         double deltaY = ownPlayer.latitude - p.latitude;
         double distance = sqrt((deltaX * deltaX) + (deltaY * deltaY)) * 1000;
 
-        return (distance > range * -1 && distance < range);
+        return (distance > MAX_RANGE * -1 && distance < MAX_RANGE);
+    }
+
+    private void usePowerup(View view) {
+        PowerUp powerUp = new PowerUp(UUID.randomUUID().toString(), "Baked cookies", false);
+
+        PowerUpUseHandler listener = new PowerUpUseHandler(powerUp);
+
+        String message = getString(R.string.game_powerup_consume_desc, powerUp.getName());
+
+        new AlertDialog.Builder(view.getContext(), R.style.AppDialog)
+            .setTitle(getString(R.string.game_powerup_consume_title))
+            .setMessage(message)
+            .setPositiveButton(R.string.game_powerup_consume_yes, listener)
+            .setNegativeButton(R.string.game_powerup_consume_no, listener)
+            .show();
+    }
+
+    private void tagPlayer() {
+
+    }
+}
+
+class PowerUpUseHandler implements
+    DialogInterface.OnClickListener {
+
+    private static final String TAG = "PowerUpUseHandler";
+
+    private final PowerUp powerUp;
+
+    public PowerUpUseHandler(PowerUp powerUp) {
+        this.powerUp = powerUp;
+    }
+
+    @Override
+    public void onClick(DialogInterface dialog, int which) {
+        if (which == DialogInterface.BUTTON_POSITIVE) {
+            Log.d(TAG, "onClick: Consuming powerup " + powerUp.getName());
+        } else if(which == DialogInterface.BUTTON_NEGATIVE) {
+            Log.d(TAG, "onClick: Not consuming " + powerUp.getName());
+        }
     }
 }

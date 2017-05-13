@@ -70,6 +70,11 @@
     </style>
 
     <!-- Define the textview style -->
+    <style name="textView_player" parent="@style/textView_normal_main">
+        <item name="android:textSize">28sp</item>
+    </style>
+
+    <!-- Define the textview style -->
     <style name="textView_normal_exo" parent="@android:style/TextAppearance.Widget.TextView">
         <item name="win.spirithunt.android:font">fonts/exo-regular.ttf</item>
         <item name="android:textColor">#FFFFFF</item>
@@ -151,6 +156,16 @@
     </style>
     <style name="btn_normal_arrow_right" parent="@style/btn_normal_arrow">
         <item name="android:background">@drawable/btn_right_normal</item>
+    </style>
+
+    <!-- Define powerup button -->
+    <style name="btn_powerup" parent="@style/btn_normal_medium">
+        <item name="android:layout_height">80dp</item>
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_marginBottom">3dp</item>
+        <item name="android:layout_marginEnd">3dp</item>
+        <item name="android:layout_marginStart">3dp</item>
+        <item name="android:layout_weight">1</item>
     </style>
 
     <color name="colorText">#CCFFFFFF</color>
