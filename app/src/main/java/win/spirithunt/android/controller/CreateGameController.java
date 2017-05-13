@@ -223,7 +223,6 @@ public class CreateGameController extends AppCompatActivity implements
             playerProvider.getNewPlayer(new PlayerCreateCallback() {
                 @Override
                 public void call(String error, Player player) {
-
                     Socket socket = SocketProvider.getInstance().getConnection();
                     socket.emit("lobby:create", gameCreate, new Ack() {
                         @Override
@@ -237,6 +236,8 @@ public class CreateGameController extends AppCompatActivity implements
                                         self.showErrorDialog(self);
                                     }else{
                                         Intent intent = new Intent(self, LobbyController.class);
+                                        intent.putExtra("lobbyId", args[1].toString());
+                                        intent.putExtra("lobbyHost", true);
                                         startActivity(intent);
                                     }
                                 }

@@ -1,26 +1,42 @@
 package win.spirithunt.android.controller;
 
-import android.app.FragmentManager;
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentStatePagerAdapter;
+import android.support.v4.view.PagerAdapter;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.MapFragment;
-import com.google.android.gms.maps.OnMapReadyCallback;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 
+import io.socket.client.Ack;
+import io.socket.client.Socket;
+import io.socket.emitter.Emitter;
 import win.spirithunt.android.R;
+import win.spirithunt.android.gui.LobbyInfoFragment;
+import win.spirithunt.android.gui.LobbyMapFragment;
 import win.spirithunt.android.model.Player;
+import win.spirithunt.android.protocol.LobbyList;
+import win.spirithunt.android.provider.SocketProvider;
 
 /**
  * Created by sven on 30-3-17.
+ *
+ * @author Remco Schipper
  */
 
-public class LobbyController extends AppCompatActivity implements OnMapReadyCallback {
+public class LobbyController extends AppCompatActivity {
+    private String lobbyId;
 
     private ArrayList<Player> players = new ArrayList<>();    // General list of players
 
@@ -28,49 +44,88 @@ public class LobbyController extends AppCompatActivity implements OnMapReadyCall
 
     private ArrayList<Player> teamBlue = new ArrayList<>();   // Team 1
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.lobby_view);
 
-        FragmentManager manager = getFragmentManager();
-        MapFragment mapFragment = (MapFragment) manager.findFragmentById(R.id.lobby_map);
+        boolean isLobbyHost;
 
-        mapFragment.getMapAsync(this);
+        this.lobbyId = this.getIntent().getStringExtra("lobbyId");
+        isLobbyHost = this.getIntent().getBooleanExtra("lobbyHost", false);
 
-        for(int i = 0; i<100; i++){
-
-            Player p1 = new Player("Sven");
-            p1.setTeam(i%2);
-            assignPlayer(p1);
+        if (isLobbyHost) {
+            View view = findViewById(R.id.btn_start);
+            view.setVisibility(View.VISIBLE);
         }
 
-        updatePlayerList();
+        ViewPager mPager;
+        PagerAdapter mPagerAdapter;
+
+        mPager = (ViewPager) findViewById(R.id.pager);
+        mPagerAdapter = new ScreenSlidePagerAdapter(this.lobbyId, getSupportFragmentManager());
+        mPager.setAdapter(mPagerAdapter);
     }
 
-    /**
-     * Called when the Google Maps map is loaded and ready to be used.
-     *
-     * @param googleMap
-     */
-    @Override
-    public void onMapReady(GoogleMap googleMap) {
-        try {
-            googleMap.setMyLocationEnabled(true);
-        } catch (SecurityException e) {
-            System.out.println(e.getMessage());
-        }
+    protected void onResume() {
+        super.onResume();
+        final LobbyController self = this;
 
-        googleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
-        googleMap.getUiSettings().setAllGesturesEnabled(false);
-//        map = googleMap;
+        Socket socket = SocketProvider.getInstance().getConnection();
+        socket.on("lobby:joined", new Emitter.Listener() {
+            @Override
+            public void call(final Object... args) {
+                self.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        self.assignPlayer(self.createPlayer((JSONObject) args[0]));
+                        self.updatePlayerList();
+                    }
+                });
+            }
+        });
+
+        socket.on("lobby:started", new Emitter.Listener() {
+            @Override
+            public void call(final Object... args) {
+                self.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Intent intent = new Intent(self, GameController.class);
+                        startActivity(intent);
+                    }
+                });
+            }
+        });
+
+        this.getLobbyFromServer();
+    }
+
+    protected void onPause() {
+        super.onPause();
+
+        Socket socket = SocketProvider.getInstance().getConnection();
+        socket.off("lobby:joined");
+        socket.off("lobby:started");
+    }
+
+    public void start(View view) {
+        Socket socket = SocketProvider.getInstance().getConnection();
+        socket.emit("lobby:start", null, new Ack() {
+            @Override
+            public void call(Object... args) {
+                Log.d("Lobby", "Lobby started");
+            }
+        });
     }
 
     /**
      * Assign player to team
+     *
      * @param player Player model
      */
-    public void assignPlayer(Player player) {
+    private void assignPlayer(Player player) {
         switch (player.team) {
             case 0:
                 teamRed.add(player);
@@ -89,7 +144,7 @@ public class LobbyController extends AppCompatActivity implements OnMapReadyCall
     /**
      * Occupy the ListView with the list of players
      */
-    public void updatePlayerList() {
+    private void updatePlayerList() {
         ListView listViewTeamRed = (ListView) findViewById(R.id.listview_teamred_lobby);
         ListView listViewTeamBlue = (ListView) findViewById(R.id.listview_teamblue_lobby);
 
@@ -107,16 +162,84 @@ public class LobbyController extends AppCompatActivity implements OnMapReadyCall
         listViewTeamBlue.setAdapter(arrayAdapterBlue);
     }
 
-//    public void getLobbyFromServer() {
-//        Socket socket = socketProvider.getConnection();
-//
-//        // TODO Socket connection
-//        lobbyId = idfromsocket;
-//        players.addAll(playersfromsocket);
-//    }
+    private void getLobbyFromServer() {
+        final LobbyController self = this;
+        Socket socket = SocketProvider.getInstance().getConnection();
 
-//    public void getLobby() {
-//        Socket socket = SocketProvider.getInstance().getConnection();
-//        // TODO get lobby an set variable
-//    }
+        socket.emit("lobby:list", new LobbyList(this.lobbyId), new Ack() {
+            @Override
+            public void call(Object... args) {
+                if (args[0] != null || args.length < 2) {
+                    Log.e("Lobby", "Error retrieving lobby");
+                    //handle error
+                } else {
+                    self.fillLobbyFromServer((JSONArray) args[1]);
+                }
+            }
+        });
+    }
+
+    private void fillLobbyFromServer(JSONArray players) {
+        if (players != null) {
+            final LobbyController self = this;
+            int len = players.length();
+
+            try {
+                for (int i = 0; i < len; i++) {
+                    this.assignPlayer(this.createPlayer(players.getJSONObject(i)));
+                }
+            } catch (JSONException e) {
+                System.out.println(e.getMessage());
+            }
+
+            this.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    self.updatePlayerList();
+                }
+            });
+        }
+    }
+
+    private Player createPlayer(JSONObject jsonObject) {
+        try {
+            Player player = new Player(jsonObject.getString("player_id"));
+            player.setTeam(jsonObject.getInt("team"));
+            player.setName(jsonObject.getString("name"));
+
+            return player;
+        } catch (JSONException e) {
+            System.out.println(e.getMessage());
+            return null;
+        }
+    }
+
+    private class ScreenSlidePagerAdapter extends FragmentStatePagerAdapter {
+        private String lobbyId;
+
+        public ScreenSlidePagerAdapter(String lobbyId, FragmentManager fm) {
+            super(fm);
+
+            this.lobbyId = lobbyId;
+        }
+
+        @Override
+        public Fragment getItem(int position) {
+            if (position == 0) {
+                return new LobbyMapFragment();
+            } else {
+                Bundle bundle = new Bundle();
+                bundle.putString("lobbyId", this.lobbyId);
+
+                LobbyInfoFragment lobbyInfoFragment = new LobbyInfoFragment();
+                lobbyInfoFragment.setArguments(bundle);
+                return lobbyInfoFragment;
+            }
+        }
+
+        @Override
+        public int getCount() {
+            return 2;
+        }
+    }
 }

@@ -102,6 +102,7 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:textSize="25sp"
+            android:minWidth="100sp"
             android:textAlignment="center" />
         <win.spirithunt.android.gui.CustomButton
             style="@style/btn_normal_arrow_right"

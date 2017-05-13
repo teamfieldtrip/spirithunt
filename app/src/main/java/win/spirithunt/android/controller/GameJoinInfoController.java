@@ -1,6 +1,8 @@
 package win.spirithunt.android.controller;
 
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import win.spirithunt.android.R;
 import win.spirithunt.android.callback.PlayerCreateCallback;
@@ -23,6 +25,8 @@ import io.socket.client.Socket;
  */
 
 public class GameJoinInfoController extends AppCompatActivity {
+    private ProgressDialog progressDialog;
+
     private String lobbyId;
 
     public void close(View view) {
@@ -30,6 +34,8 @@ public class GameJoinInfoController extends AppCompatActivity {
     }
 
     public void submit(View view) {
+        this.showProgressDialog();
+
         final GameJoinInfoController self = this;
 
         PlayerProvider.getInstance().getNewPlayer(new PlayerCreateCallback() {
@@ -83,7 +89,11 @@ public class GameJoinInfoController extends AppCompatActivity {
     }
 
     private void onSuccess() {
-        System.out.println("!!!Show lobby!!!");
+        this.hideProgressDialog();
+
+        Intent intent = new Intent(this, LobbyController.class);
+        intent.putExtra("lobbyId", this.lobbyId);
+        startActivity(intent);
     }
 
     private void onError(String error) {
@@ -104,6 +114,7 @@ public class GameJoinInfoController extends AppCompatActivity {
                 break;
         }
 
+        this.hideProgressDialog();
         this.showErrorDialog(getString(textId));
     }
 
@@ -118,5 +129,21 @@ public class GameJoinInfoController extends AppCompatActivity {
             })
             .setIcon(android.R.drawable.ic_dialog_alert)
             .show();
+    }
+
+    private void hideProgressDialog() {
+        if(this.progressDialog != null) {
+            this.progressDialog.dismiss();
+        }
+    }
+
+    private void showProgressDialog() {
+        if(this.progressDialog == null) {
+            this.progressDialog = new ProgressDialog(this);
+            this.progressDialog.setTitle(getString(R.string.lobby_text_progress_title));
+            this.progressDialog.setMessage(getString(R.string.lobby_text_progress_content));
+            this.progressDialog.setCancelable(false);
+            this.progressDialog.show();
+        }
     }
 }
