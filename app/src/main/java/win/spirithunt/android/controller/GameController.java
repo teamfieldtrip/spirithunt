@@ -27,9 +27,10 @@ import win.spirithunt.android.R;
 import win.spirithunt.android.gui.RadarDisplay;
 import win.spirithunt.android.model.Player;
 import win.spirithunt.android.model.PowerUp;
+import win.spirithunt.android.protocol.GameTag;
+import win.spirithunt.android.provider.SocketProvider;
 
 import static java.lang.Math.sqrt;
-import static java.util.UUID.randomUUID;
 
 import static java.lang.Math.sqrt;
 
@@ -172,7 +173,7 @@ public class GameController extends AppCompatActivity implements View.OnClickLis
             for (Player p : players) {
                 // If p is the ownPlayer's target
                 if (ownPlayer.target.equals(p.getId())) {
-                    Log.d("TARGET",p.getId());
+                    Log.d("TARGET", p.getId());
                     if (checkTagable(p)) {
                         Log.d(TAG, "onUpdateLocation: User can be tagged");
                         // TODO animate the object in
