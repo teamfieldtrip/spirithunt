@@ -38,12 +38,12 @@ public class GameController extends AppCompatActivity implements View.OnClickLis
     private static final double MAX_RANGE = 2d;
 
     // Determine who we are
+    private Player ownPlayer = buildPlayer("b95c67ec-38ed-463d-866d-763f6369a439", 52.512740, 6.093505, 0);
 
-    Player ownPlayer = buildPlayer(52.512740, 6.093505, 0);
     private ArrayList<Player> players = new ArrayList<>();
 
-    protected Player buildPlayer(double lat, double lng, int team) {
-        Player out = new Player(randomUUID().toString());
+    protected Player buildPlayer(String Uuid, double lat, double lng, int team) {
+        Player out = new Player(Uuid);
         out.latitude = lat;
         out.longitude = lng;
         out.team = team;
@@ -57,24 +57,28 @@ public class GameController extends AppCompatActivity implements View.OnClickLis
 
         // Flood the player list
         players.add(buildPlayer(
+            "a5393197-a932-4f8d-911d-5bb21fd840e6",
             ownPlayer.latitude + 0.001000,
             ownPlayer.longitude,
             1
         ));
         players.add(buildPlayer(
+            "db1cd8e0-abc4-4072-b46b-f63df0b80654",
             ownPlayer.latitude - 0.000500,
             ownPlayer.longitude - 0.00100,
-            2
+            0
         ));
         players.add(buildPlayer(
+            "52768d1b-20ee-4330-aa4f-96d8f0e29ea8",
             ownPlayer.latitude,
             ownPlayer.longitude + 0.003000,
-            3
+            0
         ));
         players.add(buildPlayer(
+            "857be781-3629-4976-8e22-d177a656ba3b",
             ownPlayer.latitude,
             ownPlayer.longitude - 0.004000,
-            4
+            1
         ));
 
         RadarDisplay radar = (RadarDisplay) findViewById(R.id.game_status_radar);
@@ -116,13 +120,14 @@ public class GameController extends AppCompatActivity implements View.OnClickLis
     public void onUpdateLocation() {
         Button btnTag = (Button) findViewById(R.id.game_tag);
 
-        ownPlayer.target = "c4";
+        ownPlayer.target = "db1cd8e0-abc4-4072-b46b-f63df0b80654";
 
         // Debug if-statement because of incomplete Player model
         if (ownPlayer.target != null) {
             for (Player p : players) {
                 // If p is the ownPlayer's target
                 if (ownPlayer.target.equals(p.getId())) {
+                    Log.d("TARGET",p.getId());
                     if (checkTagable(p)) {
                         btnTag.setVisibility(View.VISIBLE);
                     } else {
