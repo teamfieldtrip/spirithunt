@@ -22,6 +22,8 @@ import win.spirithunt.android.model.Player;
 import win.spirithunt.android.protocol.GameTag;
 import win.spirithunt.android.provider.SocketProvider;
 import win.spirithunt.android.model.PowerUp;
+import win.spirithunt.android.protocol.GameTag;
+import win.spirithunt.android.provider.SocketProvider;
 
 import static java.lang.Math.sqrt;
 
@@ -142,11 +144,16 @@ public class GameController extends AppCompatActivity implements View.OnClickLis
 //                usePowerup(view);
 //                break;
             case R.id.game_tag:
+                // TODO hold button for 3 seconds to tag person (probably use onLongClickListener)
                 Log.d("TAGGED", "TAGGED");
                 Button btnTag = (Button) findViewById(R.id.game_tag);
                 btnTag.setVisibility(View.INVISIBLE);
-                // TODO emit person tagged to server
-                // TODO hold button for 3 seconds to tag person
+
+                Socket socket = SocketProvider.getInstance().getConnection();
+                final GameController self = this;
+
+                socket.emit("gameplay:tag", new GameTag(ownPlayer.getId(), target.getId()));
+                // TODO get confirmation
                 break;
             default:
                 break;
