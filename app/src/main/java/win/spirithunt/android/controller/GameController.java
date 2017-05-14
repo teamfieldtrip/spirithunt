@@ -85,6 +85,8 @@ public class GameController extends AppCompatActivity implements View.OnClickLis
         radar.setActivePlayer(ownPlayer);
         radar.setPlayerList(players);
 
+        // TODO Register subscriber
+
         onUpdateLocation();
     }
 
@@ -128,7 +130,7 @@ public class GameController extends AppCompatActivity implements View.OnClickLis
         ownPlayer.target = "db1cd8e0-abc4-4072-b46b-f63df0b80654";
 
         // Debug if-statement because of incomplete Player model
-        if (ownPlayer.target != null) {
+        if (!ownPlayer.target.equals("")) {
             for (Player p : players) {
                 // If p is the ownPlayer's target
                 if (ownPlayer.target.equals(p.getId())) {
