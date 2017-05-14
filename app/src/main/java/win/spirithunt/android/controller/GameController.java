@@ -22,7 +22,6 @@ import win.spirithunt.android.provider.SocketProvider;
 
 import static java.lang.Math.sqrt;
 
-
 /**
  * Renders the main game interface, which consists of a radar, list of power ups, consume buttons
  * and a bottom navigation bar
@@ -68,12 +67,6 @@ public class GameController extends AppCompatActivity implements View.OnClickLis
             ownPlayer.latitude + 0.001000,
             ownPlayer.longitude,
             1
-        ));
-        players.add(buildPlayer(
-            "db1cd8e0-abc4-4072-b46b-f63df0b80654",
-            ownPlayer.latitude - 0.000500,
-            ownPlayer.longitude - 0.00100,
-            0
         ));
         players.add(buildPlayer(
             "52768d1b-20ee-4330-aa4f-96d8f0e29ea8",
