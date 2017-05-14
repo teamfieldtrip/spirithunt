@@ -106,7 +106,13 @@ public class GameController extends AppCompatActivity implements View.OnClickLis
             "52768d1b-20ee-4330-aa4f-96d8f0e29ea8",
             ownPlayer.latitude - 0.000500,
             ownPlayer.longitude - 0.00100,
-            2
+            0
+        ));
+        players.add(buildPlayer(
+            "52768d1b-20ee-4330-aa4f-96d8f0e29ea8",
+            ownPlayer.latitude,
+            ownPlayer.longitude + 0.003000,
+            0
         ));
         players.add(buildPlayer(
             "857be781-3629-4976-8e22-d177a656ba3b",
