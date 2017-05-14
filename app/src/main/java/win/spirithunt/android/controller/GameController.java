@@ -11,13 +11,16 @@ import android.widget.Button;
 import java.util.ArrayList;
 import java.util.UUID;
 
+import io.socket.client.Ack;
+import io.socket.client.Socket;
 import win.spirithunt.android.R;
 import win.spirithunt.android.gui.RadarDisplay;
 import win.spirithunt.android.model.Player;
 import win.spirithunt.android.model.PowerUp;
+import win.spirithunt.android.protocol.GameTag;
+import win.spirithunt.android.provider.SocketProvider;
 
 import static java.lang.Math.sqrt;
-import static java.util.UUID.randomUUID;
 
 
 /**
@@ -39,6 +42,7 @@ public class GameController extends AppCompatActivity implements View.OnClickLis
 
     // Determine who we are
     private Player ownPlayer = buildPlayer("b95c67ec-38ed-463d-866d-763f6369a439", 52.512740, 6.093505, 0);
+    private Player target = buildPlayer("db1cd8e0-abc4-4072-b46b-f63df0b80654", 52.512240, 6.093405, 0);
 
     private ArrayList<Player> players = new ArrayList<>();
 
@@ -56,17 +60,13 @@ public class GameController extends AppCompatActivity implements View.OnClickLis
         setContentView(R.layout.game_view);
 
         // Flood the player list
+        players.add(target);
+
         players.add(buildPlayer(
             "a5393197-a932-4f8d-911d-5bb21fd840e6",
             ownPlayer.latitude + 0.001000,
             ownPlayer.longitude,
             1
-        ));
-        players.add(buildPlayer(
-            "db1cd8e0-abc4-4072-b46b-f63df0b80654",
-            ownPlayer.latitude - 0.000500,
-            ownPlayer.longitude - 0.00100,
-            0
         ));
         players.add(buildPlayer(
             "52768d1b-20ee-4330-aa4f-96d8f0e29ea8",
@@ -106,11 +106,16 @@ public class GameController extends AppCompatActivity implements View.OnClickLis
 //                usePowerup(view);
 //                break;
             case R.id.game_tag:
+                // TODO hold button for 3 seconds to tag person (probably use onLongClickListener)
                 Log.d("TAGGED", "TAGGED");
                 Button btnTag = (Button) findViewById(R.id.game_tag);
                 btnTag.setVisibility(View.INVISIBLE);
-                // TODO emit person tagged to server
-                // TODO hold button for 3 seconds to tag person
+
+                Socket socket = SocketProvider.getInstance().getConnection();
+                final GameController self = this;
+
+                socket.emit("gameplay:tag", new GameTag(ownPlayer.getId(), target.getId()));
+                // TODO get confirmation
                 break;
             default:
                 break;
@@ -127,7 +132,7 @@ public class GameController extends AppCompatActivity implements View.OnClickLis
             for (Player p : players) {
                 // If p is the ownPlayer's target
                 if (ownPlayer.target.equals(p.getId())) {
-                    Log.d("TARGET",p.getId());
+                    Log.d("TARGET", p.getId());
                     if (checkTagable(p)) {
                         btnTag.setVisibility(View.VISIBLE);
                     } else {
