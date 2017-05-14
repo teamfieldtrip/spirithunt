@@ -23,9 +23,10 @@ import win.spirithunt.android.model.Player;
 import win.spirithunt.android.protocol.GameTag;
 import win.spirithunt.android.provider.SocketProvider;
 import win.spirithunt.android.model.PowerUp;
+import win.spirithunt.android.protocol.GameTag;
+import win.spirithunt.android.provider.SocketProvider;
 
 import static java.lang.Math.sqrt;
-import static java.util.UUID.randomUUID;
 
 import static java.lang.Math.sqrt;
 
