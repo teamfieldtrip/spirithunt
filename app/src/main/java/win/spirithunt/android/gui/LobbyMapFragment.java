@@ -16,6 +16,7 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import io.socket.client.Ack;
@@ -110,7 +111,7 @@ public class LobbyMapFragment extends Fragment implements OnMapReadyCallback {
         this.createCircle(center, border);
 
         CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLng(center);
-        CameraUpdate zoom = CameraUpdateFactory.zoomTo(15);
+        CameraUpdate zoom = CameraUpdateFactory.newLatLngZoom(center, 10);
 
         map.moveCamera(cameraUpdate);
         map.animateCamera(zoom);
