@@ -79,6 +79,9 @@
     <string name="join_game_info_button_join">Join</string>
     <string name="title_activity_maps">Map</string>
 
+    <!-- Leaderboard String -->
+    <string name="leaderboard_text_title">Leaderboard</string>
+
     <!-- Registration -->
     <string name="register_field_name">Name</string>
     <string name="register_field_email">E-mail</string>
@@ -154,5 +157,5 @@
     This is required for the game to function.
     ]]></string>
     <string name="game_location_explain_no">Cancel</string>
-    <string name="game_location_explain_yes">Ok</string>
+    <string name="game_location_explain_yes">OK</string>
 </resources>

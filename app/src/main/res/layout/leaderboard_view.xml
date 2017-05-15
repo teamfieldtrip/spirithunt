@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <win.spirithunt.android.gui.CustomTextView
+        style="@style/textView_normal_main"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingBottom="25dp"
+        android:textSize="40sp"
+        android:textAlignment="center"
+        android:text="@string/leaderboard_text_title" />
+
+    <ListView android:layout_height="match_parent"
+        android:layout_width="match_parent"
+        android:id="@+id/listview_leaderboard"/>
+
+</LinearLayout>
