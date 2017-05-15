@@ -33,6 +33,12 @@ import win.spirithunt.android.provider.SocketProvider;
  */
 
 public class LobbyController extends AppCompatActivity {
+
+    private String lobbyId;
+    private ArrayList<Player> players = new ArrayList<>();    // General list of players
+    private ArrayList<Player> teamRed = new ArrayList<>();    // Team 0
+    private ArrayList<Player> teamBlue = new ArrayList<>();   // Team 1
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -134,11 +140,13 @@ public class LobbyController extends AppCompatActivity {
                     provider.hideProgressDialog();
                 }
 
-                /*
-                    TODO process response, it's a single object containing id, game, players and target
-                     but how we're sending this and what the game looks like... It's TBD
-                 */
-                // TODO Add data
+                Player[] ply = (Player[]) args[0];
+                gameIntent.putExtra("players", ply);
+                gameIntent.putExtra("name", (String) args[1]);
+                gameIntent.putExtra("centerLat", (double) args[2]);
+                gameIntent.putExtra("centerLng", (double) args[3]);
+                gameIntent.putExtra("radius", (double) args[4]);
+                gameIntent.putExtra("target", (Player) args[5]);
                 self.startActivity(gameIntent);
             }
         });
@@ -167,6 +175,8 @@ public class LobbyController extends AppCompatActivity {
 
     private void getLobbyFromServer() {
         final LobbyController self = this;
+
+    }
 
     public void start(View view) {
         Socket socket = SocketProvider.getInstance().getConnection();
