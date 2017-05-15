@@ -19,8 +19,8 @@ import io.socket.client.Socket;
 import io.socket.emitter.Emitter;
 import win.spirithunt.android.R;
 import win.spirithunt.android.gui.LobbyInfoFragment;
-import win.spirithunt.android.gui.LobbyQrFragment;
 import win.spirithunt.android.gui.LobbyMapFragment;
+import win.spirithunt.android.gui.LobbyQrFragment;
 import win.spirithunt.android.gui.LobbyTeamFragment;
 import win.spirithunt.android.model.Player;
 import win.spirithunt.android.provider.DialogProvider;
@@ -51,11 +51,11 @@ public class LobbyController extends AppCompatActivity {
             view.setVisibility(View.VISIBLE);
         }
 
-        ViewPager infoPager = (ViewPager)findViewById(R.id.pager_info);
+        ViewPager infoPager = (ViewPager) findViewById(R.id.pager_info);
         infoPager.setAdapter(new InfoPagerAdapter(this.getIntent().getStringExtra("lobbyId"), getSupportFragmentManager()));
         infoPager.setCurrentItem(1);
 
-        ViewPager teamPager = (ViewPager)findViewById(R.id.pager_team);
+        ViewPager teamPager = (ViewPager) findViewById(R.id.pager_team);
         teamPager.setAdapter(new TeamPagerAdapter(getSupportFragmentManager()));
     }
 
@@ -79,6 +79,7 @@ public class LobbyController extends AppCompatActivity {
                 });
             }
         });
+
         socket.on("lobby:destroy", new Emitter.Listener() {
             @Override
             public void call(final Object... args) {
@@ -89,6 +90,23 @@ public class LobbyController extends AppCompatActivity {
                         socket.emit("lobby:leave");
 
                         self.showHostLeftDialog();
+                    }
+                });
+            }
+        });
+
+        // TODO player abandonment
+
+        socket.on("lobby:started", new Emitter.Listener() {
+
+            @Override
+            public void call(final Object... args) {
+                self.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+
+                        String gameId = (String) args[0];
+                        self.startGame(gameId);
                     }
                 });
             }
@@ -126,20 +144,18 @@ public class LobbyController extends AppCompatActivity {
                     provider.hideProgressDialog();
                 }
 
-                Player[] ply = (Player[]) args[0];
-                gameIntent.putExtra("players", ply);
-                gameIntent.putExtra("name", (String) args[1]);
-                gameIntent.putExtra("centerLat", (double) args[2]);
-                gameIntent.putExtra("centerLng", (double) args[3]);
-                gameIntent.putExtra("radius", (double) args[4]);
-                gameIntent.putExtra("target", (Player) args[5]);
+                /*
+                    TODO process response, it's a single object containing id, game, players and target
+                     but how we're sending this and what the game looks like... It's TBD
+                 */
+                // TODO Add data
                 self.startActivity(gameIntent);
             }
         });
     }
 
-        @Override
-        public void onBackPressed() {
+    @Override
+    public void onBackPressed() {
         Socket socket = SocketProvider.getInstance().getConnection();
         socket.emit("lobby:leave");
 
@@ -159,6 +175,7 @@ public class LobbyController extends AppCompatActivity {
 
     /**
      * Returns a list of players
+     *
      * @return
      */
     public ArrayList<Player> getPlayers() {
