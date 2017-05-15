@@ -119,14 +119,6 @@ public class RadarRenderController extends Thread implements SurfaceHolder.Callb
     }
 
     /**
-     * Returns the ID of the current team the app is on.
-     * @return
-     */
-    public int getTeam() {
-        return team;
-    }
-
-    /**
      * Changes the team we're on.
      * @param team
      */
@@ -362,6 +354,7 @@ public class RadarRenderController extends Thread implements SurfaceHolder.Callb
                 // Update or initialize the activePlayer variable
                 if (activePlayer == null || activePlayer != radarDisplay.getActivePlayer()) {
                     activePlayer = radarDisplay.getActivePlayer();
+                    setTeam(activePlayer.team);
                     changes = true;
                 }
 
