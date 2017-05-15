@@ -75,7 +75,6 @@ abstract public class AuthorisationController extends AppCompatActivity {
         if (dialogProvider == null) {
             dialogProvider = new DialogProvider(this);
         }
-
         if (dialogProvider.isProgressDialogOpen()) {
             hideProgressDialog();
         }
