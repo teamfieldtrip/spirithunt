@@ -209,6 +209,26 @@ public class GameController extends AppCompatActivity implements View.OnClickLis
     }
 
     /**
+     * Uses a powerup and informs the server about it.
+     *
+     * @param view
+     */
+    private void usePowerup(View view) {
+        PowerUp powerUp = new PowerUp(UUID.randomUUID().toString(), "Baked cookies", false);
+
+        PowerUpUseHandler listener = new PowerUpUseHandler(powerUp);
+
+        String message = getString(R.string.game_powerup_consume_desc, powerUp.getName());
+
+        new AlertDialog.Builder(view.getContext(), R.style.AppDialog)
+            .setTitle(getString(R.string.game_powerup_consume_title))
+            .setMessage(message)
+            .setPositiveButton(R.string.game_powerup_consume_yes, listener)
+            .setNegativeButton(R.string.game_powerup_consume_no, listener)
+            .show();
+    }
+
+    /**
      * Tags the target player, sends this information to the server and blocks the UI in the
      * meantime.
      */
