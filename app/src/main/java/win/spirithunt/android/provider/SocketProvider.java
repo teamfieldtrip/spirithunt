@@ -31,6 +31,8 @@ public class SocketProvider {
     }
 
     private void attachEvents() {
+        // TODO Show a snackbar when offline.
+
         this.socket.once(io.socket.client.Socket.EVENT_CONNECT, new Emitter.Listener() {
             @Override
             public void call(Object... args) {
