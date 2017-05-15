@@ -171,7 +171,7 @@ public class GameController extends AppCompatActivity implements View.OnClickLis
             for (Player p : players) {
                 // If p is the ownPlayer's target
                 if (ownPlayer.target.equals(p.getId())) {
-                    Log.d("TARGET", p.getId());
+                    Log.d(TAG, "Aquired target: " + p.getId());
                     if (checkTagable(p)) {
                         Log.d(TAG, "onUpdateLocation: User can be tagged");
                         // TODO animate the object in
