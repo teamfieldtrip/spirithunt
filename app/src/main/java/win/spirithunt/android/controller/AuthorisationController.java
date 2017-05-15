@@ -24,8 +24,6 @@ import win.spirithunt.android.provider.DialogProvider;
  */
 
 abstract public class AuthorisationController extends AppCompatActivity {
-    private DialogProvider dialogProvider;
-
     /**
      * Contains error messages for registration and sign up
      */
@@ -48,6 +46,8 @@ abstract public class AuthorisationController extends AppCompatActivity {
         errorDictionary = Collections.unmodifiableMap(errorMap);
     }
 
+    private DialogProvider dialogProvider;
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState, @Nullable PersistableBundle persistentState) {
         super.onCreate(savedInstanceState, persistentState);
@@ -58,6 +58,9 @@ abstract public class AuthorisationController extends AppCompatActivity {
      * Closes an open progress dialog, if any.
      */
     protected void hideProgressDialog() {
+        if (dialogProvider == null) {
+            dialogProvider = new DialogProvider(this);
+        }
         dialogProvider.hideProgressDialog();
     }
 
@@ -65,9 +68,12 @@ abstract public class AuthorisationController extends AppCompatActivity {
      * Opens a progress dialog, specify the title and body. The progress is non-cancellable.
      *
      * @param title Title of the dialog
-     * @param body Body of the dialog
+     * @param body  Body of the dialog
      */
     protected void showProgressDialog(String title, String body) {
+        if (dialogProvider == null) {
+            dialogProvider = new DialogProvider(this);
+        }
         if (dialogProvider.isProgressDialogOpen()) {
             hideProgressDialog();
         }
@@ -77,9 +83,9 @@ abstract public class AuthorisationController extends AppCompatActivity {
     /**
      * Shows an alert for failure to login or w/e
      *
-     * @param title Title of alert
+     * @param title   Title of alert
      * @param content Message of alert
-     * @param button Content of dismiss button
+     * @param button  Content of dismiss button
      */
     protected void showErrorDialog(String title, String content, String button) {
         new AlertDialog.Builder(this, R.style.AppDialog)
