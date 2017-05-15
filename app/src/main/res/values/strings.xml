@@ -134,7 +134,7 @@
     Please grant access to your camera to continue.
     ]]></string>
     <string name="join_game_camera_explain_no">Not now</string>
-    <string name="join_game_camera_explain_yes">Ok</string>
+    <string name="join_game_camera_explain_yes">OK</string>
 
     <!-- Lobby -->
     <string name="lobby_text_area">Area</string>
@@ -162,5 +162,9 @@
     This is required for the game to function.
     ]]></string>
     <string name="game_location_explain_no">Cancel</string>
-    <string name="game_location_explain_yes">OK</string>
+    <string name="game_location_explain_yes">Ok</string>
+
+    <!-- Starting lobby -->
+    <string name="game_start_dialog_title">Game commencing</string>
+    <string name="game_start_dialog_message">Stand by, the hunt starts soon&#8230;</string>
 </resources>
