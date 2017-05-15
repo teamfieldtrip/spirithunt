@@ -56,5 +56,14 @@ public class DialogProvider {
             progressDialog.show();
         }
     }
+
+    /**
+     *
+     * @param title
+     * @param body
+     */
+    public void showProgressDialog(int title, int body) {
+        showProgressDialog(activity.getString(title), activity.getString(body));
+    }
 }
 
