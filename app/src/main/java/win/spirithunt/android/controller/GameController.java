@@ -144,16 +144,7 @@ public class GameController extends AppCompatActivity implements View.OnClickLis
 //                usePowerup(view);
 //                break;
             case R.id.game_tag:
-                // TODO hold button for 3 seconds to tag person (probably use onLongClickListener)
-                Log.d(TAG, "onClick: Person has been tagged");
-                Button btnTag = (Button) findViewById(R.id.game_tag);
-                btnTag.setVisibility(View.INVISIBLE);
-
-                Socket socket = SocketProvider.getInstance().getConnection();
-                final GameController self = this;
-
-                socket.emit("gameplay:tag", new GameTag(ownPlayer.getId(), target.getId()));
-                // TODO get confirmation
+                tagPlayer();
                 break;
             default:
                 break;
@@ -232,10 +223,20 @@ public class GameController extends AppCompatActivity implements View.OnClickLis
         Log.d(TAG, "onClick: Person has been tagged");
         Button btnTag = (Button) findViewById(R.id.game_tag);
         btnTag.setVisibility(View.INVISIBLE);
-        btnTag.setEnabled(false);
 
         Socket socket = SocketProvider.getInstance().getConnection();
         final GameController self = this;
+
+        socket.emit("gameplay:tag", new GameTag(ownPlayer.getId(), target.getId()));
+        // TODO get confirmation
+        // TODO hold button for 3 seconds to tag person
+    }
+}
+
+class PowerUpUseHandler implements
+    DialogInterface.OnClickListener {
+
+    private static final String TAG = "PowerUpUseHandler";
 
         // TODO Indicate progress using Dialog
 
