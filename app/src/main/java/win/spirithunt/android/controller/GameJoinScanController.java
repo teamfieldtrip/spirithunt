@@ -42,6 +42,8 @@ public class GameJoinScanController extends AppCompatActivity implements QRCodeR
 
     private boolean isSending = false;
 
+    private boolean isShowingError = false;
+
     public void close(View view) {
         finish();
     }
@@ -208,6 +210,8 @@ public class GameJoinScanController extends AppCompatActivity implements QRCodeR
             bundle.putString("lobbyId", lobbyId);
 
             Intent gameInfoIntent = new Intent(this, GameJoinInfoController.class);
+            gameInfoIntent.addFlags(Intent.FLAG_ACTIVITY_PREVIOUS_IS_TOP);
+
             gameInfoIntent.putExtras(bundle);
             startActivity(gameInfoIntent);
         }
@@ -216,9 +220,8 @@ public class GameJoinScanController extends AppCompatActivity implements QRCodeR
     private void onError(String error) {
         if (isSending) {
             isSending = false;
-            hideProgressDialog();
             int textId;
-
+            Log.d("PrDialog", String.valueOf(progressDialog == null));
             switch (error) {
                 case "error_lobby_not_found":
                     textId = R.string.join_game_text_error_lobby_not_found;
@@ -234,6 +237,7 @@ public class GameJoinScanController extends AppCompatActivity implements QRCodeR
                     break;
             }
 
+            hideProgressDialog();
             showErrorDialog(getString(textId));
 
             if (hasPermission) {
@@ -264,16 +268,21 @@ public class GameJoinScanController extends AppCompatActivity implements QRCodeR
      * @param text
      */
     private void showErrorDialog(String text) {
-        new android.app.AlertDialog.Builder(this)
-            .setTitle(getString(R.string.join_game_text_error_title))
-            .setMessage(text)
-            .setNeutralButton(R.string.join_game_text_error_button, new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int which) {
-                    // do nothing
-                }
-            })
-            .setIcon(android.R.drawable.ic_dialog_alert)
-            .show();
+        if(!isShowingError) {
+
+            new android.app.AlertDialog.Builder(this)
+                .setTitle(getString(R.string.join_game_text_error_title))
+                .setMessage(text)
+                .setNeutralButton(R.string.join_game_text_error_button, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        isShowingError = false;
+                    }
+                })
+                .setIcon(android.R.drawable.ic_dialog_alert)
+                .show();
+
+            isShowingError = true;
+        }
     }
 
     /**
