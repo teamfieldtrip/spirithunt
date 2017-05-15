@@ -43,7 +43,7 @@ public class SettingsController extends PreferenceActivity {
         String jwt = sharedPref.getString(getString(R.string.saved_jwt), "DEFAULT");
 
         // Emit to the server
-        Socket socket = SocketProvider.getInstance().getConnection();
+        final Socket socket = SocketProvider.getInstance().getConnection();
 
         final SettingsController self = this;
 
@@ -68,6 +68,10 @@ public class SettingsController extends PreferenceActivity {
                             // Safe to do async, as the in-memory entry is instantly updated.
                             editor.apply();
 
+                            // Close the connection
+                            socket.close();
+
+                            // Open Loginscreen
                             self.openLogin();
                         } else {
                             self.showErrorDialog(
