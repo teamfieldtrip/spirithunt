@@ -12,6 +12,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 
+import java.util.ArrayList;
+
 import io.socket.client.Ack;
 import io.socket.client.Socket;
 import io.socket.emitter.Emitter;
@@ -20,6 +22,8 @@ import win.spirithunt.android.gui.LobbyInfoFragment;
 import win.spirithunt.android.gui.LobbyQrFragment;
 import win.spirithunt.android.gui.LobbyMapFragment;
 import win.spirithunt.android.gui.LobbyTeamFragment;
+import win.spirithunt.android.model.Player;
+import win.spirithunt.android.provider.DialogProvider;
 import win.spirithunt.android.provider.SocketProvider;
 
 /**
@@ -29,6 +33,12 @@ import win.spirithunt.android.provider.SocketProvider;
  */
 
 public class LobbyController extends AppCompatActivity {
+
+    private String lobbyId;
+    private ArrayList<Player> players = new ArrayList<>();    // General list of players
+    private ArrayList<Player> teamRed = new ArrayList<>();    // Team 0
+    private ArrayList<Player> teamBlue = new ArrayList<>();   // Team 1
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -94,8 +104,42 @@ public class LobbyController extends AppCompatActivity {
         socket.off("lobby:destroy");
     }
 
-    @Override
-    public void onBackPressed() {
+    /**
+     * Fired on game start, shows progress, fetches players and jumps to the player list.
+     */
+    protected void startGame(final String gameId) {
+        // Show progress
+        final DialogProvider provider = new DialogProvider(this);
+        provider.showProgressDialog(R.string.game_start_dialog_title, R.string.game_start_dialog_message);
+
+        // Create intent
+        final Intent gameIntent = new Intent(this, GameController.class);
+        gameIntent.putExtra("id", this.getLobbyId());
+
+        final LobbyController self = this;
+
+        Socket socket = SocketProvider.getInstance().getConnection();
+        socket.emit("game:info", gameId, new Ack() {
+            @Override
+            public void call(Object... args) {
+                if (provider.isProgressDialogOpen()) {
+                    provider.hideProgressDialog();
+                }
+
+                Player[] ply = (Player[]) args[0];
+                gameIntent.putExtra("players", ply);
+                gameIntent.putExtra("name", (String) args[1]);
+                gameIntent.putExtra("centerLat", (double) args[2]);
+                gameIntent.putExtra("centerLng", (double) args[3]);
+                gameIntent.putExtra("radius", (double) args[4]);
+                gameIntent.putExtra("target", (Player) args[5]);
+                self.startActivity(gameIntent);
+            }
+        });
+    }
+
+        @Override
+        public void onBackPressed() {
         Socket socket = SocketProvider.getInstance().getConnection();
         socket.emit("lobby:leave");
 
@@ -110,6 +154,23 @@ public class LobbyController extends AppCompatActivity {
                 Log.d("Lobby", "Lobby started");
             }
         });
+    }
+
+
+    /**
+     * Returns a list of players
+     * @return
+     */
+    public ArrayList<Player> getPlayers() {
+        return players;
+    }
+
+    public String getLobbyId() {
+        return lobbyId;
+    }
+
+    private void getLobbyFromServer() {
+        final LobbyController self = this;
     }
 
     private void showHostLeftDialog() {
