@@ -25,8 +25,8 @@ public class GameCreate extends JSONObject {
             this.put("powerUpsEnabled", powerUpsEnabled);
             this.put("centerLatitude", center.latitude);
             this.put("centerLongitude", center.longitude);
-            this.put("borderLongitude", border.latitude);
-            this.put("borderLatitude", border.longitude);
+            this.put("borderLongitude", border.longitude);
+            this.put("borderLatitude", border.latitude);
         } catch(JSONException e) {
             System.out.println(e.getMessage());
         }
