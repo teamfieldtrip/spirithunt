@@ -108,6 +108,10 @@ public class LobbyController extends AppCompatActivity {
         Socket socket = SocketProvider.getInstance().getConnection();
         socket.off("lobby:joined");
         socket.off("lobby:started");
+
+        this.players.clear();
+        this.teamRed.clear();
+        this.teamBlue.clear();
     }
 
     public void start(View view) {
@@ -126,18 +130,29 @@ public class LobbyController extends AppCompatActivity {
      * @param player Player model
      */
     private void assignPlayer(Player player) {
-        switch (player.team) {
-            case 0:
-                teamRed.add(player);
-                players.add(player);
+        boolean saved = false;
+
+        for(Player savedPlayer : this.players) {
+            if (player.getId().equals(savedPlayer.getId())) {
+                saved = true;
                 break;
-            case 1:
-                teamBlue.add(player);
-                players.add(player);
-                break;
-            default:
-                Log.e("No team", "No team in Player model");
-                break;
+            }
+        }
+
+        if (!saved) {
+            switch (player.team) {
+                case 0:
+                    teamRed.add(player);
+                    players.add(player);
+                    break;
+                case 1:
+                    teamBlue.add(player);
+                    players.add(player);
+                    break;
+                default:
+                    Log.e("No team", "No team in Player model");
+                    break;
+            }
         }
     }
 
