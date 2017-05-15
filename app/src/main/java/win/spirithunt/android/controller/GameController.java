@@ -124,6 +124,9 @@ public class GameController extends AppCompatActivity implements View.OnClickLis
         }
     }
 
+    /**
+     * Called after a location update
+     */
     public void onUpdateLocation() {
         Button btnTag = (Button) findViewById(R.id.game_tag);
 
@@ -134,10 +137,12 @@ public class GameController extends AppCompatActivity implements View.OnClickLis
             for (Player p : players) {
                 // If p is the ownPlayer's target
                 if (ownPlayer.target.equals(p.getId())) {
-                    Log.d("TARGET", p.getId());
+                    Log.d(TAG, "Aquired target: " + p.getId());
                     if (checkTagable(p)) {
+                        Log.d(TAG, "onUpdateLocation: User can be tagged");
                         btnTag.setVisibility(View.VISIBLE);
                     } else {
+                        Log.d(TAG, "onUpdateLocation: User cannot be tagged");
                         btnTag.setVisibility(View.INVISIBLE);
                     }
                 }
@@ -160,6 +165,11 @@ public class GameController extends AppCompatActivity implements View.OnClickLis
         return (distance > MAX_RANGE * -1 && distance < MAX_RANGE);
     }
 
+    /**
+     * Uses a powerup and informs the server about it.
+     *
+     * @param view
+     */
     private void usePowerup(View view) {
         PowerUp powerUp = new PowerUp(UUID.randomUUID().toString(), "Baked cookies", false);
 
@@ -175,6 +185,10 @@ public class GameController extends AppCompatActivity implements View.OnClickLis
             .show();
     }
 
+    /**
+     * Tags the target player, sends this information to the server and blocks the UI in the
+     * meantime.
+     */
     private void tagPlayer() {
 
     }
