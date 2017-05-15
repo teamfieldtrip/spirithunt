@@ -132,9 +132,11 @@ public class GameController extends AppCompatActivity implements View.OnClickLis
                     if (checkTagable(p)) {
                         Log.d(TAG, "onUpdateLocation: User can be tagged");
                         btnTag.setVisibility(View.VISIBLE);
+                        btnTag.setEnabled(true);
                     } else {
                         Log.d(TAG, "onUpdateLocation: User cannot be tagged");
                         btnTag.setVisibility(View.INVISIBLE);
+                        btnTag.setEnabled(false);
                     }
                 }
             }
