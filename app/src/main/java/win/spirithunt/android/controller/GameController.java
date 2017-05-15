@@ -216,6 +216,7 @@ public class GameController extends AppCompatActivity implements View.OnClickLis
         Socket socket = SocketProvider.getInstance().getConnection();
         final GameController self = this;
 
+
         // TODO Indicate progress using Dialog
 
         socket.emit("gameplay:tag", new GameTag(ownPlayer.getId(), target.getId()), new Ack() {
