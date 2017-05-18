@@ -1,6 +1,5 @@
 package win.spirithunt.android.controller;
 
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
@@ -219,37 +218,6 @@ public class GameController extends AppCompatActivity implements View.OnClickLis
         if (message.equals("tag_ok")) {
             // TODO inform player
         } else {
-            // TODO inform player of failure
-        }
-    }
-}
-
-class PowerUpUseHandler implements
-    DialogInterface.OnClickListener {
-
-    private static final String TAG = "PowerUpUseHandler";
-
-        // TODO Indicate progress using Dialog
-
-        socket.emit("gameplay:tag", new GameTag(ownPlayer.getId(), target.getId()), new Ack() {
-            @Override
-            public void call(Object... args) {
-                Log.d(TAG, "\"gameplay:tag\" responsed with: args = [" + args + "]");
-                if (args != null && args.length > 1 && args[0] == null) {
-                    self.tagComplete((String) args[1]);
-                }
-            }
-        });
-        // TODO get confirmation
-        // TODO hold button for 3 seconds to tag person
-    }
-
-    public void tagComplete(String message) {
-        if (message.equals(CLIENT_ACT_OK)) {
-            Log.d(TAG, "tagComplete: Tag acknowledged");
-            // TODO inform player
-        } else {
-            Log.d(TAG, "tagComplete: Tag denied");
             // TODO inform player of failure
         }
     }
