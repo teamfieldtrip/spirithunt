@@ -1,5 +1,6 @@
 package win.spirithunt.android.controller;
 
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
@@ -11,9 +12,7 @@ import android.view.View;
 import android.widget.Button;
 
 import java.util.ArrayList;
-import java.util.UUID;
 
-import io.socket.client.Ack;
 import io.socket.client.Socket;
 import win.spirithunt.android.R;
 import win.spirithunt.android.gui.RadarDisplay;
