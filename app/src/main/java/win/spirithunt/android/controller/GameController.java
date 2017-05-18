@@ -1,23 +1,22 @@
 package win.spirithunt.android.controller;
 
+import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
 import java.util.ArrayList;
 
+import io.socket.client.Ack;
 import io.socket.client.Socket;
 import win.spirithunt.android.R;
 import win.spirithunt.android.gui.RadarDisplay;
 import win.spirithunt.android.model.Player;
-import win.spirithunt.android.protocol.GameTag;
-import win.spirithunt.android.provider.SocketProvider;
 import win.spirithunt.android.model.PowerUp;
 import win.spirithunt.android.protocol.GameTag;
 import win.spirithunt.android.provider.SocketProvider;
@@ -233,12 +232,28 @@ public class GameController extends AppCompatActivity implements View.OnClickLis
     }
 
     public void tagComplete(String message) {
-        if (message.equals(CLIENT_ACT_OK)) {
-            Log.d(TAG, "tagComplete: Tag acknowledged");
+        if (message.equals("tag_ok")) {
             // TODO inform player
         } else {
-            Log.d(TAG, "tagComplete: Tag denied");
             // TODO inform player of failure
+        }
+    }
+
+    class PowerUpUseHandler implements
+        DialogInterface.OnClickListener {
+
+        private static final String TAG = "PowerUpUseHandler";
+
+        private final PowerUp powerUp;
+
+        public void tagComplete(String message) {
+            if (message.equals(CLIENT_ACT_OK)) {
+                Log.d(TAG, "tagComplete: Tag acknowledged");
+                // TODO inform player
+            } else {
+                Log.d(TAG, "tagComplete: Tag denied");
+                // TODO inform player of failure
+            }
         }
     }
 }
