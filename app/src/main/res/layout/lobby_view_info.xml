@@ -6,18 +6,51 @@
         android:layout_height="wrap_content">
         <android.support.v7.widget.LinearLayoutCompat
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="224dp"
             android:background="@drawable/gui_el_lobby_info"
-            android:orientation="horizontal"
-            android:layout_gravity="center_horizontal"
-            android:gravity="center"
+            android:orientation="vertical"
             android:layout_marginTop="15dp">
-            <android.support.v7.widget.AppCompatImageView
-                android:id="@+id/qr_code"
-                android:scaleType="fitCenter"
-                android:layout_width="wrap_content"
-                android:layout_height="300dp"
-                android:layout_margin="12dp" />
+            <android.support.v7.widget.LinearLayoutCompat
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:layout_gravity="center"
+                android:gravity="center">
+                <win.spirithunt.android.gui.CustomTextView
+                    style="@style/textView_normal_main"
+                    android:id="@+id/team_size_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingBottom="5dp"
+                    android:textSize="22sp"
+                    android:textAlignment="center"
+                    android:text="Team size: 7v7" />
+                <win.spirithunt.android.gui.CustomTextView
+                    style="@style/textView_normal_main"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingBottom="5dp"
+                    android:textSize="22sp"
+                    android:textAlignment="center"
+                    android:text="Game mode: Gotcha" />
+                <win.spirithunt.android.gui.CustomTextView
+                    style="@style/textView_normal_main"
+                    android:id="@+id/time_limit_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingBottom="5dp"
+                    android:textSize="22sp"
+                    android:textAlignment="center"
+                    android:text="Time limit: 10min" />
+                <win.spirithunt.android.gui.CustomTextView
+                    style="@style/textView_normal_main"
+                    android:id="@+id/player_amount_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="22sp"
+                    android:textAlignment="center"
+                    android:text="Players: 28/35" />
+            </android.support.v7.widget.LinearLayoutCompat>
         </android.support.v7.widget.LinearLayoutCompat>
         <android.support.v7.widget.LinearLayoutCompat
             android:layout_width="match_parent"
@@ -43,7 +76,7 @@
                     android:gravity="center"
                     android:textSize="20sp"
                     android:textAlignment="center"
-                    android:text="Info" />
+                    android:text="@string/lobby_text_info" />
             </RelativeLayout>
         </android.support.v7.widget.LinearLayoutCompat>
     </FrameLayout>

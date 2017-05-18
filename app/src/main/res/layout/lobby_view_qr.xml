@@ -8,12 +8,16 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/gui_el_lobby_info"
+            android:orientation="horizontal"
+            android:layout_gravity="center_horizontal"
+            android:gravity="center"
             android:layout_marginTop="15dp">
-            <RelativeLayout
-                android:layout_width="match_parent"
+            <android.support.v7.widget.AppCompatImageView
+                android:id="@+id/qr_code"
+                android:scaleType="fitCenter"
+                android:layout_width="wrap_content"
                 android:layout_height="200dp"
-                android:layout_margin="12dp"
-                android:id="@+id/map_container" />
+                android:layout_margin="12dp" />
         </android.support.v7.widget.LinearLayoutCompat>
         <android.support.v7.widget.LinearLayoutCompat
             android:layout_width="match_parent"
@@ -39,7 +43,7 @@
                     android:gravity="center"
                     android:textSize="20sp"
                     android:textAlignment="center"
-                    android:text="@string/lobby_text_area" />
+                    android:text="@string/lobby_text_qr" />
             </RelativeLayout>
         </android.support.v7.widget.LinearLayoutCompat>
     </FrameLayout>
