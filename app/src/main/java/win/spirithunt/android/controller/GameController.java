@@ -1,6 +1,5 @@
 package win.spirithunt.android.controller;
 
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -14,7 +13,6 @@ import io.socket.client.Socket;
 import win.spirithunt.android.R;
 import win.spirithunt.android.gui.RadarDisplay;
 import win.spirithunt.android.model.Player;
-import win.spirithunt.android.model.PowerUp;
 import win.spirithunt.android.protocol.GameTag;
 import win.spirithunt.android.provider.SocketProvider;
 
@@ -182,27 +180,6 @@ public class GameController extends AppCompatActivity implements View.OnClickLis
             // TODO inform player
         } else {
             // TODO inform player of failure
-        }
-    }
-}
-
-class PowerUpUseHandler implements
-    DialogInterface.OnClickListener {
-
-    private static final String TAG = "PowerUpUseHandler";
-
-    private final PowerUp powerUp;
-
-    public PowerUpUseHandler(PowerUp powerUp) {
-        this.powerUp = powerUp;
-    }
-
-    @Override
-    public void onClick(DialogInterface dialog, int which) {
-        if (which == DialogInterface.BUTTON_POSITIVE) {
-            Log.d(TAG, "onClick: Consuming powerup " + powerUp.getName());
-        } else if(which == DialogInterface.BUTTON_NEGATIVE) {
-            Log.d(TAG, "onClick: Not consuming " + powerUp.getName());
         }
     }
 }
