@@ -58,6 +58,7 @@ public class LobbyController extends AppCompatActivity {
         teamPager.setAdapter(new TeamPagerAdapter(getSupportFragmentManager()));
     }
 
+    @Override
     protected void onResume() {
         super.onResume();
         final LobbyController self = this;
@@ -78,6 +79,7 @@ public class LobbyController extends AppCompatActivity {
         });
     }
 
+    @Override
     protected void onPause() {
         super.onPause();
 
