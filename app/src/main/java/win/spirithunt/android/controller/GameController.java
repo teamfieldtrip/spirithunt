@@ -1,6 +1,5 @@
 package win.spirithunt.android.controller;
 
-import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -9,9 +8,7 @@ import android.view.View;
 import android.widget.Button;
 
 import java.util.ArrayList;
-import java.util.UUID;
 
-import io.socket.client.Ack;
 import io.socket.client.Socket;
 import win.spirithunt.android.R;
 import win.spirithunt.android.gui.RadarDisplay;
@@ -104,9 +101,6 @@ public class GameController extends AppCompatActivity implements View.OnClickLis
     public void onClick(View view) {
 
         switch (view.getId()) {
-//            case R.id.game_consume:
-//                usePowerup(view);
-//                break;
             case R.id.game_tag:
                 tagPlayer();
                 break;
@@ -156,26 +150,6 @@ public class GameController extends AppCompatActivity implements View.OnClickLis
         double distance = sqrt((deltaX * deltaX) + (deltaY * deltaY)) * 1000;
 
         return (distance > MAX_RANGE * -1 && distance < MAX_RANGE);
-    }
-
-    /**
-     * Uses a powerup and informs the server about it.
-     *
-     * @param view
-     */
-    private void usePowerup(View view) {
-        PowerUp powerUp = new PowerUp(UUID.randomUUID().toString(), "Baked cookies", false);
-
-        PowerUpUseHandler listener = new PowerUpUseHandler(powerUp);
-
-        String message = getString(R.string.game_powerup_consume_desc, powerUp.getName());
-
-        new AlertDialog.Builder(view.getContext(), R.style.AppDialog)
-            .setTitle(getString(R.string.game_powerup_consume_title))
-            .setMessage(message)
-            .setPositiveButton(R.string.game_powerup_consume_yes, listener)
-            .setNegativeButton(R.string.game_powerup_consume_no, listener)
-            .show();
     }
 
     /**
