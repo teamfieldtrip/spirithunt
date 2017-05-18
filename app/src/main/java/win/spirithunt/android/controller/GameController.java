@@ -13,6 +13,7 @@ import android.widget.Button;
 
 import java.util.ArrayList;
 
+import io.socket.client.Ack;
 import io.socket.client.Socket;
 import win.spirithunt.android.R;
 import win.spirithunt.android.gui.RadarDisplay;
@@ -202,9 +203,24 @@ public class GameController extends AppCompatActivity implements View.OnClickLis
         Socket socket = SocketProvider.getInstance().getConnection();
         final GameController self = this;
 
-        socket.emit("gameplay:tag", new GameTag(ownPlayer.getId(), target.getId()));
+        socket.emit("gameplay:tag", new GameTag(ownPlayer.getId(), target.getId()), new Ack() {
+            @Override
+            public void call(Object... args) {
+                if (args != null && args.length > 1 && args[0] == null) {
+                    self.tagComplete((String) args[1]);
+                }
+            }
+        });
         // TODO get confirmation
         // TODO hold button for 3 seconds to tag person
+    }
+
+    public void tagComplete(String message) {
+        if (message.equals("tag_ok")) {
+            // TODO inform player
+        } else {
+            // TODO inform player of failure
+        }
     }
 }
 
