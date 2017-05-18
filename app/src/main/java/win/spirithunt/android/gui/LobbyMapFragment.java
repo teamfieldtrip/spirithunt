@@ -16,7 +16,6 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import io.socket.client.Ack;
@@ -30,6 +29,7 @@ import win.spirithunt.android.provider.SocketProvider;
 
 public class LobbyMapFragment extends Fragment implements OnMapReadyCallback {
     private SupportMapFragment fragment;
+
     private GoogleMap map;
 
     @Override

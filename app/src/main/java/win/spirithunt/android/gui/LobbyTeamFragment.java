@@ -28,10 +28,14 @@ import win.spirithunt.android.provider.SocketProvider;
  */
 
 public class LobbyTeamFragment extends ListFragment {
-    private View view;
-    private Socket socket;
-    private LobbyTeamAdapter players;
     private int team;
+
+    private View view;
+
+    private Socket socket;
+
+    private LobbyTeamAdapter players;
+
     private PlayerJoinedListener playerJoinedListener;
 
     @Override

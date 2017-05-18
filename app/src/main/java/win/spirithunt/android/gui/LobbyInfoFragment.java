@@ -18,12 +18,23 @@ import win.spirithunt.android.provider.SocketProvider;
  */
 
 public class LobbyInfoFragment extends Fragment {
-    private Socket socket;
-    private View view;
-    private PlayerJoinedListener playerJoinedListener;
-    private String lobbyId;
+    /**
+     * Stores the current amount of players
+     */
     private int amountOfPlayers = 0;
+
+    /**
+     * Stores the max amount of players in the lobby
+     */
     private int maxAmountOfPlayers = 0;
+
+    private String lobbyId;
+
+    private PlayerJoinedListener playerJoinedListener;
+
+    private Socket socket;
+
+    private View view;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -79,10 +90,6 @@ public class LobbyInfoFragment extends Fragment {
 
     private void incrementAmountOfPlayers() {
         this.setAmountOfPlayers(this.amountOfPlayers + 1);
-    }
-
-    private void decrementAmountOfPlayers() {
-        this.setAmountOfPlayers(this.amountOfPlayers - 1);
     }
 
     private class LobbyInfoAck implements Ack {
