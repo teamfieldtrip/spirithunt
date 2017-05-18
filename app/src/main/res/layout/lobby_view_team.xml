@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/lobby_team_background"
+    android:layout_height="match_parent"
+    android:layout_width="match_parent"
+    android:background="@drawable/gui_el_lobby_team_red_border">
+    <ListView
+        android:id="@android:id/list"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:divider="@drawable/lobby_view_team_divider"
+        android:dividerHeight="3dp" />
+</android.support.v7.widget.LinearLayoutCompat>

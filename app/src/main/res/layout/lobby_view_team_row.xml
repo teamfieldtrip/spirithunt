@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+    <win.spirithunt.android.gui.CustomTextView
+        style="@style/textView_normal_main"
+        android:id="@+id/team_row_number"
+        android:layout_width="50dp"
+        android:layout_height="match_parent"
+        android:textSize="25sp"
+        android:paddingStart="10dp" />
+    <win.spirithunt.android.gui.CustomTextView
+        style="@style/textView_normal_main"
+        android:id="@+id/team_row_name"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:textSize="25sp" />
+    <android.support.v7.widget.AppCompatImageView
+        android:id="@+id/team_row_image"
+        android:src="@drawable/ic_hooded_white_big"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:paddingStart="10dp"
+        android:paddingEnd="10dp" />
+</LinearLayout>
