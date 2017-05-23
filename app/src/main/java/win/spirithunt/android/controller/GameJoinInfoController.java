@@ -94,6 +94,7 @@ public class GameJoinInfoController extends AppCompatActivity {
         Intent intent = new Intent(this, LobbyController.class);
         intent.putExtra("lobbyId", this.lobbyId);
         startActivity(intent);
+        finish();
     }
 
     private void onError(String error) {

@@ -38,6 +38,8 @@ public class LobbyTeamFragment extends ListFragment {
 
     private PlayerJoinedListener playerJoinedListener;
 
+    private PlayerLeftListener playerLeftListener;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         this.socket = SocketProvider.getInstance().getConnection();
@@ -53,13 +55,17 @@ public class LobbyTeamFragment extends ListFragment {
         this.getList();
 
         this.playerJoinedListener = new PlayerJoinedListener(this);
+        this.playerLeftListener = new PlayerLeftListener(this);
+
         socket.on("lobby:joined", this.playerJoinedListener);
+        socket.on("lobby:left", this.playerLeftListener);
     }
 
     @Override
     public void onPause() {
         super.onPause();
         socket.off("lobby:joined", this.playerJoinedListener);
+        socket.off("lobby:left", this.playerLeftListener);
     }
 
     @Override
@@ -97,7 +103,7 @@ public class LobbyTeamFragment extends ListFragment {
         });
     }
 
-    private Player createPlayer(JSONObject jsonObject) {
+    private Player createJoinPlayer(JSONObject jsonObject) {
         try {
             Player player = new Player(jsonObject.getString("player_id"));
             player.setTeam(jsonObject.getInt("team"));
@@ -110,13 +116,22 @@ public class LobbyTeamFragment extends ListFragment {
         }
     }
 
+    private Player createLeavePlayer(JSONObject jsonObject) {
+        try {
+            return new Player(jsonObject.getString("player_id"));
+        } catch (JSONException e) {
+            System.out.println(e.getMessage());
+            return null;
+        }
+    }
+
     private void parseList(JSONArray players) {
         if (players != null) {
             try {
                 int len = players.length();
 
                 for (int i = 0; i < len; i++) {
-                    Player player = this.createPlayer(players.getJSONObject(i));
+                    Player player = this.createJoinPlayer(players.getJSONObject(i));
 
                     if (player != null && player.getTeam() == this.team) {
                         this.addPlayer(player);
@@ -151,6 +166,31 @@ public class LobbyTeamFragment extends ListFragment {
         }
     }
 
+    private void removePlayer(final Player player) {
+        Player removePlayer = null;
+
+        for(int i = 0; i < this.players.getCount(); i++) {
+            Player savedPlayer = this.players.getItem(i);
+
+            if (savedPlayer != null && savedPlayer.getId().equals(player.getId())) {
+                removePlayer = savedPlayer;
+                break;
+            }
+        }
+
+        if (removePlayer != null) {
+            final LobbyTeamFragment self = this;
+            final Player finalRemovePlayer = removePlayer;
+
+            this.getActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    self.players.remove(finalRemovePlayer);
+                }
+            });
+        }
+    }
+
     private class PlayerJoinedListener implements Emitter.Listener {
         private LobbyTeamFragment parent;
 
@@ -165,10 +205,34 @@ public class LobbyTeamFragment extends ListFragment {
             this.parent.getActivity().runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    Player player = self.parent.createPlayer((JSONObject) args[0]);
+                    Player player = self.parent.createJoinPlayer((JSONObject) args[0]);
 
                     if (player != null && player.getTeam() == self.parent.team) {
                         self.parent.addPlayer(player);
+                    }
+                }
+            });
+        }
+    }
+
+    private class PlayerLeftListener implements Emitter.Listener {
+        private LobbyTeamFragment parent;
+
+        PlayerLeftListener(LobbyTeamFragment parent) {
+            this.parent = parent;
+        }
+
+        @Override
+        public void call(final Object... args) {
+            final PlayerLeftListener self = this;
+
+            this.parent.getActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    Player player = self.parent.createLeavePlayer((JSONObject) args[0]);
+
+                    if (player != null) {
+                        self.parent.removePlayer(player);
                     }
                 }
             });

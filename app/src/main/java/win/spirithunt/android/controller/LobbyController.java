@@ -1,5 +1,7 @@
 package win.spirithunt.android.controller;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -28,6 +30,7 @@ import win.spirithunt.android.gui.LobbyQrFragment;
 import win.spirithunt.android.gui.LobbyMapFragment;
 import win.spirithunt.android.gui.LobbyTeamFragment;
 import win.spirithunt.android.model.Player;
+import win.spirithunt.android.protocol.LobbyInfo;
 import win.spirithunt.android.protocol.LobbyList;
 import win.spirithunt.android.provider.SocketProvider;
 
@@ -73,6 +76,21 @@ public class LobbyController extends AppCompatActivity {
                     public void run() {
                         Intent intent = new Intent(self, GameController.class);
                         startActivity(intent);
+                        self.finish();
+                    }
+                });
+            }
+        });
+        socket.on("lobby:destroy", new Emitter.Listener() {
+            @Override
+            public void call(final Object... args) {
+                self.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Socket socket = SocketProvider.getInstance().getConnection();
+                        socket.emit("lobby:leave");
+
+                        self.showHostLeftDialog();
                     }
                 });
             }
@@ -85,6 +103,15 @@ public class LobbyController extends AppCompatActivity {
 
         Socket socket = SocketProvider.getInstance().getConnection();
         socket.off("lobby:started");
+        socket.off("lobby:destroy");
+    }
+
+    @Override
+    public void onBackPressed() {
+        Socket socket = SocketProvider.getInstance().getConnection();
+        socket.emit("lobby:leave");
+
+        super.onBackPressed();
     }
 
     public void start(View view) {
@@ -95,6 +122,23 @@ public class LobbyController extends AppCompatActivity {
                 Log.d("Lobby", "Lobby started");
             }
         });
+    }
+
+    private void showHostLeftDialog() {
+        final LobbyController self = this;
+
+        new AlertDialog.Builder(this, R.style.AppDialog)
+            .setTitle(R.string.lobby_text_dialog_title)
+            .setMessage(R.string.lobby_text_dialog_content)
+            .setCancelable(false)
+            .setPositiveButton(R.string.lobby_text_dialog_button, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    self.finish();
+                }
+            })
+            .setIcon(android.R.drawable.ic_dialog_alert)
+            .show();
     }
 
     private class InfoPagerAdapter extends FragmentStatePagerAdapter {

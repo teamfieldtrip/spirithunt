@@ -138,6 +138,9 @@
     <string name="lobby_text_amount_of_players">Players: %1$d/%2$d</string>
     <string name="lobby_text_progress_title">Loading</string>
     <string name="lobby_text_progress_content">Please wait</string>
+    <string name="lobby_text_dialog_title">Host left</string>
+    <string name="lobby_text_dialog_content">Unfortunately the host left</string>
+    <string name="lobby_text_dialog_button">OK</string>
     <string name="lobby_btn_start">Start</string>
 
     <!-- Game location prompt -->
