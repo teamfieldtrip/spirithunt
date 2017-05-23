@@ -68,10 +68,13 @@ public class GameController extends AppCompatActivity implements View.OnClickLis
         Toolbar appToolbar = (Toolbar) findViewById(R.id.game_toolbar);
 
         //Title and subtitle
+        // TODO This is not yet working properly, maybe actually update it to match the correct information
         appToolbar.setTitle("In-game");
         appToolbar.setSubtitle("With 8 players");
 
+        // TODO find a way to actually show the menu
         appToolbar.inflateMenu(R.menu.ingame);
+
         setSupportActionBar(appToolbar);
         appToolbar.setNavigationIcon(R.drawable.ic_hooded_white_big);
 
@@ -81,6 +84,7 @@ public class GameController extends AppCompatActivity implements View.OnClickLis
             actionBar.setDisplayUseLogoEnabled(true);
         }
 
+        // TODO Remove this!
         // Flood the player list
         players.add(target);
 
@@ -150,10 +154,12 @@ public class GameController extends AppCompatActivity implements View.OnClickLis
                     Log.d(TAG, "Aquired target: " + p.getId());
                     if (checkTagable(p)) {
                         Log.d(TAG, "onUpdateLocation: User can be tagged");
+                        // TODO animate the object in
                         btnTag.setVisibility(View.VISIBLE);
                         btnTag.setEnabled(true);
                     } else {
                         Log.d(TAG, "onUpdateLocation: User cannot be tagged");
+                        // TODO animate the object out
                         btnTag.setVisibility(View.INVISIBLE);
                         btnTag.setEnabled(false);
                     }
@@ -189,6 +195,8 @@ public class GameController extends AppCompatActivity implements View.OnClickLis
 
         Socket socket = SocketProvider.getInstance().getConnection();
         final GameController self = this;
+
+        // TODO Indicate progress using Dialog
 
         socket.emit("gameplay:tag", new GameTag(ownPlayer.getId(), target.getId()), new Ack() {
             @Override
