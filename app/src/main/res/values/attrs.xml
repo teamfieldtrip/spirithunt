@@ -3,4 +3,10 @@
     <declare-styleable name="CustomFont">
         <attr name="font" format="string"/>
     </declare-styleable>
+    <declare-styleable name="ScoreBlock">
+        <attr name="showIcon" format="boolean" />
+        <attr name="icon" format="reference" />
+        <attr name="text" format="string" />
+        <attr name="colour" format="color" />
+    </declare-styleable>
 </resources>
