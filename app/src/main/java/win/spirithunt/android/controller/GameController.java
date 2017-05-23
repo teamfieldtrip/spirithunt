@@ -2,9 +2,7 @@ package win.spirithunt.android.controller;
 
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.view.menu.MenuBuilder;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
@@ -17,18 +15,6 @@ import io.socket.client.Socket;
 import win.spirithunt.android.R;
 import win.spirithunt.android.gui.RadarDisplay;
 import win.spirithunt.android.model.Player;
-<<<<<<< f220ce72fa4d9a67401a9c9dbcf197e00d425880
-import win.spirithunt.android.protocol.GameTag;
-import win.spirithunt.android.provider.SocketProvider;
-import win.spirithunt.android.model.PowerUp;
-import win.spirithunt.android.protocol.GameTag;
-import win.spirithunt.android.provider.SocketProvider;
-import win.spirithunt.android.R;
-import win.spirithunt.android.gui.RadarDisplay;
-import win.spirithunt.android.model.Player;
-import win.spirithunt.android.model.PowerUp;
-=======
->>>>>>> Removed PowerUpUseHandler
 import win.spirithunt.android.protocol.GameTag;
 import win.spirithunt.android.provider.SocketProvider;
 
@@ -221,6 +207,7 @@ public class GameController extends AppCompatActivity implements View.OnClickLis
         socket.emit("gameplay:tag", new GameTag(ownPlayer.getId(), target.getId()), new Ack() {
             @Override
             public void call(Object... args) {
+                Log.d(TAG, "\"gameplay:tag\" responsed with: args = [" + args + "]");
                 if (args != null && args.length > 1 && args[0] == null) {
                     self.tagComplete((String) args[1]);
                 }
@@ -231,9 +218,11 @@ public class GameController extends AppCompatActivity implements View.OnClickLis
     }
 
     public void tagComplete(String message) {
-        if (message.equals("tag_ok")) {
+        if (message.equals(CLIENT_ACT_OK)) {
+            Log.d(TAG, "tagComplete: Tag acknowledged");
             // TODO inform player
         } else {
+            Log.d(TAG, "tagComplete: Tag denied");
             // TODO inform player of failure
         }
     }
