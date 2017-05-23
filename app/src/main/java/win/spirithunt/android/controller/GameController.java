@@ -74,11 +74,6 @@ public class GameController extends AppCompatActivity implements View.OnClickLis
         // TODO find a way to actually show the menu
         appToolbar.inflateMenu(R.menu.ingame);
 
-        appToolbar.setTitle("In-game");
-        appToolbar.setSubtitle("With 8 players");
-
-        // TODO find a way to actually show the menu
-        appToolbar.inflateMenu(R.menu.ingame);
         setSupportActionBar(appToolbar);
         appToolbar.setNavigationIcon(R.drawable.ic_hooded_white_big);
 
@@ -88,6 +83,7 @@ public class GameController extends AppCompatActivity implements View.OnClickLis
             actionBar.setDisplayUseLogoEnabled(true);
         }
 
+        // TODO Remove this!
         // Flood the player list
         players.add(target);
 
@@ -203,6 +199,8 @@ public class GameController extends AppCompatActivity implements View.OnClickLis
 
         Socket socket = SocketProvider.getInstance().getConnection();
         final GameController self = this;
+
+        // TODO Indicate progress using Dialog
 
         socket.emit("gameplay:tag", new GameTag(ownPlayer.getId(), target.getId()), new Ack() {
             @Override
