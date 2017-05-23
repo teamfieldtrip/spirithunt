@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.view.menu.MenuBuilder;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
@@ -232,9 +233,11 @@ public class GameController extends AppCompatActivity implements View.OnClickLis
     }
 
     public void tagComplete(String message) {
-        if (message.equals("tag_ok")) {
+        if (message.equals(CLIENT_ACT_OK)) {
+            Log.d(TAG, "tagComplete: Tag acknowledged");
             // TODO inform player
         } else {
+            Log.d(TAG, "tagComplete: Tag denied");
             // TODO inform player of failure
         }
     }
