@@ -1,7 +1,10 @@
 package win.spirithunt.android.controller;
 
 import android.os.Bundle;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.view.menu.MenuBuilder;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -35,6 +38,11 @@ public class GameController extends AppCompatActivity implements View.OnClickLis
 
     private static final double MAX_RANGE = 2d;
 
+    /**
+     * Sent from the server when the client action (tag or consume) is approved.
+     */
+    private static final String CLIENT_ACT_OK = "act-ok";
+
     // Determine who we are
     private Player ownPlayer = buildPlayer("b95c67ec-38ed-463d-866d-763f6369a439", 52.512740, 6.093505, 0);
 
@@ -53,7 +61,25 @@ public class GameController extends AppCompatActivity implements View.OnClickLis
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setTheme(R.style.GameView);
         setContentView(R.layout.game_view);
+
+        // Set app bar
+        Toolbar appToolbar = (Toolbar) findViewById(R.id.game_toolbar);
+
+        //Title and subtitle
+        appToolbar.setTitle("In-game");
+        appToolbar.setSubtitle("With 8 players");
+
+        appToolbar.inflateMenu(R.menu.ingame);
+        setSupportActionBar(appToolbar);
+        appToolbar.setNavigationIcon(R.drawable.ic_hooded_white_big);
+
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setDisplayShowHomeEnabled(false);
+            actionBar.setDisplayUseLogoEnabled(true);
+        }
 
         // Flood the player list
         players.add(target);
@@ -159,6 +185,7 @@ public class GameController extends AppCompatActivity implements View.OnClickLis
         Log.d(TAG, "onClick: Person has been tagged");
         Button btnTag = (Button) findViewById(R.id.game_tag);
         btnTag.setVisibility(View.INVISIBLE);
+        btnTag.setEnabled(false);
 
         Socket socket = SocketProvider.getInstance().getConnection();
         final GameController self = this;
@@ -166,6 +193,7 @@ public class GameController extends AppCompatActivity implements View.OnClickLis
         socket.emit("gameplay:tag", new GameTag(ownPlayer.getId(), target.getId()), new Ack() {
             @Override
             public void call(Object... args) {
+                Log.d(TAG, "\"gameplay:tag\" responsed with: args = [" + args + "]");
                 if (args != null && args.length > 1 && args[0] == null) {
                     self.tagComplete((String) args[1]);
                 }
@@ -176,9 +204,11 @@ public class GameController extends AppCompatActivity implements View.OnClickLis
     }
 
     public void tagComplete(String message) {
-        if (message.equals("tag_ok")) {
+        if (message.equals(CLIENT_ACT_OK)) {
+            Log.d(TAG, "tagComplete: Tag acknowledged");
             // TODO inform player
         } else {
+            Log.d(TAG, "tagComplete: Tag denied");
             // TODO inform player of failure
         }
     }

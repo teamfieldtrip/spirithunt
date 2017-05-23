@@ -160,4 +160,5 @@
     <!-- Starting lobby -->
     <string name="game_start_dialog_title">Game commencing</string>
     <string name="game_start_dialog_message">Stand by, the hunt starts soon&#8230;</string>
+    <string name="game_end_action">End game</string>
 </resources>
