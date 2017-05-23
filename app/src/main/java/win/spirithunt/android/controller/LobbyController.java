@@ -69,6 +69,7 @@ public class LobbyController extends AppCompatActivity {
         mPager.setAdapter(mPagerAdapter);
     }
 
+    @Override
     protected void onResume() {
         super.onResume();
         final LobbyController self = this;
@@ -199,6 +200,7 @@ public class LobbyController extends AppCompatActivity {
 
     /**
      * Returns a list of players
+     *
      * @return
      */
     public ArrayList<Player> getPlayers() {
