@@ -2,10 +2,7 @@ package win.spirithunt.android.controller;
 
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
-<<<<<<< 16c63c7167a3b5716cf561d63749d30b41a27e73
 import android.support.v7.app.AlertDialog;
-=======
->>>>>>> Added toolbar, WIP
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.view.menu.MenuBuilder;
 import android.support.v7.widget.Toolbar;
@@ -75,7 +72,6 @@ public class GameController extends AppCompatActivity implements View.OnClickLis
         Toolbar appToolbar = (Toolbar) findViewById(R.id.game_toolbar);
 
         //Title and subtitle
-<<<<<<< 16c63c7167a3b5716cf561d63749d30b41a27e73
         // TODO This is not yet working properly, maybe actually update it to match the correct information
         appToolbar.setTitle("In-game");
         appToolbar.setSubtitle("With 8 players");
@@ -83,12 +79,11 @@ public class GameController extends AppCompatActivity implements View.OnClickLis
         // TODO find a way to actually show the menu
         appToolbar.inflateMenu(R.menu.ingame);
 
-=======
         appToolbar.setTitle("In-game");
         appToolbar.setSubtitle("With 8 players");
 
+        // TODO find a way to actually show the menu
         appToolbar.inflateMenu(R.menu.ingame);
->>>>>>> Added toolbar, WIP
         setSupportActionBar(appToolbar);
         appToolbar.setNavigationIcon(R.drawable.ic_hooded_white_big);
 
@@ -98,10 +93,6 @@ public class GameController extends AppCompatActivity implements View.OnClickLis
             actionBar.setDisplayUseLogoEnabled(true);
         }
 
-<<<<<<< 16c63c7167a3b5716cf561d63749d30b41a27e73
-        // TODO Remove this!
-=======
->>>>>>> Added toolbar, WIP
         // Flood the player list
         players.add(target);
 
@@ -215,6 +206,8 @@ public class GameController extends AppCompatActivity implements View.OnClickLis
 
         Socket socket = SocketProvider.getInstance().getConnection();
         final GameController self = this;
+
+        // TODO Indicate progress using Dialog
 
         socket.emit("gameplay:tag", new GameTag(ownPlayer.getId(), target.getId()), new Ack() {
             @Override
