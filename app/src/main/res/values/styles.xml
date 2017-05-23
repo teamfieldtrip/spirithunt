@@ -32,6 +32,17 @@
         <item name="android:textAppearanceListItem">@style/PreferenceTextAppearance</item>
     </style>
 
+    <!-- Main game interface -->
+    <style name="GameView" parent="AppFullScreenTheme">
+        <item name="android:windowTranslucentStatus">false</item>
+        <item name="android:textColorSecondary">#000</item>
+    </style>
+
+    <style name="GameViewToolbar" parent="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+        <item name="android:background">@color/transparent</item>
+    </style>
+
+
     <!-- Main Game view -->
     <style name="SpiritHunt.GameTitle" parent="@style/btn_lobster_default">
         <item name="android:textSize">20sp</item>
@@ -169,4 +180,5 @@
     </style>
 
     <color name="colorText">#CCFFFFFF</color>
+    <color name="transparent">#00000000</color>
 </resources>

@@ -1,114 +1,133 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/game_layout"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:paddingTop="@dimen/activity_top_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin">
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
-    <!-- App name -->
-    <win.spirithunt.android.gui.CustomTextView
-        style="@style/textView_normal_main"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:background="@null"
-        android:text="@string/app_name"
-        android:textAlignment="center"
-        android:layout_marginBottom="8dp"
-        android:textSize="42sp" />
-
-    <!-- Radar -->
-    <include
-        android:id="@+id/playermap"
-        layout="@layout/section_playermap" />
-
-    <!-- Target name -->
-    <win.spirithunt.android.gui.CustomTextView
-        style="@style/textView_player"
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/game_toolbar"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textAlignment="center"
-        android:layout_margin="16dp"
-        android:text="Target name" />
+        android:layout_height="?attr/actionBarSize"
+        android:elevation="4dp"
+        android:theme="@style/GameViewToolbar"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
 
-    <!-- Action view -->
     <LinearLayout
+        android:id="@+id/game_layout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="vertical"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin"
+        android:paddingTop="@dimen/activity_top_margin">
 
-        <!-- Powerups -->
-        <LinearLayout
-            android:layout_weight="6"
-            android:layout_width="0dp"
-            android:layout_height="176dp"
-            android:visibility="gone"
-            android:orientation="vertical">
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="88dp"
-                android:padding="0dp"
-                android:orientation="horizontal">
-                <win.spirithunt.android.gui.CustomButton
-                    style="@style/btn_powerup"
-                    android:id="@+id/btn_powerup_invisibility"
-                    android:text="Invisibility"/>
-
-                <win.spirithunt.android.gui.CustomButton
-                    style="@style/btn_powerup"
-                    android:id="@+id/btn_powerup_bash"
-                    android:text="Bash"/>
-
-                <win.spirithunt.android.gui.CustomButton
-                    style="@style/btn_powerup"
-                    android:id="@+id/btn_powerup_shield"
-                    android:text="Shield"/>
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="88dp"
-                android:padding="0dp"
-                android:orientation="horizontal">
-
-                <win.spirithunt.android.gui.CustomButton
-                    style="@style/btn_powerup"
-                    android:id="@+id/btn_powerup_sweep"
-                    android:text="Radar sweep"/>
-
-                <win.spirithunt.android.gui.CustomButton
-                    style="@style/btn_powerup"
-                    android:id="@+id/btn_powerup_superradar"
-                    android:text="Super radar"/>
-
-                <win.spirithunt.android.gui.CustomButton
-                    style="@style/btn_powerup"
-                    android:id="@+id/btn_powerup_slowtag"
-                    android:text="Slow tag"/>
-            </LinearLayout>
-        </LinearLayout>
-
-        <!-- Tag button -->
-        <LinearLayout
-            android:layout_weight="4"
-            android:layout_width="0dp"
+        <!-- App name -->
+        <win.spirithunt.android.gui.CustomTextView
+            style="@style/textView_normal_main"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:gravity="center"
+            android:layout_marginBottom="8dp"
+            android:background="@null"
+            android:text="@string/app_name"
+            android:textAlignment="center"
+            android:textSize="42sp" />
+
+        <!-- Radar -->
+        <include
+            android:id="@+id/playermap"
+            layout="@layout/section_playermap" />
+
+        <!-- Target name -->
+        <win.spirithunt.android.gui.CustomTextView
+            style="@style/textView_player"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:text="Target name"
+            android:textAlignment="center" />
+
+        <!-- Action view -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:orientation="horizontal">
 
-            <!-- Tag player button -->
-            <win.spirithunt.android.gui.CustomButton
-                style="@style/btn_normal_main_large"
-                android:id="@+id/game_tag"
+            <!-- Powerups -->
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="176dp"
+                android:layout_weight="6"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="88dp"
+                    android:orientation="horizontal"
+                    android:padding="0dp">
+
+                    <win.spirithunt.android.gui.CustomButton
+                        android:id="@+id/btn_powerup_invisibility"
+                        style="@style/btn_powerup"
+                        android:text="Invisibility" />
+
+                    <win.spirithunt.android.gui.CustomButton
+                        android:id="@+id/btn_powerup_bash"
+                        style="@style/btn_powerup"
+                        android:text="Bash" />
+
+                    <win.spirithunt.android.gui.CustomButton
+                        android:id="@+id/btn_powerup_shield"
+                        style="@style/btn_powerup"
+                        android:text="Shield" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="88dp"
+                    android:orientation="horizontal"
+                    android:padding="0dp">
+
+                    <win.spirithunt.android.gui.CustomButton
+                        android:id="@+id/btn_powerup_sweep"
+                        style="@style/btn_powerup"
+                        android:text="Radar sweep" />
+
+                    <win.spirithunt.android.gui.CustomButton
+                        android:id="@+id/btn_powerup_superradar"
+                        style="@style/btn_powerup"
+                        android:text="Super radar" />
+
+                    <win.spirithunt.android.gui.CustomButton
+                        android:id="@+id/btn_powerup_slowtag"
+                        style="@style/btn_powerup"
+                        android:text="Slow tag" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <!-- Tag button -->
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:layout_width="150dp"
-                android:layout_height="50dp"
-                android:layout_alignParentRight="true"
-                android:onClick="onClick"
-                android:text="@string/game_tag" />
+                android:layout_weight="4"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <!-- Tag player button -->
+                <win.spirithunt.android.gui.CustomButton
+                    android:id="@+id/game_tag"
+                    style="@style/btn_normal_main_large"
+                    android:layout_width="150dp"
+                    android:layout_height="50dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_gravity="center"
+                    android:onClick="onClick"
+                    android:text="@string/game_tag" />
+            </LinearLayout>
         </LinearLayout>
     </LinearLayout>
 
