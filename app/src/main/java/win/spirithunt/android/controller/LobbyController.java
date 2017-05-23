@@ -24,7 +24,9 @@ import io.socket.client.Socket;
 import io.socket.emitter.Emitter;
 import win.spirithunt.android.R;
 import win.spirithunt.android.gui.LobbyInfoFragment;
+import win.spirithunt.android.gui.LobbyQrFragment;
 import win.spirithunt.android.gui.LobbyMapFragment;
+import win.spirithunt.android.gui.LobbyTeamFragment;
 import win.spirithunt.android.model.Player;
 import win.spirithunt.android.protocol.LobbyList;
 import win.spirithunt.android.provider.SocketProvider;
@@ -36,55 +38,32 @@ import win.spirithunt.android.provider.SocketProvider;
  */
 
 public class LobbyController extends AppCompatActivity {
-    private String lobbyId;
-
-    private ArrayList<Player> players = new ArrayList<>();    // General list of players
-
-    private ArrayList<Player> teamRed = new ArrayList<>();    // Team 0
-
-    private ArrayList<Player> teamBlue = new ArrayList<>();   // Team 1
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.lobby_view);
 
-        boolean isLobbyHost;
-
-        this.lobbyId = this.getIntent().getStringExtra("lobbyId");
-        isLobbyHost = this.getIntent().getBooleanExtra("lobbyHost", false);
+        boolean isLobbyHost = this.getIntent().getBooleanExtra("lobbyHost", false);
 
         if (isLobbyHost) {
             View view = findViewById(R.id.btn_start);
             view.setVisibility(View.VISIBLE);
         }
 
-        ViewPager mPager;
-        PagerAdapter mPagerAdapter;
+        ViewPager infoPager = (ViewPager)findViewById(R.id.pager_info);
+        infoPager.setAdapter(new InfoPagerAdapter(this.getIntent().getStringExtra("lobbyId"), getSupportFragmentManager()));
+        infoPager.setCurrentItem(1);
 
-        mPager = (ViewPager) findViewById(R.id.pager);
-        mPagerAdapter = new ScreenSlidePagerAdapter(this.lobbyId, getSupportFragmentManager());
-        mPager.setAdapter(mPagerAdapter);
+        ViewPager teamPager = (ViewPager)findViewById(R.id.pager_team);
+        teamPager.setAdapter(new TeamPagerAdapter(getSupportFragmentManager()));
     }
 
+    @Override
     protected void onResume() {
         super.onResume();
         final LobbyController self = this;
 
         Socket socket = SocketProvider.getInstance().getConnection();
-        socket.on("lobby:joined", new Emitter.Listener() {
-            @Override
-            public void call(final Object... args) {
-                self.runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        self.assignPlayer(self.createPlayer((JSONObject) args[0]));
-                        self.updatePlayerList();
-                    }
-                });
-            }
-        });
 
         socket.on("lobby:started", new Emitter.Listener() {
             @Override
@@ -98,15 +77,13 @@ public class LobbyController extends AppCompatActivity {
                 });
             }
         });
-
-        this.getLobbyFromServer();
     }
 
+    @Override
     protected void onPause() {
         super.onPause();
 
         Socket socket = SocketProvider.getInstance().getConnection();
-        socket.off("lobby:joined");
         socket.off("lobby:started");
     }
 
@@ -120,104 +97,10 @@ public class LobbyController extends AppCompatActivity {
         });
     }
 
-    /**
-     * Assign player to team
-     *
-     * @param player Player model
-     */
-    private void assignPlayer(Player player) {
-        switch (player.team) {
-            case 0:
-                teamRed.add(player);
-                players.add(player);
-                break;
-            case 1:
-                teamBlue.add(player);
-                players.add(player);
-                break;
-            default:
-                Log.e("No team", "No team in Player model");
-                break;
-        }
-    }
-
-    /**
-     * Occupy the ListView with the list of players
-     */
-    private void updatePlayerList() {
-        ListView listViewTeamRed = (ListView) findViewById(R.id.listview_teamred_lobby);
-        ListView listViewTeamBlue = (ListView) findViewById(R.id.listview_teamblue_lobby);
-
-        ArrayAdapter<Player> arrayAdapterRed = new ArrayAdapter<>(
-            this,
-            android.R.layout.simple_list_item_1,
-            teamRed);
-
-        ArrayAdapter<Player> arrayAdapterBlue = new ArrayAdapter<>(
-            this,
-            android.R.layout.simple_list_item_1,
-            teamBlue);
-
-        listViewTeamRed.setAdapter(arrayAdapterRed);
-        listViewTeamBlue.setAdapter(arrayAdapterBlue);
-    }
-
-    private void getLobbyFromServer() {
-        final LobbyController self = this;
-        Socket socket = SocketProvider.getInstance().getConnection();
-
-        socket.emit("lobby:list", new LobbyList(this.lobbyId), new Ack() {
-            @Override
-            public void call(Object... args) {
-                if (args[0] != null || args.length < 2) {
-                    Log.e("Lobby", "Error retrieving lobby");
-                    //handle error
-                } else {
-                    self.fillLobbyFromServer((JSONArray) args[1]);
-                }
-            }
-        });
-    }
-
-    private void fillLobbyFromServer(JSONArray players) {
-        if (players != null) {
-            final LobbyController self = this;
-            int len = players.length();
-
-            try {
-                for (int i = 0; i < len; i++) {
-                    this.assignPlayer(this.createPlayer(players.getJSONObject(i)));
-                }
-            } catch (JSONException e) {
-                System.out.println(e.getMessage());
-            }
-
-            this.runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    self.updatePlayerList();
-                }
-            });
-        }
-    }
-
-    private Player createPlayer(JSONObject jsonObject) {
-        try {
-            Player player = new Player(jsonObject.getString("player_id"));
-            player.setTeam(jsonObject.getInt("team"));
-            player.setName(jsonObject.getString("name"));
-
-            return player;
-        } catch (JSONException e) {
-            System.out.println(e.getMessage());
-            return null;
-        }
-    }
-
-    private class ScreenSlidePagerAdapter extends FragmentStatePagerAdapter {
+    private class InfoPagerAdapter extends FragmentStatePagerAdapter {
         private String lobbyId;
 
-        public ScreenSlidePagerAdapter(String lobbyId, FragmentManager fm) {
+        InfoPagerAdapter(String lobbyId, FragmentManager fm) {
             super(fm);
 
             this.lobbyId = lobbyId;
@@ -227,14 +110,44 @@ public class LobbyController extends AppCompatActivity {
         public Fragment getItem(int position) {
             if (position == 0) {
                 return new LobbyMapFragment();
-            } else {
+            } else if (position == 1) {
                 Bundle bundle = new Bundle();
                 bundle.putString("lobbyId", this.lobbyId);
 
                 LobbyInfoFragment lobbyInfoFragment = new LobbyInfoFragment();
                 lobbyInfoFragment.setArguments(bundle);
+
                 return lobbyInfoFragment;
+            } else {
+                Bundle bundle = new Bundle();
+                bundle.putString("lobbyId", this.lobbyId);
+
+                LobbyQrFragment lobbyQrFragment = new LobbyQrFragment();
+                lobbyQrFragment.setArguments(bundle);
+                return lobbyQrFragment;
             }
+        }
+
+        @Override
+        public int getCount() {
+            return 3;
+        }
+    }
+
+    private class TeamPagerAdapter extends FragmentStatePagerAdapter {
+        TeamPagerAdapter(FragmentManager fm) {
+            super(fm);
+        }
+
+        @Override
+        public Fragment getItem(int position) {
+            Bundle bundle = new Bundle();
+            bundle.putInt("team", position);
+
+            LobbyTeamFragment lobbyTeamFragment = new LobbyTeamFragment();
+            lobbyTeamFragment.setArguments(bundle);
+
+            return lobbyTeamFragment;
         }
 
         @Override
