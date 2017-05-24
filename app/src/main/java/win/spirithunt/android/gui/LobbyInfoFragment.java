@@ -6,13 +6,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import org.json.JSONObject;
-
 import io.socket.client.Ack;
 import io.socket.client.Socket;
 import io.socket.emitter.Emitter;
 import win.spirithunt.android.R;
-import win.spirithunt.android.model.Player;
 import win.spirithunt.android.protocol.LobbyInfo;
 import win.spirithunt.android.provider.SocketProvider;
 

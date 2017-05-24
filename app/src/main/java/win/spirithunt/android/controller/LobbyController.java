@@ -7,19 +7,10 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
-import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.util.ArrayList;
 
 import io.socket.client.Ack;
 import io.socket.client.Socket;
@@ -29,9 +20,6 @@ import win.spirithunt.android.gui.LobbyInfoFragment;
 import win.spirithunt.android.gui.LobbyQrFragment;
 import win.spirithunt.android.gui.LobbyMapFragment;
 import win.spirithunt.android.gui.LobbyTeamFragment;
-import win.spirithunt.android.model.Player;
-import win.spirithunt.android.protocol.LobbyInfo;
-import win.spirithunt.android.protocol.LobbyList;
 import win.spirithunt.android.provider.SocketProvider;
 
 /**
