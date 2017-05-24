@@ -32,6 +32,8 @@ public class LobbyInfoFragment extends Fragment {
 
     private PlayerJoinedListener playerJoinedListener;
 
+    private PlayerLeftListener playerLeftListener;
+
     private Socket socket;
 
     private View view;
@@ -58,7 +60,10 @@ public class LobbyInfoFragment extends Fragment {
         this.socket.emit("lobby:info", new LobbyInfo(this.lobbyId), new LobbyInfoAck(this));
 
         this.playerJoinedListener = new PlayerJoinedListener(this);
+        this.playerLeftListener = new PlayerLeftListener(this);
+
         this.socket.on("lobby:joined", this.playerJoinedListener);
+        this.socket.on("lobby:left", this.playerLeftListener);
     }
 
     @Override
@@ -66,6 +71,7 @@ public class LobbyInfoFragment extends Fragment {
         super.onPause();
 
         this.socket.off("lobby:joined", this.playerJoinedListener);
+        this.socket.off("lobby:left", this.playerLeftListener);
     }
 
     private void setTeamSize(int totalSize) {
@@ -90,6 +96,10 @@ public class LobbyInfoFragment extends Fragment {
 
     private void incrementAmountOfPlayers() {
         this.setAmountOfPlayers(this.amountOfPlayers + 1);
+    }
+
+    private void decrementAmountOfPlayers() {
+        this.setAmountOfPlayers(this.amountOfPlayers - 1);
     }
 
     private class LobbyInfoAck implements Ack {
@@ -131,6 +141,26 @@ public class LobbyInfoFragment extends Fragment {
                 @Override
                 public void run() {
                     self.parent.incrementAmountOfPlayers();
+                }
+            });
+        }
+    }
+
+    private class PlayerLeftListener implements Emitter.Listener {
+        private LobbyInfoFragment parent;
+
+        PlayerLeftListener(LobbyInfoFragment parent) {
+            this.parent = parent;
+        }
+
+        @Override
+        public void call(final Object... args) {
+            final PlayerLeftListener self = this;
+
+            this.parent.getActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    self.parent.decrementAmountOfPlayers();
                 }
             });
         }

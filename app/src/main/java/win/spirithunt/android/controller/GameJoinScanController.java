@@ -210,8 +210,6 @@ public class GameJoinScanController extends AppCompatActivity implements QRCodeR
             bundle.putString("lobbyId", lobbyId);
 
             Intent gameInfoIntent = new Intent(this, GameJoinInfoController.class);
-            gameInfoIntent.addFlags(Intent.FLAG_ACTIVITY_PREVIOUS_IS_TOP);
-
             gameInfoIntent.putExtras(bundle);
             startActivity(gameInfoIntent);
         }
