@@ -170,12 +170,13 @@ public class LobbyController extends AppCompatActivity {
                     provider.hideProgressDialog();
                 }
 
-                /*
-                    TODO process response, it's a single object containing id, game, players and target
-                     but how we're sending this and what the game looks like... It's TBD
-                 */
+                for (Object s : args) {
+                    Log.d("args", s.toString());
+                }
+
                 // TODO Add data
-                self.startActivity(gameIntent);
+                if (args[0] != null || args.length < 2)
+                    self.startActivity(gameIntent);
             }
         });
     }
