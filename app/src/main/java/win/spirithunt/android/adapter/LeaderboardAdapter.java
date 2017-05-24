@@ -2,7 +2,6 @@ package win.spirithunt.android.adapter;
 
 import android.content.Context;
 import android.graphics.Color;
-import android.graphics.ColorFilter;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.AppCompatImageView;
 import android.view.LayoutInflater;
