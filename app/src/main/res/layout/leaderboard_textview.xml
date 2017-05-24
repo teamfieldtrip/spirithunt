@@ -5,7 +5,8 @@
     android:orientation="horizontal"
     android:id="@+id/leaderboard_textview">
 
-    <TextView
+    <win.spirithunt.android.gui.CustomTextView
+        style="@style/textView_normal_main"
         android:id="@+id/leaderboard_rank"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -14,7 +15,8 @@
         android:minHeight="26dp"
         android:textColor="@android:color/white" />
 
-    <TextView
+    <win.spirithunt.android.gui.CustomTextView
+        style="@style/textView_normal_main"
         android:id="@+id/leaderboard_player"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -23,7 +25,8 @@
         android:minHeight="26dp"
         android:textColor="@android:color/white" />
 
-    <TextView
+    <win.spirithunt.android.gui.CustomTextView
+        style="@style/textView_normal_main"
         android:id="@+id/leaderboard_score"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -32,12 +35,13 @@
         android:minHeight="26dp"
         android:textColor="@android:color/white" />
 
-    <TextView
+    <win.spirithunt.android.gui.CustomTextView
+        style="@style/textView_normal_main"
         android:id="@+id/leaderboard_team"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:gravity="center_vertical"
+        android:gravity="end"
         android:minHeight="26dp"
         android:textColor="@android:color/white" />
 </LinearLayout>
