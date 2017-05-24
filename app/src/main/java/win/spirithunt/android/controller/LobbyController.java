@@ -23,7 +23,6 @@ import win.spirithunt.android.gui.LobbyMapFragment;
 import win.spirithunt.android.gui.LobbyQrFragment;
 import win.spirithunt.android.gui.LobbyTeamFragment;
 import win.spirithunt.android.model.Player;
-import win.spirithunt.android.protocol.GameInfo;
 import win.spirithunt.android.provider.DialogProvider;
 import win.spirithunt.android.provider.SocketProvider;
 
@@ -73,7 +72,6 @@ public class LobbyController extends AppCompatActivity {
                 self.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        Log.d("TAG", "GEEF GAME");
                         String gameId = (String) args[0];
                         self.startGame(gameId);
                     }
@@ -145,12 +143,13 @@ public class LobbyController extends AppCompatActivity {
                     provider.hideProgressDialog();
                 }
 
-                /*
-                    TODO process response, it's a single object containing id, game, players and target
-                     but how we're sending this and what the game looks like... It's TBD
-                 */
+                for (Object s : args) {
+                    Log.d("args", s.toString());
+                }
+
                 // TODO Add data
-                self.startActivity(gameIntent);
+                if (args[0] != null || args.length < 2)
+                    self.startActivity(gameIntent);
             }
         });
     }

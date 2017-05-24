@@ -1,5 +1,7 @@
 package win.spirithunt.android.controller;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -240,12 +242,11 @@ public class GameController extends AppCompatActivity implements View.OnClickLis
         }
     }
 
-    class PowerUpUseHandler implements
-        DialogInterface.OnClickListener {
+    class PowerUpUseHandler implements DialogInterface.OnClickListener {
 
         private static final String TAG = "PowerUpUseHandler";
 
-        private final PowerUp powerUp;
+        private PowerUp powerUp;
 
         public void tagComplete(String message) {
             if (message.equals(CLIENT_ACT_OK)) {
@@ -255,6 +256,11 @@ public class GameController extends AppCompatActivity implements View.OnClickLis
                 Log.d(TAG, "tagComplete: Tag denied");
                 // TODO inform player of failure
             }
+        }
+
+        @Override
+        public void onClick(DialogInterface dialog, int which) {
+            //TODO stuff
         }
     }
 }
