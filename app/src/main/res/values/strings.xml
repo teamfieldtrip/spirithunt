@@ -83,8 +83,7 @@
     <string name="leaderboard_text_title">Leaderboard</string>
     <string name="leaderboard_rank">Rank</string>
     <string name="leaderboard_player">Player</string>
-    <string name="leaderboard_tags">Tags</string>
-    <string name="leaderboard_deaths">Deaths</string>
+    <string name="leaderboard_score">Score</string>
     <string name="leaderboard_team">Team</string>
 
     <!-- Registration -->

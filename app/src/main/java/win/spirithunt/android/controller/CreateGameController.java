@@ -235,7 +235,12 @@ public class CreateGameController extends AppCompatActivity implements
                                     if (args[0] != null || args.length < 2) {
                                         self.showErrorDialog(self);
                                     }else{
-                                        Intent intent = new Intent(self, LobbyController.class);
+//                                        Intent intent = new Intent(self, LobbyController.class);
+//                                        intent.putExtra("lobbyId", args[1].toString());
+//                                        intent.putExtra("lobbyHost", true);
+//                                        startActivity(intent);
+
+                                        Intent intent = new Intent(self, LeaderboardController.class);
                                         intent.putExtra("lobbyId", args[1].toString());
                                         intent.putExtra("lobbyHost", true);
                                         startActivity(intent);

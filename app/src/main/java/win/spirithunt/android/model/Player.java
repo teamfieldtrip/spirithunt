@@ -39,6 +39,22 @@ public class Player {
         this.name = name;
     }
 
+    public void setScore(int score) {
+        this.score = score;
+    }
+
+    public String getName() {
+        return this.name;
+    }
+
+    public int getTeam() {
+        return this.team;
+    }
+
+    public int getScore() {
+        return this.score;
+    }
+
     public String toString() {
         return this.name;
     }

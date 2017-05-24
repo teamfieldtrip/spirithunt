@@ -27,7 +27,7 @@
         android:background="@drawable/gui_el_store_background"
         android:padding="26dp">
 
-        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        <LinearLayout
             android:layout_height="wrap_content"
             android:layout_width="match_parent"
             android:orientation="horizontal">
@@ -53,17 +53,7 @@
                 android:textColor="@android:color/white" />
 
             <TextView
-                android:text="@string/leaderboard_tags"
-                android:textStyle="bold"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center_vertical"
-                android:minHeight="26dp"
-                android:textColor="@android:color/white" />
-
-            <TextView
-                android:text="@string/leaderboard_deaths"
+                android:text="@string/leaderboard_score"
                 android:textStyle="bold"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
