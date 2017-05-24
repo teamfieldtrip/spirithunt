@@ -23,6 +23,7 @@ import win.spirithunt.android.gui.LobbyMapFragment;
 import win.spirithunt.android.gui.LobbyQrFragment;
 import win.spirithunt.android.gui.LobbyTeamFragment;
 import win.spirithunt.android.model.Player;
+import win.spirithunt.android.protocol.GameInfo;
 import win.spirithunt.android.provider.DialogProvider;
 import win.spirithunt.android.provider.SocketProvider;
 
@@ -66,15 +67,15 @@ public class LobbyController extends AppCompatActivity {
 
         Socket socket = SocketProvider.getInstance().getConnection();
 
-        socket.on("lobby:started", new Emitter.Listener() {
+        socket.on("lobby:ready", new Emitter.Listener() {
             @Override
             public void call(final Object... args) {
                 self.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        Intent intent = new Intent(self, GameController.class);
-                        startActivity(intent);
-                        self.finish();
+                        Log.d("TAG", "GEEF GAME");
+                        String gameId = (String) args[0];
+                        self.startGame(gameId);
                     }
                 });
             }
@@ -105,21 +106,6 @@ public class LobbyController extends AppCompatActivity {
                     @Override
                     public void run() {
 
-                        String gameId = (String) args[0];
-                        self.startGame(gameId);
-                    }
-                });
-            }
-        });
-
-        // TODO player abandonment
-
-        socket.on("lobby:started", new Emitter.Listener() {
-            @Override
-            public void call(final Object... args) {
-                self.runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
                         String gameId = (String) args[0];
                         self.startGame(gameId);
                     }
@@ -169,6 +155,16 @@ public class LobbyController extends AppCompatActivity {
         });
     }
 
+    public void start(View view) {
+        Socket socket = SocketProvider.getInstance().getConnection();
+        socket.emit("lobby:start", null, new Ack() {
+            @Override
+            public void call(Object... args) {
+                Log.d("Lobby", "Lobby started");
+            }
+        });
+    }
+
     @Override
     public void onBackPressed() {
         Socket socket = SocketProvider.getInstance().getConnection();
@@ -193,16 +189,6 @@ public class LobbyController extends AppCompatActivity {
     private void getLobbyFromServer() {
         final LobbyController self = this;
 
-    }
-
-    public void start(View view) {
-        Socket socket = SocketProvider.getInstance().getConnection();
-        socket.emit("lobby:start", null, new Ack() {
-            @Override
-            public void call(Object... args) {
-                Log.d("Lobby", "Lobby started");
-            }
-        });
     }
 
     private void showHostLeftDialog() {
