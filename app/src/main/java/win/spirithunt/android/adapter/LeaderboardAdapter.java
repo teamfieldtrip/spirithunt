@@ -1,7 +1,10 @@
 package win.spirithunt.android.adapter;
 
 import android.content.Context;
+import android.graphics.Color;
+import android.graphics.ColorFilter;
 import android.support.annotation.NonNull;
+import android.support.v7.widget.AppCompatImageView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -45,8 +48,15 @@ public class LeaderboardAdapter extends ArrayAdapter<Player> {
             TextView scoreText = (TextView)rowView.findViewById(R.id.leaderboard_score);
             scoreText.setText(String.valueOf(player.getScore()));
 
-            TextView teamText = (TextView)rowView.findViewById(R.id.leaderboard_team);
-            teamText.setText((player.getTeam() == 0) ? "R" : "B");
+            AppCompatImageView teamImg = (AppCompatImageView)rowView.findViewById(R.id.leaderboard_team);
+            if (player.getTeam() == 0) {
+                teamImg.setColorFilter(Color.argb(255, 255, 0, 0));
+            } else {
+                teamImg.setColorFilter(Color.argb(255, 0, 0, 255));
+            }
+
+//            TextView teamText = (TextView)rowView.findViewById(R.id.leaderboard_team);
+//            teamText.setText((player.getTeam() == 0) ? "R" : "B");
         }
 
         return rowView;
