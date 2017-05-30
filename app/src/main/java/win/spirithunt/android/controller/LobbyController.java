@@ -165,27 +165,6 @@ public class LobbyController extends AppCompatActivity {
         });
     }
 
-    @Override
-    public void onBackPressed() {
-        Socket socket = SocketProvider.getInstance().getConnection();
-        socket.emit("game:info", gameId, new Ack() {
-            @Override
-            public void call(Object... args) {
-                if (provider.isProgressDialogOpen()) {
-                    provider.hideProgressDialog();
-                }
-
-                for (Object s : args) {
-                    Log.d("args", s.toString());
-                }
-
-                // TODO Add data
-                if (args[0] != null || args.length < 2)
-                    self.startActivity(gameIntent);
-            }
-        });
-    }
-
     public void start(View view) {
         Socket socket = SocketProvider.getInstance().getConnection();
         socket.emit("lobby:start", null, new Ack() {
