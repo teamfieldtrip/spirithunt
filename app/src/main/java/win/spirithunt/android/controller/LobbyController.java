@@ -66,15 +66,14 @@ public class LobbyController extends AppCompatActivity {
 
         Socket socket = SocketProvider.getInstance().getConnection();
 
-        socket.on("lobby:started", new Emitter.Listener() {
+        socket.on("lobby:ready", new Emitter.Listener() {
             @Override
             public void call(final Object... args) {
                 self.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        Intent intent = new Intent(self, GameController.class);
-                        startActivity(intent);
-                        self.finish();
+                        String gameId = (String) args[0];
+                        self.startGame(gameId);
                     }
                 });
             }
@@ -103,21 +102,6 @@ public class LobbyController extends AppCompatActivity {
                         socket.emit("lobby:leave");
 
                         self.showHostLeftDialog();
-                    }
-                });
-            }
-        });
-
-        // TODO player abandonment
-
-        socket.on("lobby:started", new Emitter.Listener() {
-            @Override
-            public void call(final Object... args) {
-                self.runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        String gameId = (String) args[0];
-                        self.startGame(gameId);
                     }
                 });
             }
@@ -184,6 +168,37 @@ public class LobbyController extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         Socket socket = SocketProvider.getInstance().getConnection();
+        socket.emit("game:info", gameId, new Ack() {
+            @Override
+            public void call(Object... args) {
+                if (provider.isProgressDialogOpen()) {
+                    provider.hideProgressDialog();
+                }
+
+                for (Object s : args) {
+                    Log.d("args", s.toString());
+                }
+
+                // TODO Add data
+                if (args[0] != null || args.length < 2)
+                    self.startActivity(gameIntent);
+            }
+        });
+    }
+
+    public void start(View view) {
+        Socket socket = SocketProvider.getInstance().getConnection();
+        socket.emit("lobby:start", null, new Ack() {
+            @Override
+            public void call(Object... args) {
+                Log.d("Lobby", "Lobby started");
+            }
+        });
+    }
+
+    @Override
+    public void onBackPressed() {
+        Socket socket = SocketProvider.getInstance().getConnection();
         socket.emit("lobby:leave");
 
         super.onBackPressed();
@@ -205,16 +220,6 @@ public class LobbyController extends AppCompatActivity {
     private void getLobbyFromServer() {
         final LobbyController self = this;
 
-    }
-
-    public void start(View view) {
-        Socket socket = SocketProvider.getInstance().getConnection();
-        socket.emit("lobby:start", null, new Ack() {
-            @Override
-            public void call(Object... args) {
-                Log.d("Lobby", "Lobby started");
-            }
-        });
     }
 
     private void showHostLeftDialog() {
