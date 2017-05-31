@@ -115,7 +115,6 @@ public class GameController extends AppCompatActivity implements View.OnClickLis
             e.printStackTrace();
         }
 
-        gpsReader.start();
         RadarDisplay radar = (RadarDisplay) findViewById(R.id.game_status_radar);
         radar.setActivePlayer(ownPlayer);
         radar.setPlayerList(players);
