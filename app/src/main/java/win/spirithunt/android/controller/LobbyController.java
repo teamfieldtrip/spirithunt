@@ -12,6 +12,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 
 import io.socket.client.Ack;
@@ -23,6 +26,7 @@ import win.spirithunt.android.gui.LobbyMapFragment;
 import win.spirithunt.android.gui.LobbyQrFragment;
 import win.spirithunt.android.gui.LobbyTeamFragment;
 import win.spirithunt.android.model.Player;
+import win.spirithunt.android.protocol.GameInfo;
 import win.spirithunt.android.provider.DialogProvider;
 import win.spirithunt.android.provider.SocketProvider;
 
@@ -79,19 +83,6 @@ public class LobbyController extends AppCompatActivity {
             }
         });
 
-        socket.on("lobby:started", new Emitter.Listener() {
-            @Override
-            public void call(final Object... args) {
-                self.runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        String gameId = (String) args[0];
-                        self.startGame(gameId);
-                    }
-                });
-            }
-        });
-
         socket.on("lobby:destroy", new Emitter.Listener() {
             @Override
             public void call(final Object... args) {
@@ -102,21 +93,6 @@ public class LobbyController extends AppCompatActivity {
                         socket.emit("lobby:leave");
 
                         self.showHostLeftDialog();
-                    }
-                });
-            }
-        });
-
-        // TODO player abandonment
-
-        socket.on("lobby:started", new Emitter.Listener() {
-            @Override
-            public void call(final Object... args) {
-                self.runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        String gameId = (String) args[0];
-                        self.startGame(gameId);
                     }
                 });
             }
@@ -142,25 +118,22 @@ public class LobbyController extends AppCompatActivity {
 
         // Create intent
         final Intent gameIntent = new Intent(this, GameController.class);
-        gameIntent.putExtra("id", this.getLobbyId());
+        gameIntent.putExtra("gameId", gameId);
 
         final LobbyController self = this;
 
         Socket socket = SocketProvider.getInstance().getConnection();
-        socket.emit("game:info", gameId, new Ack() {
+        socket.emit("game:info", new GameInfo(gameId), new Ack() {
             @Override
             public void call(Object... args) {
                 if (provider.isProgressDialogOpen()) {
                     provider.hideProgressDialog();
                 }
 
-                for (Object s : args) {
-                    Log.d("args", s.toString());
-                }
-
-                // TODO Add data
-                if (args[0] != null || args.length < 2)
+                if (args[0] == null && args.length >= 2) {
+                    gameIntent.putExtra("gameData", args[1].toString());
                     self.startActivity(gameIntent);
+                }
             }
         });
     }
@@ -171,6 +144,10 @@ public class LobbyController extends AppCompatActivity {
             @Override
             public void call(Object... args) {
                 Log.d("Lobby", "Lobby started");
+                if(args[0] != null){
+                    // TODO error handling
+                    Log.e("Error","Lobby starting error");
+                }
             }
         });
     }

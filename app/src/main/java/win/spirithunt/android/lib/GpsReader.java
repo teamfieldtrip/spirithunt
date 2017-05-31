@@ -54,7 +54,6 @@ public class GpsReader implements GoogleApiClient.ConnectionCallbacks, GoogleApi
         locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
 
         this.mLocationRequest = locationRequest;
-        this.mGoogleApiClient.connect();
     }
 
     /**
@@ -72,6 +71,7 @@ public class GpsReader implements GoogleApiClient.ConnectionCallbacks, GoogleApi
      */
     public void stop() {
         this.isUpdating = false;
+        this.mGoogleApiClient.disconnect();
         LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, this);
     }
 
@@ -81,8 +81,11 @@ public class GpsReader implements GoogleApiClient.ConnectionCallbacks, GoogleApi
     public void start() {
         if(!this.isUpdating) {
             if (ContextCompat.checkSelfPermission(activity, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-                LocationServices.FusedLocationApi.requestLocationUpdates(this.mGoogleApiClient, this.mLocationRequest, this);
-                this.isUpdating = true;
+                this.mGoogleApiClient.connect();
+                if(mGoogleApiClient.isConnected()) {
+                    LocationServices.FusedLocationApi.requestLocationUpdates(this.mGoogleApiClient, this.mLocationRequest, this);
+                    this.isUpdating = true;
+                }
             } else {
                 this.askPermissions(this.activity);
             }

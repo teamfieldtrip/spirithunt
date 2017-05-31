@@ -5,21 +5,27 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.view.menu.MenuBuilder;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.InvalidObjectException;
 import java.util.ArrayList;
 
 import io.socket.client.Ack;
 import io.socket.client.Socket;
 import win.spirithunt.android.R;
 import win.spirithunt.android.gui.RadarDisplay;
+import win.spirithunt.android.lib.GpsReader;
 import win.spirithunt.android.model.Player;
 import win.spirithunt.android.model.PowerUp;
 import win.spirithunt.android.protocol.GameTag;
+import win.spirithunt.android.provider.PlayerProvider;
 import win.spirithunt.android.provider.SocketProvider;
 
 import static java.lang.Math.sqrt;
@@ -34,11 +40,8 @@ import static java.lang.Math.sqrt;
 public class GameController extends AppCompatActivity implements View.OnClickListener {
 
     public static final int TEAM_RED = 0;
-
     public static final int TEAM_BLUE = 1;
-
     private static final String TAG = "GameController";
-
     private static final double MAX_RANGE = 2d;
 
     /**
@@ -46,12 +49,12 @@ public class GameController extends AppCompatActivity implements View.OnClickLis
      */
     private static final String CLIENT_ACT_OK = "act-ok";
 
-    // Determine who we are
-    private Player ownPlayer = buildPlayer("b95c67ec-38ed-463d-866d-763f6369a439", 52.512740, 6.093505, 0);
-
-    private Player target = buildPlayer("db1cd8e0-abc4-4072-b46b-f63df0b80654", 52.512240, 6.093405, 0);
-
+    private String gameId;
+    private Player ownPlayer = PlayerProvider.getInstance().getPlayer();
+    private Player target;
     private ArrayList<Player> players = new ArrayList<>();
+
+    private GpsReader gpsReader = new GpsReader(this);;
 
     protected Player buildPlayer(String Uuid, double lat, double lng, int team) {
         Player out = new Player(Uuid);
@@ -73,7 +76,7 @@ public class GameController extends AppCompatActivity implements View.OnClickLis
         //Title and subtitle
         // TODO This is not yet working properly, maybe actually update it to match the correct information
         appToolbar.setTitle("In-game");
-        appToolbar.setSubtitle("With 8 players");
+        appToolbar.setSubtitle("With " + players.size() + " players");
 
         // TODO find a way to actually show the menu
         appToolbar.inflateMenu(R.menu.ingame);
@@ -87,41 +90,49 @@ public class GameController extends AppCompatActivity implements View.OnClickLis
             actionBar.setDisplayUseLogoEnabled(true);
         }
 
-        // TODO Remove this!
-        // Flood the player list
-        players.add(target);
+        // Parsing JSON to actual Players
+        try {
+            JSONObject gameData = new JSONObject(this.getIntent().getStringExtra("gameData"));
 
-        players.add(buildPlayer(
-            "a5393197-a932-4f8d-911d-5bb21fd840e6",
-            ownPlayer.latitude + 0.001000,
-            ownPlayer.longitude,
-            1
-        ));
-        players.add(buildPlayer(
-            "52768d1b-20ee-4330-aa4f-96d8f0e29ea8",
-            ownPlayer.latitude - 0.000500,
-            ownPlayer.longitude - 0.00100,
-            0
-        ));
-        players.add(buildPlayer(
-            "52768d1b-20ee-4330-aa4f-96d8f0e29ea8",
-            ownPlayer.latitude,
-            ownPlayer.longitude + 0.003000,
-            0
-        ));
-        players.add(buildPlayer(
-            "857be781-3629-4976-8e22-d177a656ba3b",
-            ownPlayer.latitude,
-            ownPlayer.longitude - 0.004000,
-            1
-        ));
+            gameId = gameData.getString("id");
+            target = new Player(gameData.getString("target"));
 
+            JSONArray jsonPlayers = gameData.getJSONArray("players");
+
+            for (int i = 0; i < jsonPlayers.length(); i++) {
+                // Create new Player Model per player
+                Log.d("Player", jsonPlayers.getString(i));
+
+                players.add(Player.FromJson(new JSONObject(jsonPlayers.getString(i))));
+            }
+
+            players.add(buildPlayer("aoeu", 52.523390, 6.118051 , 1));
+            Log.d("Location", "Lat: " + ownPlayer.latitude + "Lon:" + ownPlayer.longitude);
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        } catch (InvalidObjectException e) {
+            e.printStackTrace();
+        }
+
+        gpsReader.start();
         RadarDisplay radar = (RadarDisplay) findViewById(R.id.game_status_radar);
         radar.setActivePlayer(ownPlayer);
         radar.setPlayerList(players);
 
         // TODO Register subscriber
         onUpdateLocation();
+    }
+
+    @Override
+    protected void onResume(){
+        super.onResume();
+    }
+
+    @Override
+    protected void onPause(){
+        super.onPause();
+        gpsReader.stop();
     }
 
     @Override
@@ -165,10 +176,7 @@ public class GameController extends AppCompatActivity implements View.OnClickLis
     public void onUpdateLocation() {
         Button btnTag = (Button) findViewById(R.id.game_tag);
 
-        ownPlayer.target = "db1cd8e0-abc4-4072-b46b-f63df0b80654";
-
-        // Debug if-statement because of incomplete Player model
-        if (!ownPlayer.target.equals("")) {
+        if (ownPlayer.target != null) {
             for (Player p : players) {
                 // If p is the ownPlayer's target
                 if (ownPlayer.target.equals(p.getId())) {
