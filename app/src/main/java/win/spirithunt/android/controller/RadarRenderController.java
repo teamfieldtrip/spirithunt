@@ -12,15 +12,16 @@ import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.PowerManager;
-import win.spirithunt.android.R;
-import win.spirithunt.android.gui.RadarDisplay;
-import win.spirithunt.android.model.Location;
-import win.spirithunt.android.model.Player;
 import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.SurfaceHolder;
 
 import java.util.ArrayList;
+
+import win.spirithunt.android.R;
+import win.spirithunt.android.gui.RadarDisplay;
+import win.spirithunt.android.model.Location;
+import win.spirithunt.android.model.Player;
 
 /**
  * Handles updating the radar in a separate thread
@@ -98,6 +99,12 @@ public class RadarRenderController extends Thread implements SurfaceHolder.Callb
      */
     private int team;
 
+    public RadarRenderController(RadarDisplay display, int theme) {
+        radarDisplay = display;
+
+        setTeam(theme);
+    }
+
     /**
      * Returns true if power save mode is supported and currently active.
      *
@@ -112,14 +119,9 @@ public class RadarRenderController extends Thread implements SurfaceHolder.Callb
         }
     }
 
-    public RadarRenderController(RadarDisplay display, int theme) {
-        radarDisplay = display;
-
-        setTeam(theme);
-    }
-
     /**
      * Changes the team we're on.
+     *
      * @param team
      */
     public void setTeam(int team) {
@@ -154,6 +156,7 @@ public class RadarRenderController extends Thread implements SurfaceHolder.Callb
     /**
      * Safely updates SurfaceHolder and activates while loop, or disables it in case the holder is
      * null.
+     *
      * @param surfaceHolder
      */
     protected void updateHolder(@Nullable SurfaceHolder surfaceHolder) {
@@ -294,7 +297,7 @@ public class RadarRenderController extends Thread implements SurfaceHolder.Callb
         paintHostile.setAlpha(200);
 
         // Draw targets, both friendly and hostile.
-        for (DrawablePlayer player: players) {
+        for (DrawablePlayer player : players) {
             player.draw(canvas, currentPlayer, paintFriendly, paintHostile, rotation, inPowerSaveMode);
         }
 
@@ -319,10 +322,13 @@ public class RadarRenderController extends Thread implements SurfaceHolder.Callb
 
         DrawablePlayer playerLocation;
 
-        for (Player player: players) {
+        for (Player player : players) {
             playerLocation = new DrawablePlayer(player);
             playerLocation.preload(perspectivePlayer);
-            res.add(playerLocation);
+
+            if (player != perspectivePlayer) {
+                res.add(playerLocation);
+            }
         }
 
         return res;
@@ -342,7 +348,7 @@ public class RadarRenderController extends Thread implements SurfaceHolder.Callb
         boolean changes;
         boolean inPowerSaveMode = isInPowerSaveMode();
 
-        while(!isInterrupted()) {
+        while (!isInterrupted()) {
             if (!active || holder == null) {
                 rate = RATE_IDLE;
             } else {
@@ -358,7 +364,8 @@ public class RadarRenderController extends Thread implements SurfaceHolder.Callb
                 }
 
                 // Update or initialize the arrayList of players, if required
-                if (players != radarDisplay.getPlayerList()) {
+                if (radarDisplay.getUpdateState()) {
+                    radarDisplay.setUpdateState(false);
                     players = radarDisplay.getPlayerList();
                     changes = true;
                 }
@@ -446,6 +453,7 @@ public class RadarRenderController extends Thread implements SurfaceHolder.Callb
 
         /**
          * Draws the player on the radar, using the given radar dimensions and center location.
+         *
          * @param canvas
          */
         public void draw(Canvas canvas, Player perspectivePlayer, Paint paintFriendly, Paint paintHostile, double sweeperRotation, boolean inPowerSaveMode) {

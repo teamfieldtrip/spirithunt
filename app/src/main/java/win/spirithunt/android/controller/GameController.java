@@ -9,6 +9,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -19,12 +20,14 @@ import java.util.ArrayList;
 
 import io.socket.client.Ack;
 import io.socket.client.Socket;
+import io.socket.emitter.Emitter;
 import win.spirithunt.android.R;
 import win.spirithunt.android.gui.RadarDisplay;
 import win.spirithunt.android.lib.GpsReader;
 import win.spirithunt.android.model.Player;
 import win.spirithunt.android.model.PowerUp;
 import win.spirithunt.android.protocol.GameTag;
+import win.spirithunt.android.provider.ContextProvider;
 import win.spirithunt.android.provider.PlayerProvider;
 import win.spirithunt.android.provider.SocketProvider;
 
@@ -48,13 +51,12 @@ public class GameController extends AppCompatActivity implements View.OnClickLis
      * Sent from the server when the client action (tag or consume) is approved.
      */
     private static final String CLIENT_ACT_OK = "act-ok";
-
+    RadarDisplay radar;
     private String gameId;
-    private Player ownPlayer = PlayerProvider.getInstance().getPlayer();
+    private Player ownPlayer;
     private Player target;
     private ArrayList<Player> players = new ArrayList<>();
-
-    private GpsReader gpsReader = new GpsReader(this);;
+    private GpsReader gpsReader;
 
     protected Player buildPlayer(String Uuid, double lat, double lng, int team) {
         Player out = new Player(Uuid);
@@ -69,6 +71,32 @@ public class GameController extends AppCompatActivity implements View.OnClickLis
         super.onCreate(savedInstanceState);
         setTheme(R.style.GameView);
         setContentView(R.layout.game_view);
+
+        radar = (RadarDisplay) findViewById(R.id.game_status_radar);
+        ownPlayer = PlayerProvider.getInstance().getPlayer();
+
+        // Parsing JSON to actual Players
+        try {
+            JSONObject gameData = new JSONObject(this.getIntent().getStringExtra("gameData"));
+
+            gameId = gameData.getString("id");
+            target = new Player(gameData.getString("target"));
+
+            Log.d(TAG, " " + target);
+
+            JSONArray jsonPlayers = gameData.getJSONArray("players");
+
+            for (int i = 0; i < jsonPlayers.length(); i++) {
+                // Create new Player Model per player
+                Log.d("Player", jsonPlayers.getString(i));
+                players.add(Player.FromJson(new JSONObject(jsonPlayers.getString(i))));
+            }
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        } catch (InvalidObjectException e) {
+            e.printStackTrace();
+        }
 
         // Set app bar
         Toolbar appToolbar = (Toolbar) findViewById(R.id.game_toolbar);
@@ -90,46 +118,78 @@ public class GameController extends AppCompatActivity implements View.OnClickLis
             actionBar.setDisplayUseLogoEnabled(true);
         }
 
-        // Parsing JSON to actual Players
-        try {
-            JSONObject gameData = new JSONObject(this.getIntent().getStringExtra("gameData"));
-
-            gameId = gameData.getString("id");
-            target = new Player(gameData.getString("target"));
-
-            JSONArray jsonPlayers = gameData.getJSONArray("players");
-
-            for (int i = 0; i < jsonPlayers.length(); i++) {
-                // Create new Player Model per player
-                Log.d("Player", jsonPlayers.getString(i));
-
-                players.add(Player.FromJson(new JSONObject(jsonPlayers.getString(i))));
-            }
-
-            players.add(buildPlayer("aoeu", 52.523390, 6.118051 , 1));
-            Log.d("Location", "Lat: " + ownPlayer.latitude + "Lon:" + ownPlayer.longitude);
-
-        } catch (JSONException e) {
-            e.printStackTrace();
-        } catch (InvalidObjectException e) {
-            e.printStackTrace();
-        }
-
-        RadarDisplay radar = (RadarDisplay) findViewById(R.id.game_status_radar);
-        radar.setActivePlayer(ownPlayer);
-        radar.setPlayerList(players);
-
-        // TODO Register subscriber
-        onUpdateLocation();
     }
 
     @Override
-    protected void onResume(){
+    protected void onResume() {
         super.onResume();
+        gpsReader = new GpsReader(this);
+
+        Socket socket = SocketProvider.getInstance().getConnection();
+        final GameController self = this;
+
+        socket.on("gps:updated", new Emitter.Listener() {
+            @Override
+            public void call(final Object... args) {
+                self.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Log.d(TAG, "run() called" + args[0]);
+                        try {
+                            JSONObject gpsData = new JSONObject(args[0].toString());
+
+                            for (Player p : players) {
+                                if (gpsData.has("player")) {
+                                    if (p.getId().equals(gpsData.getString("player"))) {
+                                        p.latitude = Double.parseDouble(gpsData.getString("latitude"));
+                                        p.longitude = Double.parseDouble(gpsData.getString("longitude"));
+
+                                        if (ownPlayer.getId().equals(p.getId())) {
+                                            Log.d(TAG, "ownPlayer set");
+                                            ownPlayer = p;
+                                        }
+
+                                        break;
+                                    }
+                                }
+                            }
+
+                            onUpdateLocation();
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                });
+            }
+        });
+
+        socket.on("gameplay:tagged", new Emitter.Listener() {
+            @Override
+            public void call(final Object... args) {
+                self.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+                            JSONObject tagData = new JSONObject(args[0].toString());
+                            if (tagData.has("invoker") && tagData.has("victim")) {
+                                if (ownPlayer.getId().equals(tagData.getString("victim"))) {
+                                    Log.d("TAG", "You have been tagged by " + tagData.getString("invoker"));
+                                    Toast.makeText(ContextProvider.getInstance().getContext(), "You have been tagged by " + tagData.getString("invoker"), Toast.LENGTH_SHORT).show();
+                                } else {
+                                    Log.d("TAG", tagData.getString("invoker") + "tagged" + tagData.getString("victim"));
+                                }
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                });
+            }
+        });
     }
 
     @Override
-    protected void onPause(){
+    protected void onPause() {
         super.onPause();
         gpsReader.stop();
     }
@@ -150,6 +210,7 @@ public class GameController extends AppCompatActivity implements View.OnClickLis
         switch (view.getId()) {
             case R.id.game_tag:
                 tagPlayer();
+                break;
             case R.id.game_consume:
                 DialogInterface.OnClickListener listener = new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
@@ -173,7 +234,12 @@ public class GameController extends AppCompatActivity implements View.OnClickLis
      * Called after a location update
      */
     public void onUpdateLocation() {
+        Log.d(TAG, "Location Updated");
         Button btnTag = (Button) findViewById(R.id.game_tag);
+
+        radar.setActivePlayer(ownPlayer);
+        radar.setPlayerList(players);
+        radar.setUpdateState(true);
 
         if (ownPlayer.target != null) {
             for (Player p : players) {

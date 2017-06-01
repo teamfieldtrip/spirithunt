@@ -7,6 +7,6 @@
     <dimen name="activity_top_margin">40dp</dimen>
     <dimen name="activity_top_margin_short">24dp</dimen>
     <dimen name="game_status_padding">4dp</dimen>
-    <dimen name="radar_size">320dp</dimen>
+    <dimen name="radar_size">240dp</dimen>
     <dimen name="scoreblock_icon_margin">16dp</dimen>
 </resources>

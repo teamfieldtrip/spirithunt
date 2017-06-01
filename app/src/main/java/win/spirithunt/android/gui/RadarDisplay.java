@@ -2,16 +2,16 @@ package win.spirithunt.android.gui;
 
 import android.content.Context;
 import android.graphics.PixelFormat;
-
-import win.spirithunt.android.controller.GameController;
-import win.spirithunt.android.controller.RadarRenderController;
-import win.spirithunt.android.model.Player;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
 import java.util.ArrayList;
+
+import win.spirithunt.android.controller.GameController;
+import win.spirithunt.android.controller.RadarRenderController;
+import win.spirithunt.android.model.Player;
 
 /**
  * Handles updating the radar
@@ -23,12 +23,14 @@ public class RadarDisplay extends SurfaceView {
 
     private static String TAG = "RadarDisplay";
 
+    protected boolean isUpdated;
+
     protected RadarRenderController renderController;
 
     /**
      * Current player
      */
-    protected Player activePlayer;
+    protected Player activePlayer = new Player("");
 
     /**
      * List of players
@@ -57,21 +59,29 @@ public class RadarDisplay extends SurfaceView {
         renderController = new RadarRenderController(this, GameController.TEAM_BLUE);
     }
 
-    public void setActivePlayer(Player activePlayer) {
-        this.activePlayer = activePlayer;
-        renderController.setTeam(activePlayer.team);
-    }
-
-    public void setPlayerList(ArrayList<Player> playerList) {
-        this.playerList = playerList;
+    public void setUpdateState(boolean bool) {
+        this.isUpdated = bool;
     }
 
     public Player getActivePlayer() {
         return activePlayer;
     }
 
+    public void setActivePlayer(Player activePlayer) {
+        this.activePlayer = activePlayer;
+        renderController.setTeam(activePlayer.team);
+    }
+
     public ArrayList<Player> getPlayerList() {
         return playerList;
+    }
+
+    public void setPlayerList(ArrayList<Player> playerList) {
+        this.playerList = playerList;
+    }
+
+    public boolean getUpdateState() {
+        return isUpdated;
     }
 
     @Override

@@ -130,7 +130,7 @@ public class LobbyController extends AppCompatActivity {
                     provider.hideProgressDialog();
                 }
 
-                if (args[0] == null && args.length >= 2) {
+                if (args[0] == null && args[1] != null && args.length >= 2) {
                     gameIntent.putExtra("gameData", args[1].toString());
                     self.startActivity(gameIntent);
                 }

@@ -19,6 +19,7 @@ public class Player implements Serializable {
     private static final String FIELD_LAT = "latitude";
     private static final String FIELD_LNG = "longitude";
     private static final String FIELD_SCORE = "score";
+    private static final String FIELD_TARGET = "target";
     private static final String FIELD_RESULT = "result";
 
     public String name;
@@ -47,6 +48,7 @@ public class Player implements Serializable {
         out.latitude = object.optDouble(FIELD_LAT);
         out.longitude = object.optDouble(FIELD_LNG);
         out.score = object.optInt(FIELD_SCORE);
+        out.target = object.optString(FIELD_TARGET);
         out.result = object.optInt(FIELD_RESULT, 0);
         return out;
     }

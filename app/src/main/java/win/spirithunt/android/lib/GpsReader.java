@@ -82,7 +82,7 @@ public class GpsReader implements GoogleApiClient.ConnectionCallbacks, GoogleApi
     /**
      * Start the location updates
      */
-    public void start() {
+    private void start() {
         if (!isUpdating) {
             if (ContextCompat.checkSelfPermission(activity, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
                 LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
