@@ -399,7 +399,7 @@ public class RadarRenderController extends Thread implements SurfaceHolder.Callb
     class DrawablePlayer {
         private static final double RADIAL_MULTIPLIER = ((2.0 * Math.PI) / 360.0);
 
-        private static final double MAX_DISTANCE = 250f;
+        private static final double MAX_DISTANCE = 50f; //250f;
 
         private static final int CIRCLE_SIZE = 10;
 
@@ -432,13 +432,14 @@ public class RadarRenderController extends Thread implements SurfaceHolder.Callb
                 results
             );
 
-            bearing = (360f - results[2]) - angle;
+            // 360 + 360 + 180, 180 would work, but would require extra statements below
+            bearing = (900f - angle) - results[2];
             distance = results[0];
 
-            Log.d("BEARING", String.valueOf(360f - results[2]));
-            Log.d("ANGLE", String.valueOf(angle));
+            Log.d("Compass Angle", String.valueOf(angle));
+            Log.d("Player Angle", String.valueOf(results[2]));
 
-            if (bearing >= 360f) {
+            while (bearing > 360f) {
                 bearing -= 360f;
             }
 

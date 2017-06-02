@@ -36,6 +36,7 @@ import win.spirithunt.android.provider.PlayerProvider;
 import win.spirithunt.android.provider.SocketProvider;
 
 import static java.lang.Math.sqrt;
+import static java.util.UUID.randomUUID;
 
 /**
  * Renders the main game interface, which consists of a radar, list of power ups, consume buttons
@@ -64,6 +65,15 @@ public class GameController extends AppCompatActivity implements View.OnClickLis
     private SensorManager mSensorManager;
     private float angle;
 
+
+    protected Player buildPlayer(double lat, double lng, int team) {
+        Player out = new Player(randomUUID().toString());
+        out.latitude = lat;
+        out.longitude = lng;
+        out.team = team;
+        return out;
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -91,6 +101,8 @@ public class GameController extends AppCompatActivity implements View.OnClickLis
                 Log.d("Player", jsonPlayers.getString(i));
                 players.add(Player.FromJson(new JSONObject(jsonPlayers.getString(i))));
             }
+
+            players.add(buildPlayer(52.515584, 6.088091, 1));
 
         } catch (JSONException e) {
             e.printStackTrace();
@@ -269,7 +281,7 @@ public class GameController extends AppCompatActivity implements View.OnClickLis
     }
 
     public void onSensorChanged(SensorEvent event) {
-        angle = Math.round(event.values[0]) * -1;
+        angle = Math.round(event.values[0]);
     }
 
     @Override
