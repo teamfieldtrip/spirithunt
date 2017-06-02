@@ -2,6 +2,10 @@ package win.spirithunt.android.controller;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -40,7 +44,7 @@ import static java.lang.Math.sqrt;
  * @author Roelof Roos [github@roelof.io]
  * @author sven
  */
-public class GameController extends AppCompatActivity implements View.OnClickListener {
+public class GameController extends AppCompatActivity implements View.OnClickListener, SensorEventListener {
 
     public static final int TEAM_RED = 0;
     public static final int TEAM_BLUE = 1;
@@ -57,20 +61,16 @@ public class GameController extends AppCompatActivity implements View.OnClickLis
     private Player target;
     private ArrayList<Player> players = new ArrayList<>();
     private GpsReader gpsReader;
-
-    protected Player buildPlayer(String Uuid, double lat, double lng, int team) {
-        Player out = new Player(Uuid);
-        out.latitude = lat;
-        out.longitude = lng;
-        out.team = team;
-        return out;
-    }
+    private SensorManager mSensorManager;
+    private float angle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setTheme(R.style.GameView);
         setContentView(R.layout.game_view);
+
+        mSensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
 
         radar = (RadarDisplay) findViewById(R.id.game_status_radar);
         ownPlayer = PlayerProvider.getInstance().getPlayer();
@@ -124,6 +124,10 @@ public class GameController extends AppCompatActivity implements View.OnClickLis
     protected void onResume() {
         super.onResume();
         gpsReader = new GpsReader(this);
+
+        mSensorManager.registerListener(this, mSensorManager.getDefaultSensor(Sensor.TYPE_ORIENTATION),
+            SensorManager.SENSOR_DELAY_NORMAL);
+
 
         Socket socket = SocketProvider.getInstance().getConnection();
         final GameController self = this;
@@ -192,6 +196,7 @@ public class GameController extends AppCompatActivity implements View.OnClickLis
     protected void onPause() {
         super.onPause();
         gpsReader.stop();
+        mSensorManager.unregisterListener(this);
     }
 
     @Override
@@ -239,6 +244,7 @@ public class GameController extends AppCompatActivity implements View.OnClickLis
 
         radar.setActivePlayer(ownPlayer);
         radar.setPlayerList(players);
+        radar.setAngle(angle);
         radar.setUpdateState(true);
 
         if (ownPlayer.target != null) {
@@ -260,6 +266,15 @@ public class GameController extends AppCompatActivity implements View.OnClickLis
                 }
             }
         }
+    }
+
+    public void onSensorChanged(SensorEvent event) {
+        angle = Math.round(event.values[0]) * -1;
+    }
+
+    @Override
+    public void onAccuracyChanged(Sensor sensor, int accuracy) {
+        // Unused
     }
 
     /**

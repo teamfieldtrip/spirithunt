@@ -321,10 +321,11 @@ public class RadarRenderController extends Thread implements SurfaceHolder.Callb
         ArrayList<DrawablePlayer> res = new ArrayList<>();
 
         DrawablePlayer playerLocation;
+        float angle = radarDisplay.getAngle();
 
         for (Player player : players) {
             playerLocation = new DrawablePlayer(player);
-            playerLocation.preload(perspectivePlayer);
+            playerLocation.preload(perspectivePlayer, angle);
 
             if (player != perspectivePlayer) {
                 res.add(playerLocation);
@@ -398,7 +399,7 @@ public class RadarRenderController extends Thread implements SurfaceHolder.Callb
     class DrawablePlayer {
         private static final double RADIAL_MULTIPLIER = ((2.0 * Math.PI) / 360.0);
 
-        private static final double MAX_DISTANCE = 650f;
+        private static final double MAX_DISTANCE = 250f;
 
         private static final int CIRCLE_SIZE = 10;
 
@@ -420,7 +421,7 @@ public class RadarRenderController extends Thread implements SurfaceHolder.Callb
          *
          * @param perspectivePlayer Player to use as alignment, basically the Player for this device.
          */
-        public void preload(Player perspectivePlayer) {
+        public void preload(Player perspectivePlayer, float angle) {
             float[] results = new float[3];
 
             Location.distanceBetween(
@@ -431,8 +432,11 @@ public class RadarRenderController extends Thread implements SurfaceHolder.Callb
                 results
             );
 
-            bearing = 360f - results[2];
+            bearing = (360f - results[2]) - angle;
             distance = results[0];
+
+            Log.d("BEARING", String.valueOf(360f - results[2]));
+            Log.d("ANGLE", String.valueOf(angle));
 
             if (bearing >= 360f) {
                 bearing -= 360f;
@@ -486,7 +490,7 @@ public class RadarRenderController extends Thread implements SurfaceHolder.Callb
                 }
 
                 double alphaMultiplier = Math.cos(HALF_PI * Math.min(1, (rotationAlpha / 200f)) + HALF_PI) + 1;
-                double alphaBase = paint.getAlpha() / 255f * 150f;
+                double alphaBase = 0d;//paint.getAlpha() / 255f * 150f;
                 int alpha = (int) Math.round(alphaBase + (255 - alphaBase) * alphaMultiplier);
                 paint.setAlpha(alpha);
             }

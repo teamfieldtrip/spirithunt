@@ -30,6 +30,7 @@ public class GpsReader implements GoogleApiClient.ConnectionCallbacks, GoogleApi
     private static final String TAG = GpsReader.class.getSimpleName();
     private GoogleApiClient mGoogleApiClient;
     private LocationRequest mLocationRequest;
+
     private Location mLastLocation;
     private Activity activity;
     private boolean isUpdating = false;

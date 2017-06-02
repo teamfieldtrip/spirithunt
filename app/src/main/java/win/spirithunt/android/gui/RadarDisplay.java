@@ -2,6 +2,7 @@ package win.spirithunt.android.gui;
 
 import android.content.Context;
 import android.graphics.PixelFormat;
+import android.location.Location;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.SurfaceHolder;
@@ -23,7 +24,7 @@ public class RadarDisplay extends SurfaceView {
 
     private static String TAG = "RadarDisplay";
 
-    protected boolean isUpdated;
+    protected boolean willUpdate;
 
     protected RadarRenderController renderController;
 
@@ -36,6 +37,11 @@ public class RadarDisplay extends SurfaceView {
      * List of players
      */
     private ArrayList<Player> playerList;
+
+    /**
+     * Compass angle
+     */
+    private float angle = 0f;
 
     public RadarDisplay(Context context) {
         super(context);
@@ -60,7 +66,7 @@ public class RadarDisplay extends SurfaceView {
     }
 
     public void setUpdateState(boolean bool) {
-        this.isUpdated = bool;
+        this.willUpdate = bool;
     }
 
     public Player getActivePlayer() {
@@ -81,7 +87,7 @@ public class RadarDisplay extends SurfaceView {
     }
 
     public boolean getUpdateState() {
-        return isUpdated;
+        return willUpdate;
     }
 
     @Override
@@ -100,5 +106,13 @@ public class RadarDisplay extends SurfaceView {
         Log.d(TAG, "onDetachedFromWindow: Detaching and stopping RenderController");
         getHolder().removeCallback(renderController);
         renderController.interrupt();
+    }
+
+    public void setAngle(float angle) {
+        this.angle = angle;
+    }
+
+    public float getAngle(){
+        return angle;
     }
 }
