@@ -1,6 +1,7 @@
 package win.spirithunt.android.provider;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 
 import win.spirithunt.android.R;
@@ -64,6 +65,15 @@ public class DialogProvider {
      */
     public void showProgressDialog(int title, int body) {
         showProgressDialog(activity.getString(title), activity.getString(body));
+    }
+
+    /**
+     * Returns a themed alert dialog
+     *
+     * @return
+     */
+    public AlertDialog.Builder provideAlertBuilder() {
+        return new android.app.AlertDialog.Builder(activity, R.style.AppDialog);
     }
 }
 
