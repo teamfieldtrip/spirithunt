@@ -39,6 +39,7 @@ import win.spirithunt.android.model.AmountOfRounds;
 import win.spirithunt.android.model.Duration;
 import win.spirithunt.android.model.Player;
 import win.spirithunt.android.protocol.GameCreate;
+import win.spirithunt.android.provider.DialogProvider;
 import win.spirithunt.android.provider.PermissionProvider;
 import win.spirithunt.android.provider.PlayerProvider;
 import win.spirithunt.android.provider.SocketProvider;
@@ -53,7 +54,6 @@ public class CreateGameController extends PermissionRequestingActivity implement
     GoogleMap.OnMarkerClickListener,
     GoogleMap.OnCameraMoveStartedListener,
     OnMapReadyCallback {
-    private ProgressDialog progressDialog;
 
     /**
      * Stores a list with the possible amount of players
@@ -99,6 +99,8 @@ public class CreateGameController extends PermissionRequestingActivity implement
     private int timeIndicatorIndex;
 
     private MapFragment mapView;
+
+    private DialogProvider dialogProvider;
 
     public CreateGameController() {
         this.amountOfPlayers = new ArrayList<>();
@@ -251,7 +253,7 @@ public class CreateGameController extends PermissionRequestingActivity implement
                                 self.hideProgressDialog();
 
                                 if (args[0] != null || args.length < 2) {
-                                    self.showErrorDialog(self);
+                                    self.showErrorDialog();
                                 } else {
                                     Intent intent = new Intent(self, LobbyController.class);
                                     intent.putExtra("lobbyId", args[1].toString());
@@ -294,6 +296,9 @@ public class CreateGameController extends PermissionRequestingActivity implement
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.create_game_view);
+
+        // Assign dialogProvider
+        dialogProvider = new DialogProvider(this);
 
         // Get the container
 
@@ -448,7 +453,7 @@ public class CreateGameController extends PermissionRequestingActivity implement
     public void showPermissionRationale(PermissionProvider.Permissions permission) {
         final CreateGameController self = this;
 
-        new android.app.AlertDialog.Builder(this)
+        dialogProvider.provideAlertBuilder()
             .setTitle(getString(R.string.create_game_location_explain_title))
             .setMessage(getString(R.string.create_game_location_explain_message))
             .setPositiveButton(R.string.create_game_location_explain_positive, new DialogInterface.OnClickListener() {
@@ -470,38 +475,24 @@ public class CreateGameController extends PermissionRequestingActivity implement
      * Hides the progress bar.
      */
     private void hideProgressDialog() {
-        if (progressDialog != null) {
-            progressDialog.dismiss();
-        }
+        dialogProvider.hideProgressDialog();
     }
 
     /**
      * Shows a progress dialog
      */
     private void showProgressDialog() {
-        if (progressDialog == null) {
-            progressDialog = new ProgressDialog(this, R.style.AppDialog);
-            progressDialog.setTitle(getString(R.string.create_game_progress_title));
-            progressDialog.setMessage(getString(R.string.create_game_progress_content));
-            progressDialog.setCancelable(false);
-            progressDialog.show();
-        }
+        dialogProvider.showProgressDialog(R.string.create_game_progress_title, R.string.create_game_progress_content);
     }
 
     /**
      * Shows error messages when stuff is done incorrectly.
-     *
-     * @param context
      */
-    private void showErrorDialog(Context context) {
-        new android.app.AlertDialog.Builder(context, R.style.AppDialog)
+    private void showErrorDialog() {
+        dialogProvider.provideAlertBuilder()
             .setTitle(getString(R.string.create_game_alert_title))
             .setMessage(getString(R.string.create_game_alert_content))
-            .setNeutralButton(R.string.create_game_alert_button, new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int which) {
-                    // do nothing
-                }
-            })
+            .setNeutralButton(R.string.create_game_alert_button, null)
             .setIcon(android.R.drawable.ic_dialog_alert)
             .show();
     }

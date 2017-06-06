@@ -1,7 +1,5 @@
 package win.spirithunt.android.controller;
 
-import android.app.AlertDialog;
-import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -10,8 +8,8 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutCompat;
-import android.view.View;
 import android.util.Log;
+import android.view.View;
 import android.widget.LinearLayout;
 
 import com.dlazaro66.qrcodereaderview.QRCodeReaderView;
@@ -20,6 +18,7 @@ import io.socket.client.Ack;
 import io.socket.client.Socket;
 import win.spirithunt.android.R;
 import win.spirithunt.android.protocol.LobbyInfo;
+import win.spirithunt.android.provider.DialogProvider;
 import win.spirithunt.android.provider.PermissionProvider;
 import win.spirithunt.android.provider.SocketProvider;
 
@@ -32,8 +31,6 @@ public class GameJoinScanController extends AppCompatActivity implements QRCodeR
     private static final PermissionProvider permissionProvider = PermissionProvider.getInstance();
     private static final String TAG = "JoinScanner";
 
-    private ProgressDialog progressDialog;
-
     private QRCodeReaderView qrCodeReaderView;
 
     private LinearLayoutCompat cameraContainer;
@@ -43,6 +40,7 @@ public class GameJoinScanController extends AppCompatActivity implements QRCodeR
     private boolean isSending = false;
 
     private boolean isShowingError = false;
+    private DialogProvider dialogProvider;
 
     public void close(View view) {
         finish();
@@ -106,7 +104,8 @@ public class GameJoinScanController extends AppCompatActivity implements QRCodeR
 
         // Alert the user why we need the camera.
         final GameJoinScanController self = this;
-        new AlertDialog.Builder(this, R.style.AppDialog)
+
+        dialogProvider.provideAlertBuilder()
             .setTitle(getString(R.string.join_game_camera_explain_title))
             .setMessage(getString(R.string.join_game_camera_explain_text))
             .setCancelable(true)
@@ -151,10 +150,12 @@ public class GameJoinScanController extends AppCompatActivity implements QRCodeR
         super.onCreate(savedInstanceState);
         setContentView(R.layout.game_join_scan_view);
 
-        Log.i(TAG, "onCreate: ONCREATE fired!");
+        Log.d(TAG, "onCreate() called with: savedInstanceState = [" + savedInstanceState + "]");
 
         cameraContainer = (LinearLayoutCompat)findViewById(R.id.camera_preview);
         hasPermission = permissionProvider.hasPermission(this, PermissionProvider.Permissions.CAMERA);
+
+        dialogProvider = new DialogProvider(this);
 
         // If we've already got permission,
         if (hasPermission) {
@@ -219,7 +220,6 @@ public class GameJoinScanController extends AppCompatActivity implements QRCodeR
         if (isSending) {
             isSending = false;
             int textId;
-            Log.d("PrDialog", String.valueOf(progressDialog == null));
             switch (error) {
                 case "error_lobby_not_found":
                     textId = R.string.join_game_text_error_lobby_not_found;
@@ -245,19 +245,11 @@ public class GameJoinScanController extends AppCompatActivity implements QRCodeR
     }
 
     private void hideProgressDialog() {
-        if(progressDialog != null) {
-            progressDialog.dismiss();
-        }
+        dialogProvider.hideProgressDialog();
     }
 
     private void showProgressDialog() {
-        if(progressDialog == null) {
-            progressDialog = new ProgressDialog(this);
-            progressDialog.setTitle(getString(R.string.join_game_scan_text_progress_title));
-            progressDialog.setMessage(getString(R.string.join_game_scan_text_progress_message));
-            progressDialog.setCancelable(false);
-            progressDialog.show();
-        }
+        dialogProvider.showProgressDialog(R.string.join_game_scan_text_progress_title, R.string.join_game_scan_text_progress_message);
     }
 
     /**
@@ -268,7 +260,7 @@ public class GameJoinScanController extends AppCompatActivity implements QRCodeR
     private void showErrorDialog(String text) {
         if(!isShowingError) {
 
-            new android.app.AlertDialog.Builder(this)
+            dialogProvider.provideAlertBuilder()
                 .setTitle(getString(R.string.join_game_text_error_title))
                 .setMessage(text)
                 .setNeutralButton(R.string.join_game_text_error_button, new DialogInterface.OnClickListener() {

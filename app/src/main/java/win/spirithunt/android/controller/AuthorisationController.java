@@ -1,8 +1,6 @@
 package win.spirithunt.android.controller;
 
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -87,16 +85,11 @@ abstract class AuthorisationController extends AppCompatActivity {
      * @param button  Content of dismiss button
      */
     protected void showErrorDialog(String title, String content, String button) {
-        new AlertDialog.Builder(this, R.style.AppDialog)
+        dialogProvider.provideAlertBuilder()
             .setTitle(title)
             .setMessage(content)
             .setCancelable(true)
-            .setPositiveButton(button, new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    // do nothing
-                }
-            })
+            .setPositiveButton(button, null)
             .setIcon(android.R.drawable.ic_dialog_alert)
             .show();
     }

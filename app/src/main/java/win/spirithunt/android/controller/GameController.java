@@ -1,6 +1,5 @@
 package win.spirithunt.android.controller;
 
-import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
@@ -32,6 +31,7 @@ import win.spirithunt.android.model.Player;
 import win.spirithunt.android.model.PowerUp;
 import win.spirithunt.android.protocol.GameTag;
 import win.spirithunt.android.provider.ContextProvider;
+import win.spirithunt.android.provider.DialogProvider;
 import win.spirithunt.android.provider.PlayerProvider;
 import win.spirithunt.android.provider.SocketProvider;
 
@@ -64,6 +64,7 @@ public class GameController extends AppCompatActivity implements View.OnClickLis
     private GpsReader gpsReader;
     private SensorManager mSensorManager;
     private float angle;
+    private DialogProvider dialogProvider;
 
 
     protected Player buildPlayer(double lat, double lng, int team) {
@@ -84,6 +85,8 @@ public class GameController extends AppCompatActivity implements View.OnClickLis
 
         radar = (RadarDisplay) findViewById(R.id.game_status_radar);
         ownPlayer = PlayerProvider.getInstance().getPlayer();
+
+        dialogProvider = new DialogProvider(this);
 
         // Parsing JSON to actual Players
         try {
@@ -235,7 +238,7 @@ public class GameController extends AppCompatActivity implements View.OnClickLis
                     }
                 };
 
-                new AlertDialog.Builder(view.getContext(), R.style.AppDialog)
+                dialogProvider.provideAlertBuilder()
                     .setTitle(getString(R.string.game_powerup_consume_title))
                     .setMessage(getString(R.string.game_powerup_consume_desc))
                     .setPositiveButton(R.string.game_powerup_consume_yes, listener)
