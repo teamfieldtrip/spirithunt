@@ -23,7 +23,7 @@ import win.spirithunt.android.provider.DialogProvider;
  * @author Roelof Roos
  */
 
-abstract public class AuthorisationController extends AppCompatActivity {
+abstract class AuthorisationController extends AppCompatActivity {
     /**
      * Contains error messages for registration and sign up
      */
