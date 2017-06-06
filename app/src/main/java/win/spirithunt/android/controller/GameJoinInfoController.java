@@ -9,6 +9,8 @@ import win.spirithunt.android.callback.PlayerCreateCallback;
 import win.spirithunt.android.model.Player;
 import win.spirithunt.android.protocol.LobbyJoin;
 import win.spirithunt.android.provider.CustomFontSpan;
+import win.spirithunt.android.provider.DialogProvider;
+import win.spirithunt.android.provider.PermissionProvider;
 import win.spirithunt.android.provider.PlayerProvider;
 import win.spirithunt.android.provider.SocketProvider;
 import android.support.v7.app.AppCompatActivity;
@@ -24,8 +26,8 @@ import io.socket.client.Socket;
  * Created by Remco Schipper
  */
 
-public class GameJoinInfoController extends AppCompatActivity {
-    private ProgressDialog progressDialog;
+public class GameJoinInfoController extends PermissionRequestingActivity {
+    private DialogProvider dialogProvider;
 
     private String lobbyId;
 
@@ -34,6 +36,14 @@ public class GameJoinInfoController extends AppCompatActivity {
     }
 
     public void submit(View view) {
+        if (hasPermission(PermissionProvider.Permissions.LOCATION)) {
+            joinLobby();
+        } else {
+            requestPermission(PermissionProvider.Permissions.LOCATION, false);
+        }
+    }
+
+    public void joinLobby() {
         this.showProgressDialog();
 
         final GameJoinInfoController self = this;
@@ -65,6 +75,8 @@ public class GameJoinInfoController extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.game_join_info_view);
+
+        dialogProvider = new DialogProvider(this);
 
         Bundle extras = getIntent().getExtras();
         this.lobbyId = extras.getString("lobbyId");
@@ -120,7 +132,7 @@ public class GameJoinInfoController extends AppCompatActivity {
     }
 
     private void showErrorDialog(String text) {
-        new android.app.AlertDialog.Builder(this)
+        dialogProvider.provideAlertBuilder()
             .setTitle(getString(R.string.join_game_text_error_title))
             .setMessage(text)
             .setNeutralButton(R.string.join_game_text_error_button, new DialogInterface.OnClickListener() {
@@ -133,18 +145,33 @@ public class GameJoinInfoController extends AppCompatActivity {
     }
 
     private void hideProgressDialog() {
-        if(this.progressDialog != null) {
-            this.progressDialog.dismiss();
-        }
+        dialogProvider.hideProgressDialog();
     }
 
     private void showProgressDialog() {
-        if(this.progressDialog == null) {
-            this.progressDialog = new ProgressDialog(this);
-            this.progressDialog.setTitle(getString(R.string.lobby_text_progress_title));
-            this.progressDialog.setMessage(getString(R.string.lobby_text_progress_content));
-            this.progressDialog.setCancelable(false);
-            this.progressDialog.show();
-        }
+        dialogProvider.showProgressDialog(R.string.lobby_text_progress_title, R.string.lobby_text_progress_content);
+    }
+
+
+    @Override
+    public void showPermissionRationale(PermissionProvider.Permissions permission) {
+        final GameJoinInfoController self = this;
+
+        dialogProvider.provideAlertBuilder()
+            .setTitle(getString(R.string.join_game_location_explain_title))
+            .setMessage(getString(R.string.join_game_location_explain_message))
+            .setPositiveButton(R.string.join_game_location_explain_positive, new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
+                    self.requestPermission(PermissionProvider.Permissions.LOCATION, true);
+                }
+            })
+            .setNegativeButton(R.string.join_game_location_explain_negative, null)
+            .setIcon(android.R.drawable.ic_dialog_info)
+            .show();
+    }
+
+    @Override
+    public void onPermissionGranted(PermissionProvider.Permissions permission) {
+        joinLobby();
     }
 }
