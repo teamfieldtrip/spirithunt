@@ -52,7 +52,7 @@ public class DialogProvider {
             progressDialog.setTitle(title);
             progressDialog.setMessage(body);
             progressDialog.setIndeterminate(true);
-            progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+            progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
             progressDialog.setCancelable(false);
             progressDialog.show();
         }
