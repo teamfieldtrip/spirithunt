@@ -143,7 +143,7 @@ public class GameJoinScanController extends AppCompatActivity implements QRCodeR
     protected void askForCameraAccess() {
         Log.d(TAG, "askForCameraAccess: Asking for camera access");
 
-        permissionProvider.requestPermission(this, PermissionProvider.PERMISSION_CAMERA);
+        permissionProvider.requestPermission(this, PermissionProvider.Permissions.CAMERA);
     }
 
     @Override
@@ -154,7 +154,7 @@ public class GameJoinScanController extends AppCompatActivity implements QRCodeR
         Log.i(TAG, "onCreate: ONCREATE fired!");
 
         cameraContainer = (LinearLayoutCompat)findViewById(R.id.camera_preview);
-        hasPermission = permissionProvider.hasPermission(this, PermissionProvider.PERMISSION_CAMERA);
+        hasPermission = permissionProvider.hasPermission(this, PermissionProvider.Permissions.CAMERA);
 
         // If we've already got permission,
         if (hasPermission) {
@@ -163,7 +163,7 @@ public class GameJoinScanController extends AppCompatActivity implements QRCodeR
         }
 
         // Should we explain why we need the permission?
-        if (permissionProvider.shouldShowRationale(this, PermissionProvider.PERMISSION_CAMERA)) {
+        if (permissionProvider.shouldShowRationale(this, PermissionProvider.Permissions.CAMERA)) {
             Log.d(TAG, "onCreate: Describing why we need the camera");
             describeCameraAccess();
         } else {
@@ -292,7 +292,7 @@ public class GameJoinScanController extends AppCompatActivity implements QRCodeR
      */
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String permissions[], @NonNull int[] grantResults) {
-        if (requestCode != PermissionProvider.PERMISSION_CAMERA) return;
+        if (requestCode != PermissionProvider.getPermissionId(PermissionProvider.Permissions.CAMERA)) return;
 
         Log.d(TAG, "onRequestPermissionsResult: Recieved a result, which is " + grantResults[0]);
         // If request is cancelled, the result arrays are empty.

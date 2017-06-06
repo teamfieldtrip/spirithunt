@@ -270,13 +270,13 @@ public class CreateGameController extends AppCompatActivity implements
      */
     protected void askForLocationAccess() {
         // Check if we already have permission to use it
-        if(permissionProvider.hasPermission(this, PermissionProvider.PERMISSION_LOCATION)) return;
+        if(permissionProvider.hasPermission(this, PermissionProvider.Permissions.LOCATION)) return;
 
         // Check if we should explain why we're asking, cancel if we do.
-        if(permissionProvider.shouldShowRationale(this, PermissionProvider.PERMISSION_LOCATION)) return;
+        if(permissionProvider.shouldShowRationale(this, PermissionProvider.Permissions.LOCATION)) return;
 
         // Request location access
-        permissionProvider.requestPermission(this, PermissionProvider.PERMISSION_LOCATION);
+        permissionProvider.requestPermission(this, PermissionProvider.Permissions.LOCATION);
     }
 
     @Override
@@ -305,7 +305,7 @@ public class CreateGameController extends AppCompatActivity implements
     private void updateMapPosition() {
         if (map == null) return;
 
-        boolean hasPerm = permissionProvider.hasPermission(this, PermissionProvider.PERMISSION_LOCATION);
+        boolean hasPerm = permissionProvider.hasPermission(this, PermissionProvider.Permissions.LOCATION);
         map.setMyLocationEnabled(hasPerm);
 
         if (mapWasMoved) return;
@@ -425,7 +425,7 @@ public class CreateGameController extends AppCompatActivity implements
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String permissions[], @NonNull int[] grantResults) {
-        if (requestCode != PermissionProvider.PERMISSION_LOCATION) return;
+        if (requestCode != PermissionProvider.getPermissionId(PermissionProvider.Permissions.LOCATION)) return;
 
         // If request is cancelled, the result arrays are empty.
         if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {

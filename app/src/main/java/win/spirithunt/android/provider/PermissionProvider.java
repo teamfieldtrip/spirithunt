@@ -14,17 +14,16 @@ import android.support.v4.content.ContextCompat;
  * @author Roelof Roos
  */
 public class PermissionProvider {
+    private static final int BASE_COUNT = 1337;
     private static PermissionProvider instance;
 
     /**
-     * Request access to the camera
+     * Enum of the permissions we're allowed to request.
      */
-    public static final int PERMISSION_CAMERA = 1;
-
-    /**
-     * Request access to the user's GPS location
-     */
-    public static final int PERMISSION_LOCATION = 2;
+    public enum Permissions {
+        CAMERA,
+        LOCATION
+    }
 
     /**
      * Get the permission provider instance
@@ -40,16 +39,27 @@ public class PermissionProvider {
     }
 
     /**
+     * Returns the ID for a given permission. This ID is sent to the permission request system on
+     * Android.
+     *
+     * @param permission
+     * @return
+     */
+    public static int getPermissionId(Permissions permission) {
+        return BASE_COUNT + permission.ordinal();
+    }
+
+    /**
      * Returns the permission name for the given permission constant.
      *
-     * @param permission One of the PERMISSION_ constants.
+     * @param permission A Permission to request, from the Permissions enum
      * @return permission name, or null if invalid.
      */
-    private String getPermissionName(int permission) {
+    private String getPermissionName(Permissions permission) {
         switch (permission) {
-            case PERMISSION_LOCATION:
+            case LOCATION:
                 return Manifest.permission.ACCESS_FINE_LOCATION;
-            case PERMISSION_CAMERA:
+            case CAMERA:
                 return Manifest.permission.CAMERA;
             default:
                 return null;
@@ -59,10 +69,10 @@ public class PermissionProvider {
     /**
      * Check if the permission has been granted yet.
      *
-     * @param permission PERMISSION_* constant of the permission you want to check
+     * @param permission Permission enum of the permission you want to check
      * @return           Boolean if the permission has been granted.
      */
-    public boolean hasPermission(Context context, int permission) {
+    public boolean hasPermission(Context context, Permissions permission) {
         String permissionName = getPermissionName(permission);
         return permissionName != null &&
             (ContextCompat.checkSelfPermission(context, permissionName) == PackageManager.PERMISSION_GRANTED);
@@ -76,10 +86,10 @@ public class PermissionProvider {
      * <strong>Make sure your permission request is async!</strong>
      *
      * @param activity Used to check if the given activity has asked for access earlier on
-     * @param permission PERMISSION_* constant of the permission you'd like to use.
+     * @param permission Permission enum of the permission you're going to request
      * @return true if you should explain why you need the permission, false if you can prompt.
      */
-    public boolean shouldShowRationale(Activity activity, int permission) {
+    public boolean shouldShowRationale(Activity activity, Permissions permission) {
         String permissionName = getPermissionName(permission);
         if (permissionName == null) {
             return false;
@@ -97,10 +107,10 @@ public class PermissionProvider {
      * been sent!</em>
      *
      * @param activity   Current activity to show the request dialog on
-     * @param permission Permission that needs to be requested
+     * @param permission Permission that needs to be requested, from the Permissions enum
      * @return false if the permission couldn't be requested, true if the request is made.
      */
-    public Boolean requestPermission(Activity activity, int permission) {
+    public Boolean requestPermission(Activity activity, Permissions permission) {
         String permissionName = getPermissionName(permission);
         if (permissionName == null) {
             return false;
@@ -109,7 +119,7 @@ public class PermissionProvider {
         ActivityCompat.requestPermissions(
             activity,
             new String[]{permissionName},
-            permission
+            getPermissionId(permission)
         );
 
         return true;
