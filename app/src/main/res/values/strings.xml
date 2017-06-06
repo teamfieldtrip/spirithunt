@@ -168,4 +168,18 @@
     <string name="game_start_dialog_title">Game commencing</string>
     <string name="game_start_dialog_message">Stand by, the hunt starts soon&#8230;</string>
     <string name="game_end_action">End game</string>
+
+    <!-- Creating game, asking for location -->
+    <string name="create_game_location_explain_title">Device location required</string>
+    <string name="create_game_location_explain_message">To create a game, you need to grant access to this device\'s current location.</string>
+    <!-- Options as described in https://material.io/guidelines/style/writing.html#writing-language -->
+    <string name="create_game_location_explain_positive">OK</string>
+    <string name="create_game_location_explain_negative">Not now</string>
+
+    <!-- Joining game, asking for location -->
+    <string name="join_game_location_explain_title">Device location required</string>
+    <string name="join_game_location_explain_message">To join this game, you need to grant access to this device\'s current location.</string>
+    <!-- Options as described in https://material.io/guidelines/style/writing.html#writing-language -->
+    <string name="join_game_location_explain_positive">OK</string>
+    <string name="join_game_location_explain_negative">Not now</string>
 </resources>

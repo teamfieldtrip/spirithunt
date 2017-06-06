@@ -47,7 +47,7 @@ import win.spirithunt.android.provider.SocketProvider;
  * @author Remco Schipper
  */
 
-public class CreateGameController extends AppCompatActivity implements
+public class CreateGameController extends PermissionRequestingActivity implements
     GoogleMap.OnMapClickListener,
     GoogleMap.OnMapLongClickListener,
     GoogleMap.OnMarkerClickListener,
@@ -98,13 +98,9 @@ public class CreateGameController extends AppCompatActivity implements
 
     private int timeIndicatorIndex;
 
-    private PermissionProvider permissionProvider;
-
     private MapFragment mapView;
 
     public CreateGameController() {
-        permissionProvider = PermissionProvider.getInstance();
-
         this.amountOfPlayers = new ArrayList<>();
         for (int i = 4; i <= 16; i+= 2) {
             this.amountOfPlayers.add(new AmountOfPlayers(i, Integer.toString(i)));
@@ -202,57 +198,72 @@ public class CreateGameController extends AppCompatActivity implements
     }
 
     public void submit(View view) {
-        if (this.centerLatLng != null && this.borderLatLng != null) {
-            this.showProgressDialog();
-            final GameCreate gameCreate = new GameCreate(
-                this.durations.get(this.timeIndicatorIndex).getTime(),
-                this.amountOfPlayers.get(this.amountOfLivesIndex).getAmount(),
-                this.amountOfRounds.get(this.amountOfRoundsIndex).getAmount(),
-                this.amountOfLives.get(this.amountOfLivesIndex).getAmount(),
-                this.powerUpsEnabled,
-                this.centerLatLng,
-                this.borderLatLng
-            );
-
-            final CreateGameController self = this;
-
-
-            // Create new Player
-
-            PlayerProvider playerProvider = PlayerProvider.getInstance();
-            playerProvider.getNewPlayer(new PlayerCreateCallback() {
-                @Override
-                public void call(String error, Player player) {
-                    Socket socket = SocketProvider.getInstance().getConnection();
-                    socket.emit("lobby:create", gameCreate, new Ack() {
-                        @Override
-                        public void call(final Object... args) {
-                            self.runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    self.hideProgressDialog();
-
-                                    if (args[0] != null || args.length < 2) {
-                                        self.showErrorDialog(self);
-                                    }else{
-                                        Intent intent = new Intent(self, LobbyController.class);
-                                        intent.putExtra("lobbyId", args[1].toString());
-                                        intent.putExtra("lobbyHost", true);
-                                        startActivity(intent);
-                                    }
-                                }
-                            });
-                        }
-                    });
-                }
-            });
-        } else {
+        // Validate first
+        if (this.centerLatLng == null || this.borderLatLng == null) {
             new AlertDialog.Builder(this, R.style.AppDialog)
                 .setTitle(getString(R.string.create_game_no_area_title))
                 .setMessage(getString(R.string.create_game_no_area_content))
                 .setIcon(android.R.drawable.ic_dialog_alert)
                 .show();
+            return;
         }
+
+        // Then check for location permissions
+        if(hasPermission(PermissionProvider.Permissions.LOCATION)) {
+            createGame();
+        } else {
+            // Or ask for it
+            requestPermission(PermissionProvider.Permissions.LOCATION, false);
+        }
+    }
+
+    /**
+     * Called after we've ensured that the user has granted us location access.
+     * Users should not be able to enter lobbies without granting location access.
+     */
+    public void createGame() {
+        this.showProgressDialog();
+        final GameCreate gameCreate = new GameCreate(
+            this.durations.get(this.timeIndicatorIndex).getTime(),
+            this.amountOfPlayers.get(this.amountOfLivesIndex).getAmount(),
+            this.amountOfRounds.get(this.amountOfRoundsIndex).getAmount(),
+            this.amountOfLives.get(this.amountOfLivesIndex).getAmount(),
+            this.powerUpsEnabled,
+            this.centerLatLng,
+            this.borderLatLng
+        );
+
+        final CreateGameController self = this;
+
+        // Create new Player
+
+        PlayerProvider playerProvider = PlayerProvider.getInstance();
+        playerProvider.getNewPlayer(new PlayerCreateCallback() {
+            @Override
+            public void call(String error, Player player) {
+                Socket socket = SocketProvider.getInstance().getConnection();
+                socket.emit("lobby:create", gameCreate, new Ack() {
+                    @Override
+                    public void call(final Object... args) {
+                        self.runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                self.hideProgressDialog();
+
+                                if (args[0] != null || args.length < 2) {
+                                    self.showErrorDialog(self);
+                                } else {
+                                    Intent intent = new Intent(self, LobbyController.class);
+                                    intent.putExtra("lobbyId", args[1].toString());
+                                    intent.putExtra("lobbyHost", true);
+                                    startActivity(intent);
+                                }
+                            }
+                        });
+                    }
+                });
+            }
+        });
     }
 
     @Override
@@ -270,7 +281,7 @@ public class CreateGameController extends AppCompatActivity implements
      */
     protected void askForLocationAccess() {
         // Check if we already have permission to use it
-        if(permissionProvider.hasPermission(this, PermissionProvider.Permissions.LOCATION)) return;
+        if (hasPermission(PermissionProvider.Permissions.LOCATION)) return;
 
         // Check if we should explain why we're asking, cancel if we do.
         if(permissionProvider.shouldShowRationale(this, PermissionProvider.Permissions.LOCATION)) return;
@@ -431,6 +442,28 @@ public class CreateGameController extends AppCompatActivity implements
         if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
             updateMapPosition();
         }
+    }
+
+    @Override
+    public void showPermissionRationale(PermissionProvider.Permissions permission) {
+        final CreateGameController self = this;
+
+        new android.app.AlertDialog.Builder(this)
+            .setTitle(getString(R.string.create_game_location_explain_title))
+            .setMessage(getString(R.string.create_game_location_explain_message))
+            .setPositiveButton(R.string.create_game_location_explain_positive, new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
+                    self.requestPermission(PermissionProvider.Permissions.LOCATION, true);
+                }
+            })
+            .setNegativeButton(R.string.create_game_location_explain_negative, null)
+            .setIcon(android.R.drawable.ic_dialog_info)
+            .show();
+    }
+
+    @Override
+    public void onPermissionGranted(PermissionProvider.Permissions permission) {
+        createGame();
     }
 
     /**
