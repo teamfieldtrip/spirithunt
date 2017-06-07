@@ -14,9 +14,6 @@ import android.view.View;
 
 import com.rd.PageIndicatorView;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.util.ArrayList;
 
 import io.socket.client.Ack;
@@ -40,6 +37,7 @@ import win.spirithunt.android.provider.SocketProvider;
 
 public class LobbyController extends AppCompatActivity {
 
+    private static final String TAG = "LobbyController";
     private String lobbyId;
     private ArrayList<Player> players = new ArrayList<>();    // General list of players
     private ArrayList<Player> teamRed = new ArrayList<>();    // Team 0
@@ -151,15 +149,23 @@ public class LobbyController extends AppCompatActivity {
     }
 
     public void start(View view) {
+        final LobbyController self = this;
+
         Socket socket = SocketProvider.getInstance().getConnection();
         socket.emit("lobby:start", null, new Ack() {
             @Override
-            public void call(Object... args) {
-                Log.d("Lobby", "Lobby started");
-                if(args[0] != null){
-                    // TODO error handling
-                    Log.e("Error","Lobby starting error");
-                }
+            public void call(final Object... args) {
+                self.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Log.d("Lobby", "Lobby started");
+
+                        if (args[0] != null) {
+                            Log.e(TAG, args[0].toString());
+                            self.showNotEnoughPlayersDialog();
+                        }
+                    }
+                });
             }
         });
     }
@@ -194,13 +200,28 @@ public class LobbyController extends AppCompatActivity {
         final LobbyController self = this;
 
         new AlertDialog.Builder(this, R.style.AppDialog)
-            .setTitle(R.string.lobby_text_dialog_title)
-            .setMessage(R.string.lobby_text_dialog_content)
+            .setTitle(R.string.lobby_text_dialog_no_host_title)
+            .setMessage(R.string.lobby_text_dialog_no_host_content)
             .setCancelable(false)
             .setPositiveButton(R.string.lobby_text_dialog_button, new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     self.finish();
+                }
+            })
+            .setIcon(android.R.drawable.ic_dialog_alert)
+            .show();
+    }
+
+    private void showNotEnoughPlayersDialog() {
+        final LobbyController self = this;
+
+        new AlertDialog.Builder(this, R.style.AppDialog)
+            .setTitle(R.string.lobby_text_dialog_not_enough_players_title)
+            .setMessage(R.string.lobby_text_dialog_not_enough_players_content)
+            .setNeutralButton(R.string.lobby_text_dialog_button, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
                 }
             })
             .setIcon(android.R.drawable.ic_dialog_alert)
