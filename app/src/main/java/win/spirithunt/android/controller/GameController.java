@@ -105,8 +105,6 @@ public class GameController extends AppCompatActivity implements View.OnClickLis
                 players.add(Player.FromJson(new JSONObject(jsonPlayers.getString(i))));
             }
 
-            players.add(buildPlayer(52.515584, 6.088091, 1));
-
         } catch (JSONException e) {
             e.printStackTrace();
         } catch (InvalidObjectException e) {
