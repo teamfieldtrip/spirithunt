@@ -12,6 +12,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 
+import com.rd.PageIndicatorView;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -55,12 +57,22 @@ public class LobbyController extends AppCompatActivity {
             view.setVisibility(View.VISIBLE);
         }
 
+        /* Info Pager */
         ViewPager infoPager = (ViewPager) findViewById(R.id.pager_info);
         infoPager.setAdapter(new InfoPagerAdapter(this.getIntent().getStringExtra("lobbyId"), getSupportFragmentManager()));
-        infoPager.setCurrentItem(1);
 
+        PageIndicatorView infoPagerIndicator = (PageIndicatorView) findViewById(R.id.infoPagerIndicator);
+        infoPagerIndicator.setViewPager(infoPager);
+
+        infoPager.setCurrentItem(1);
+        infoPagerIndicator.setSelection(1);
+
+        /* Team Pager */
         ViewPager teamPager = (ViewPager) findViewById(R.id.pager_team);
         teamPager.setAdapter(new TeamPagerAdapter(getSupportFragmentManager()));
+
+        PageIndicatorView teamPagerIndicator = (PageIndicatorView) findViewById(R.id.teamPagerIndicator);
+        teamPagerIndicator.setViewPager(teamPager);
     }
 
     @Override

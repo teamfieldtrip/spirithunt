@@ -34,6 +34,7 @@
 
     <!-- Main game interface -->
     <style name="GameView" parent="AppFullScreenTheme">
+        <item name="android:windowBackground">@drawable/bg_gamescreen</item>
         <item name="android:windowTranslucentStatus">false</item>
         <item name="android:textColorSecondary">#000</item>
     </style>
