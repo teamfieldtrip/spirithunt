@@ -1,11 +1,15 @@
 package win.spirithunt.android.controller;
 
+import android.content.Context;
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
+import android.os.Vibrator;
+import android.preference.PreferenceManager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -57,6 +61,7 @@ public class GameController extends AppCompatActivity implements View.OnClickLis
      */
     private static final String CLIENT_ACT_OK = "act-ok";
     RadarDisplay radar;
+    SharedPreferences prefs;
     private String gameId;
     private Player ownPlayer;
     private Player target;
@@ -65,7 +70,6 @@ public class GameController extends AppCompatActivity implements View.OnClickLis
     private SensorManager mSensorManager;
     private float angle;
     private DialogProvider dialogProvider;
-
 
     protected Player buildPlayer(double lat, double lng, int team) {
         Player out = new Player(randomUUID().toString());
@@ -87,6 +91,8 @@ public class GameController extends AppCompatActivity implements View.OnClickLis
         ownPlayer = PlayerProvider.getInstance().getPlayer();
 
         dialogProvider = new DialogProvider(this);
+
+        prefs = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
 
         // Parsing JSON to actual Players
         try {
@@ -190,6 +196,12 @@ public class GameController extends AppCompatActivity implements View.OnClickLis
                             JSONObject tagData = new JSONObject(args[0].toString());
                             if (tagData.has("invoker") && tagData.has("victim")) {
                                 if (ownPlayer.getId().equals(tagData.getString("victim"))) {
+
+                                    if (prefs.getBoolean("settings_vibration", false)) {
+                                        Vibrator v = (Vibrator) ContextProvider.getInstance().getContext().getSystemService(Context.VIBRATOR_SERVICE);
+                                        v.vibrate(250);
+                                    }
+
                                     Log.d("TAG", "You have been tagged by " + tagData.getString("invoker"));
                                     Toast.makeText(ContextProvider.getInstance().getContext(), "You have been tagged by " + tagData.getString("invoker"), Toast.LENGTH_SHORT).show();
                                 } else {
@@ -227,6 +239,13 @@ public class GameController extends AppCompatActivity implements View.OnClickLis
 
         switch (view.getId()) {
             case R.id.game_tag:
+
+                /* Vibrate if enabled */
+                if (prefs.getBoolean("settings_vibration", true)) {
+                    Vibrator v = (Vibrator) ContextProvider.getInstance().getContext().getSystemService(Context.VIBRATOR_SERVICE);
+                    v.vibrate(150);
+                }
+
                 tagPlayer();
                 break;
             case R.id.game_consume:

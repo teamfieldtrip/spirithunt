@@ -1,10 +1,14 @@
 package win.spirithunt.android.controller;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.PointF;
 import android.os.Bundle;
+import android.os.Vibrator;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutCompat;
@@ -34,6 +38,8 @@ public class GameJoinScanController extends AppCompatActivity implements QRCodeR
     private QRCodeReaderView qrCodeReaderView;
 
     private LinearLayoutCompat cameraContainer;
+
+    SharedPreferences prefs;
 
     private boolean hasPermission = false;
 
@@ -152,10 +158,12 @@ public class GameJoinScanController extends AppCompatActivity implements QRCodeR
 
         Log.d(TAG, "onCreate() called with: savedInstanceState = [" + savedInstanceState + "]");
 
-        cameraContainer = (LinearLayoutCompat)findViewById(R.id.camera_preview);
+        cameraContainer = (LinearLayoutCompat) findViewById(R.id.camera_preview);
         hasPermission = permissionProvider.hasPermission(this, PermissionProvider.Permissions.CAMERA);
 
         dialogProvider = new DialogProvider(this);
+
+        prefs = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
 
         // If we've already got permission,
         if (hasPermission) {
@@ -201,6 +209,12 @@ public class GameJoinScanController extends AppCompatActivity implements QRCodeR
 
     private void onSuccess(int currentPlayers, int maxPlayers, String hostname, String lobbyId) {
         if (isSending) {
+
+            if(prefs.getBoolean("settings_vibration", true)){
+                Vibrator v = (Vibrator) this.getSystemService(Context.VIBRATOR_SERVICE);
+                v.vibrate(150);
+            }
+
             isSending = false;
             hideProgressDialog();
 
@@ -218,6 +232,12 @@ public class GameJoinScanController extends AppCompatActivity implements QRCodeR
 
     private void onError(String error) {
         if (isSending) {
+
+            if(prefs.getBoolean("settings_vibration", true)){
+                Vibrator v = (Vibrator) this.getSystemService(Context.VIBRATOR_SERVICE);
+                v.vibrate(500);
+            }
+
             isSending = false;
             int textId;
             switch (error) {
@@ -258,7 +278,7 @@ public class GameJoinScanController extends AppCompatActivity implements QRCodeR
      * @param text
      */
     private void showErrorDialog(String text) {
-        if(!isShowingError) {
+        if (!isShowingError) {
 
             dialogProvider.provideAlertBuilder()
                 .setTitle(getString(R.string.join_game_text_error_title))
@@ -284,7 +304,8 @@ public class GameJoinScanController extends AppCompatActivity implements QRCodeR
      */
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String permissions[], @NonNull int[] grantResults) {
-        if (requestCode != PermissionProvider.getPermissionId(PermissionProvider.Permissions.CAMERA)) return;
+        if (requestCode != PermissionProvider.getPermissionId(PermissionProvider.Permissions.CAMERA))
+            return;
 
         Log.d(TAG, "onRequestPermissionsResult: Recieved a result, which is " + grantResults[0]);
         // If request is cancelled, the result arrays are empty.

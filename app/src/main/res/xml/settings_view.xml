@@ -6,11 +6,14 @@
     <PreferenceCategory
         android:title="@string/settings_title">
         <CheckBoxPreference
+            android:enabled="false"
             android:key="settings_sound"
+            android:defaultValue="true"
             android:title="@string/settings_title_sound"
             android:summary="@string/settings_summary_sound" />
         <CheckBoxPreference
             android:key="settings_vibration"
+            android:defaultValue="true"
             android:title="@string/settings_title_vibration"
             android:summary="@string/settings_summary_vibration" />
     </PreferenceCategory>

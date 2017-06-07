@@ -61,7 +61,7 @@
 
     <!-- Define the edittext style -->
     <style name="editText_normal_main" parent="@style/Widget.AppCompat.EditText">
-        <item name="win.spirithunt.android:font">fonts/lobster.ttf</item>
+        <!--<item name="win.spirithunt.android:font">fonts/lobster.ttf</item>-->
         <item name="android:background">@drawable/edittext_normal_main</item>
         <item name="android:paddingStart">8dp</item>
         <item name="android:padding">5dp</item>
