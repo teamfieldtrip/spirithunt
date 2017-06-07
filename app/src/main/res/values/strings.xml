@@ -162,7 +162,7 @@
     This is required for the game to function.
     ]]></string>
     <string name="game_location_explain_no">Cancel</string>
-    <string name="game_location_explain_yes">Ok</string>
+    <string name="game_location_explain_yes">OK</string>
 
     <!-- Starting lobby -->
     <string name="game_start_dialog_title">Game commencing</string>
