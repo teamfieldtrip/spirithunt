@@ -49,7 +49,7 @@ public class LoginController extends AuthorisationController {
         startActivity(intent);
     }
 
-    public void submit(View view) {
+    public void startLogin(View view) {
         final LoginController self = this;
         this.showProgressDialog();
 

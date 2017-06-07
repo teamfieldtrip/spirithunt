@@ -199,7 +199,7 @@ public class CreateGameController extends PermissionRequestingActivity implement
         startActivityForResult(advancedSettingsIntent, 1);
     }
 
-    public void submit(View view) {
+    public void doCreateGame(View view) {
         // Validate first
         if (this.centerLatLng == null || this.borderLatLng == null) {
             new AlertDialog.Builder(this, R.style.AppDialog)

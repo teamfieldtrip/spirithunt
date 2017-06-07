@@ -129,7 +129,7 @@
                         <win.spirithunt.android.gui.CustomButton
                             style="@style/btn_normal_main_medium"
                             android:text="@string/join_game_info_button_join"
-                            android:onClick="submit" />
+                            android:onClick="doJoinGame" />
                     </android.support.v7.widget.LinearLayoutCompat>
                 </android.support.v7.widget.LinearLayoutCompat>
                 <android.support.v7.widget.LinearLayoutCompat

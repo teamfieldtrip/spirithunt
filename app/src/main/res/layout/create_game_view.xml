@@ -115,7 +115,7 @@
                 android:layout_width="160dp"
                 android:layout_alignParentEnd="true"
                 android:text="@string/create_game_btn_create"
-                android:onClick="submit"/>
+                android:onClick="doCreateGame"/>
         </RelativeLayout>
     </android.support.v7.widget.LinearLayoutCompat>
     <RelativeLayout

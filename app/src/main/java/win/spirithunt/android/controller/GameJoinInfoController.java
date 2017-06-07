@@ -35,7 +35,7 @@ public class GameJoinInfoController extends PermissionRequestingActivity {
         this.finish();
     }
 
-    public void submit(View view) {
+    public void doJoinGame(View view) {
         if (hasPermission(PermissionProvider.Permissions.LOCATION)) {
             joinLobby();
         } else {

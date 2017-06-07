@@ -45,7 +45,7 @@
             style="@style/btn_normal_main_large"
             android:id="@+id/login_button"
             android:text="@string/btn_login"
-            android:onClick="submit"
+            android:onClick="startLogin"
             android:layout_marginBottom="25dp" />
 
         <win.spirithunt.android.gui.CustomTextView
